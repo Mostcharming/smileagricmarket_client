@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --appWhite: #FFFFFF;
+  --appBlack: #000000;
+  --background: #F3FFED;
+  --foreground: #0B1307;
+  --foreground100: #92998E;
+  --primary: #599C38;
+  --primary100: #64B03F;
+  --border: #AAB3A6;
+  --border100: #C2CCBE;
+}
+
+@theme {
+  --color-appWhite: var(--appWhite);
+  --color-appBlack: var(--appBlack);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground100: var(--foreground100);
+  --color-primary: var(--primary);
+  --color-primary100: var(--primary100);
+  --color-border: var(--border);
+  --color-border100: var(--border100);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  width: 10px;
+  border: 5px solid transparent;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  margin-block: 15px;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Theme transition for all elements */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+    color 0.2s ease;
+}
