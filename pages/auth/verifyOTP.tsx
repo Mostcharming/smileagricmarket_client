@@ -12,10 +12,8 @@ const VerifyOTP = () => {
     <>
         <LogoIcon />
 
-        <div className="w-full flex flex-col">
-            <Typography variant="intro" className="mt-10">Verify OTP</Typography>
-            <Typography className="mb-4">We sent an OTP code to your number 08*******90.</Typography>
-        </div>
+        <Typography variant="intro" className="w-full mt-10">Verify OTP</Typography>
+        <Typography className="w-full mb-4">We sent an OTP code to your number 08*******90.</Typography>
 
         <div className="w-full flex flex-col gap-2">
             <Input

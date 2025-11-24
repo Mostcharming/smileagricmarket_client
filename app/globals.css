@@ -6,6 +6,7 @@
   --background: #F3FFED;
   --foreground: #0B1307;
   --foreground100: #92998E;
+  --foreground200: #819989;
   --primary: #599C38;
   --primary100: #64B03F;
   --border: #AAB3A6;
@@ -18,6 +19,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-foreground100: var(--foreground100);
+  --color-foreground200: var(--foreground200);
   --color-primary: var(--primary);
   --color-primary100: var(--primary100);
   --color-border: var(--border);

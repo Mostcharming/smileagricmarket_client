@@ -16,7 +16,7 @@ const Login = () => {
 
       <Input
         label="Enter your phone number"
-        id="name"
+        id="phone"
         type="text"
         value={phone}
         onChange={e => setPhone(e.target.value)}

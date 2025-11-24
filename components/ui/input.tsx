@@ -2,18 +2,7 @@
 
 import { useState } from 'react';
 import { EyeIcon, EyeOffIcon } from '../icons';
-
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  id: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
-  labelClassName?: string;
-  containerClassName?: string;
-  bottomText?: string;
-  bottomClassName?: string;
-}
+import { InputProps } from '@/types';
 
 const Input = ({
   label = '',
@@ -51,7 +40,6 @@ const Input = ({
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           className={`peer w-full bg-transparent border border-border rounded-lg px-3 py-4 text-appBlack placeholder:text-border focus:outline-none focus:ring-2 focus:ring-primary ${isPasswordType ? 'pr-10' : ''} ${className}`}
-          placeholder={label ? '' : props.placeholder}
           {...props}
         />
 
