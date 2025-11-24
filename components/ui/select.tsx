@@ -239,7 +239,7 @@ export default function Select({
               {selectedOption.label}
             </span>
           ) : (
-            <span className="truncate text-border">{placeholder || "Select"}</span>
+            <span className="truncate text-border">{placeholder}</span>
           )}
         </span>
         <div>

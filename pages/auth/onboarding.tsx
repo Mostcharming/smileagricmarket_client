@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { useState } from "react"
 import { AddIcon, ArrowLeftIcon } from "@/components/icons"
-import { Button, Typography, Input } from "@/components/ui"
+import { Button, Typography, Input, Select } from "@/components/ui"
 
 const emptyFarm = () => ({
   type: "",
@@ -11,6 +12,20 @@ const emptyFarm = () => ({
   lga: "",
   address: "",
 })
+
+const FARM_TYPES = [
+  { label: "Poultry", value: "poultry" },
+  { label: "Vegetable", value: "vegetable" },
+  { label: "Livestock", value: "livestock" },
+  // add real options from your codebase if available
+]
+
+const STATES = [
+  { label: "Lagos", value: "lagos" },
+  { label: "Oyo", value: "oyo" },
+  { label: "Kano", value: "kano" },
+  // add remaining states
+]
 
 const Onboarding = () => {
   const [step, setStep] = useState<1 | 2>(1)
@@ -24,6 +39,16 @@ const Onboarding = () => {
       return copy
     })
   }
+
+  const handleSelectChange =
+    (index: number, field: string) =>
+    (valueOrEvent: any) => {
+      const value =
+        typeof valueOrEvent === "string"
+          ? valueOrEvent
+          : valueOrEvent?.target?.value ?? ""
+      updateFarm(index, field, value)
+    }
 
   const addFarm = () => setFarms(prev => [...prev, emptyFarm()])
   const removeFarm = (index: number) =>
@@ -82,12 +107,12 @@ const Onboarding = () => {
                 )}
               </div>
 
-              <Input
+              <Select
                 label="What type of farm do you run?"
                 id={`farm-type-${idx}`}
-                type="text"
                 value={farm.type}
-                onChange={e => updateFarm(idx, "type", e.target.value)}
+                options={FARM_TYPES}
+                onChange={handleSelectChange(idx, "type")}
                 className="mb-4"
               />
 
@@ -100,12 +125,12 @@ const Onboarding = () => {
                 className="mb-4"
               />
 
-              <Input
+              <Select
                 label="Select state that the farm is located?"
                 id={`farm-state-${idx}`}
-                type="text"
                 value={farm.state}
-                onChange={e => updateFarm(idx, "state", e.target.value)}
+                options={STATES}
+                onChange={handleSelectChange(idx, "state")}
                 className="mb-4"
               />
 
