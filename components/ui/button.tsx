@@ -1,13 +1,5 @@
 import clsx from 'clsx';
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'light' | 'dark' | 'primary';
-  className?: string;
-  icon?: React.ReactNode;
-  iconPosition?: 'left' | 'right';
-  size?: 'small' | 'medium' | 'large';
-  children: React.ReactNode;
-}
+import { ButtonProps } from '@/types';
 
 const variantClasses: Record<string, string> = {
   light: 'bg-white text-appBlack border border-border',
@@ -28,8 +20,12 @@ const Button = ({
   iconPosition = 'left',
   size = 'small',
   children,
+  isLoading = false,
   ...props
 }: ButtonProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isDisabled = (props as any).disabled || isLoading;
+
   return (
     <button
       className={clsx(
@@ -39,10 +35,43 @@ const Button = ({
         className
       )}
       {...props}
+      disabled={isDisabled}
+      aria-busy={isLoading}
     >
-      {icon && iconPosition === 'left' && <span className="flex items-center">{icon}</span>}
+      {isLoading ? (
+        <span className="flex items-center" aria-hidden="true">
+          <svg
+            className="w-4 h-4 animate-spin text-current"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="3"
+              opacity="0.25"
+            />
+            <path
+              d="M22 12a10 10 0 0 1-10 10"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </svg>
+        </span>
+      ) : (
+        icon &&
+        iconPosition === "left" && (
+          <span className="flex items-center">{icon}</span>
+        )
+      )}
       <span>{children}</span>
-      {icon && iconPosition === 'right' && <span className="flex items-center">{icon}</span>}
+      {icon && iconPosition === "right" && !isLoading && (
+        <span className="flex items-center">{icon}</span>
+      )}
     </button>
   );
 };

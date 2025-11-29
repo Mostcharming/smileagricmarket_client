@@ -31,3 +31,13 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   bottomText?: string;
   bottomClassName?: string;
 }
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'light' | 'dark' | 'primary';
+  className?: string;
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
+  size?: 'small' | 'medium' | 'large';
+  children: React.ReactNode;
+  isLoading?: boolean;
+}

@@ -1,12 +1,39 @@
 "use client"
 
-import Link from "next/link"
 import { useState } from "react"
-import { Button, Typography, Input } from "@/components/ui"
+import { useRouter } from "next/navigation"
 import { LogoIcon } from "@/components/icons"
+import { Button, Typography, Input } from "@/components/ui"
+import { useRequestOtp } from "@/mutation"
+import { toast } from "sonner"
 
 const Login = () => {
+  const router = useRouter()
+  const { mutate, isPending } = useRequestOtp()
+
   const [phone, setPhone] = useState("")
+
+  const handleLogin = () => {
+    const phoneRegex = /^\d{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+      toast.error("Please enter a valid phone number.");
+      return;
+    }
+
+    const payload = {
+      phoneNumber: phone,
+    };
+
+    mutate(payload, {
+      onSuccess: () => {
+        toast.success("Login successful! OTP has been sent to your phone number.");
+        router.push(`/verify-otp?phone=${phone}`);
+      },
+      onError: (error) => {
+        toast.error(error?.message || "Failed to login, please try again.");
+      },
+    });
+  }
 
   return (
     <>
@@ -23,17 +50,17 @@ const Login = () => {
         bottomText="You will receive an OTP code as SMS / Whatsapp"
       />
 
-      <Link href="/verify-otp" className="w-full">
-        <Button
-          variant="primary"
-          className="w-full uppercase mt-4"
-          size="large"
-          type="submit"
-          disabled={!phone}
-        >
-          Submit phone number
-        </Button>
-      </Link>
+      <Button
+        variant="primary"
+        className="w-full uppercase mt-4"
+        size="large"
+        type="submit"
+        onClick={handleLogin}
+        isLoading={isPending}
+        disabled={!phone}
+      >
+        Submit phone number
+      </Button>
     </>
   )
 }
