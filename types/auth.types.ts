@@ -5,3 +5,22 @@ export interface AuthPayload {
   gender?: string;
   email?: string;
 };
+
+export interface AuthResponse {
+  phoneNumber: string;
+  userId: string;
+  isNewUser: boolean;
+};
+
+export interface ProfileResponse {
+  token: string;
+  user: profileSchema;
+};
+
+export interface profileSchema {
+  id: string;
+  phoneNumber: string;
+  fullName: string;
+  email: string;
+  gender: string;
+};

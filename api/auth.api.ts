@@ -1,6 +1,6 @@
 import { authUrl } from "@/constants";
 import { post } from "@/utils";
-import { ApiResponse, AuthPayload } from "@/types";
+import { ApiResponse, AuthPayload, AuthResponse, ProfileResponse } from "@/types";
 
 export async function requestOtp(
     payload: AuthPayload
@@ -11,14 +11,14 @@ export async function requestOtp(
 
 export async function verifyOtp(
     payload: AuthPayload
-): Promise<ApiResponse<string[]>> {
-    const response = await post<string[]>(authUrl.verifyOtp(), payload);
+): Promise<ApiResponse<AuthResponse>> {
+    const response = await post<AuthResponse>(authUrl.verifyOtp(), payload);
     return response;
 }
 
 export async function completeUserProfile(
     payload: AuthPayload
-): Promise<ApiResponse<string[]>> {
-    const response = await post<string[]>(authUrl.completeUserProfile(), payload);
+): Promise<ApiResponse<ProfileResponse>> {
+    const response = await post<ProfileResponse>(authUrl.completeUserProfile(), payload);
     return response;
 }

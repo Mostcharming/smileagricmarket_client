@@ -54,7 +54,6 @@ const Login = () => {
         variant="primary"
         className="w-full uppercase mt-4"
         size="large"
-        type="submit"
         onClick={handleLogin}
         isLoading={isPending}
         disabled={!phone}

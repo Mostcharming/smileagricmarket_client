@@ -168,7 +168,6 @@ const Onboarding = () => {
             variant="primary"
             className="w-full uppercase mt-2"
             size="large"
-            type="button"
             onClick={handleContinue}
             disabled={!isStep1Valid()}
           >
@@ -195,7 +194,6 @@ const Onboarding = () => {
               variant="primary"
               className="w-full uppercase"
               size="large"
-              type="submit"
               disabled={!nin}
               onClick={() => {
                 // submit farms + nin
