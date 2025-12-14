@@ -22,3 +22,31 @@ export async function completeUserProfile(
     const response = await post<ProfileResponse>(authUrl.completeUserProfile(), payload);
     return response;
 }
+
+export async function setPassword(
+    payload: AuthPayload
+): Promise<ApiResponse<ProfileResponse>> {
+    const response = await post<ProfileResponse>(authUrl.setPassword(), payload);
+    return response;
+}
+
+export async function loginPassword(
+    payload: AuthPayload
+): Promise<ApiResponse<ProfileResponse>> {
+    const response = await post<ProfileResponse>(authUrl.loginPassword(), payload);
+    return response;
+}
+
+export async function forgotPassword(
+    payload: AuthPayload
+): Promise<ApiResponse<ProfileResponse>> {
+    const response = await post<ProfileResponse>(authUrl.forgotPassword(), payload);
+    return response;
+}
+
+export async function resetPassword(
+    payload: AuthPayload
+): Promise<ApiResponse<string[]>> {
+    const response = await post<string[]>(authUrl.resetPassword(), payload);
+    return response;
+}

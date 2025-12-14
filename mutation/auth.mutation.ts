@@ -1,6 +1,7 @@
-import { completeUserProfile, requestOtp, verifyOtp } from "@/api";
+import { AxiosError } from "axios";
+import { completeUserProfile, forgotPassword, loginPassword, requestOtp, resetPassword, setPassword, verifyOtp } from "@/api";
 import { useMutation } from "@tanstack/react-query";
-import { AuthPayload } from "@/types";
+import { ApiResponse, AuthPayload, TokenResponse } from "@/types";
 
 export const useRequestOtp = () => {
     return useMutation({
@@ -14,8 +15,40 @@ export const useVerifyOtp = () => {
     });
 };
 
-export const useCompleteUserProfile = () => {
-    return useMutation({
+export function useCompleteUserProfile() {
+    return useMutation<
+        ApiResponse<TokenResponse>,
+        AxiosError<ApiResponse<{ token: string }>>,
+        AuthPayload
+    >({
         mutationFn: (payload: AuthPayload) => completeUserProfile(payload),
+    });
+}
+
+export const useSetPassword = () => {
+    return useMutation<
+        ApiResponse<TokenResponse>,
+        AxiosError<ApiResponse<{ token: string }>>,
+        AuthPayload
+    >({
+        mutationFn: (payload: AuthPayload) => setPassword(payload),
+    });
+};
+
+export const useLoginPassword = () => {
+    return useMutation({
+        mutationFn: (payload: AuthPayload) => loginPassword(payload),
+    });
+};
+
+export const useForgotPassword = () => {
+    return useMutation({
+        mutationFn: (payload: AuthPayload) => forgotPassword(payload),
+    });
+};
+
+export const useResetPassword = () => {
+    return useMutation({
+        mutationFn: (payload: AuthPayload) => resetPassword(payload),
     });
 };

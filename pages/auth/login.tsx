@@ -1,33 +1,31 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { LogoIcon } from "@/components/icons"
 import { Button, Typography, Input } from "@/components/ui"
-import { useRequestOtp } from "@/mutation"
+import { useLoginPassword } from "@/mutation"
 import { toast } from "sonner"
 
 const Login = () => {
   const router = useRouter()
-  const { mutate, isPending } = useRequestOtp()
+  const { mutate, isPending } = useLoginPassword()
 
   const [phone, setPhone] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleLogin = () => {
-    const phoneRegex = /^\d{10,15}$/;
-    if (!phoneRegex.test(phone)) {
-      toast.error("Please enter a valid phone number.");
-      return;
-    }
-
     const payload = {
       phoneNumber: phone,
+      password,
     };
 
     mutate(payload, {
       onSuccess: () => {
-        toast.success("Login successful! OTP has been sent to your phone number.");
-        router.push(`/verify-otp?phone=${phone}`);
+        toast.success("Login successful!");
+        router.push('/dashboard');
       },
       onError: (error) => {
         toast.error(error?.message || "Failed to login, please try again.");
@@ -42,24 +40,42 @@ const Login = () => {
       <Typography variant="intro" className="mt-10 mb-4">Welcome to SmileAgrimarket</Typography>
 
       <Input
-        label="Enter your phone number"
+        label="Enter your email address or phone number"
         id="phone"
         type="text"
         value={phone}
         onChange={e => setPhone(e.target.value)}
-        bottomText="You will receive an OTP code as SMS / Whatsapp"
       />
+
+      <Input
+        label="Enter your password"
+        id="password"
+        type="password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        containerClassName="mt-4 mb-2"
+      />
+
+      <div className="w-full">
+        <Link href="/forgot-password">
+          <Typography variant="normal" className="text-primary font-medium">Forgot Password</Typography>
+        </Link>
+      </div>
 
       <Button
         variant="primary"
-        className="w-full uppercase mt-4"
+        className="w-full uppercase mt-4 mb-3"
         size="large"
         onClick={handleLogin}
         isLoading={isPending}
         disabled={!phone}
       >
-        Submit phone number
+        Log in
       </Button>
+
+      <Typography variant="normal" className="text-center">
+        Don't have an account? <Link href="/signup" className="text-primary font-medium">Sign up</Link>
+      </Typography>
     </>
   )
 }

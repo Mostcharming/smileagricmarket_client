@@ -5,11 +5,12 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { LogoIcon } from "@/components/icons"
 import { Button, Typography, Input } from "@/components/ui"
 import { useVerifyOtp, useRequestOtp } from "@/mutation"
+import { setCookie } from "@/utils"
 import { toast } from "sonner"
 
 const VerifyOTP = () => {
-  const searchParams = useSearchParams()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [otp, setOtp] = useState("")
 
   const { mutate: verifyMutate, isPending } = useVerifyOtp()
@@ -54,11 +55,8 @@ const VerifyOTP = () => {
     verifyMutate(payload, {
       onSuccess: (response) => {
         toast.success("OTP verified.")
-        if (response?.data?.isNewUser) {
-            router.push(`/signup?phone=${phoneParam}`)
-        } else {
-            router.push("/dashboard")
-        }
+        setCookie(response.data.token);
+        router.push("/onboarding")
       },
       onError: (error) => {
         toast.error(error?.message || "Failed to verify OTP.")

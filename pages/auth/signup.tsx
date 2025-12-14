@@ -1,57 +1,36 @@
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { LogoIcon } from "@/components/icons"
-import { Button, Typography, Input, Select } from "@/components/ui"
-import { useCompleteUserProfile } from "@/mutation"
-import { SelectOptions } from "@/types"
+import { Button, Typography, Input } from "@/components/ui"
+import { useRequestOtp } from "@/mutation"
 import { toast } from "sonner"
 
 const Signup = () => {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const phoneParam = searchParams?.get("phone") ?? ""
-
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [gender, setGender] = useState("")
-
-  const { mutate, isPending } = useCompleteUserProfile()
-
-  const genderOptions: SelectOptions[] = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-  ]
+  const [phone, setPhone] = useState("")
+  const { mutate, isPending } = useRequestOtp()
 
   const handleContinue = () => {
-    if (!phoneParam) {
-      toast.error("Missing phone number.")
-      return
-    }
-    if (!name.trim()) {
-      toast.error("Please enter your full name.")
-      return
-    }
-    if (!email.trim()) {
-      toast.error("Please enter your email.")
-      return
+    const phoneRegex = /^\d{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+      toast.error("Please enter a valid phone number.");
+      return;
     }
 
     const payload = {
-      phoneNumber: phoneParam,
-      fullName: name.trim(),
-      gender,
-      email: email.trim().toLowerCase(),
+      phoneNumber: phone,
     }
 
     mutate(payload, {
       onSuccess: () => {
-        toast.success("Profile completed.")
-        router.push("/onboarding")
+        toast.success("Signup successful! OTP has been sent to your phone number.")
+        router.push(`/verify-otp?phone=${phone}`)
       },
       onError: (error) => {
-        toast.error(error?.message || "Failed to complete profile.")
+        toast.error(error?.message || "Failed to signup, please try again.")
       },
     })
   }
@@ -60,45 +39,31 @@ const Signup = () => {
     <>
       <LogoIcon />
 
-      <Typography variant="intro" className="mt-10 mb-4">Sign up on Smile Agrimarket</Typography>
+      <Typography variant="intro" className="mt-10 mb-4">Welcome to SmileAgrimarket</Typography>
 
       <Input
-        label="Enter your Fullname"
+        label="Enter your phone number"
         id="name"
         type="text"
-        value={name}
-        onChange={e => setName(e.target.value)}
-        className="mb-4"
-      />
-
-      <Select
-        options={genderOptions}
-        value={genderOptions.find(opt => opt.value === gender) ? gender : ''}
-        onChange={e => setGender(e.target.value as string)}
-        placeholder="Select your Gender"
-        label="Select your Gender"
-        className="w-full mb-4"
-      />
-
-      <Input
-        label="Enter your email address"
-        id="email"
-        type="text"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        bottomText="Please confirm that your email address is valid"
+        value={phone}
+        onChange={e => setPhone(e.target.value)}
+        bottomText="You will receive an OTP code as SMS / Whatsapp"
       />
 
       <Button
         variant="primary"
-        className="w-full uppercase mt-4"
+        className="w-full uppercase mt-4 mb-3"
         size="large"
         onClick={handleContinue}
         isLoading={isPending}
-        disabled={isPending}
+        disabled={!phone}
       >
-        continue
+        Submit phone number
       </Button>
+
+      <Typography variant="normal" className="text-center">
+        Already have an account? <Link href="/login" className="text-primary font-medium">Log in</Link>
+      </Typography>
     </>
   )
 }

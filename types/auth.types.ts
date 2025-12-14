@@ -1,14 +1,17 @@
 export interface AuthPayload {
-  phoneNumber: string;
+  phoneNumber?: string;
   otp?: string;
   fullName?: string;
   gender?: string;
   email?: string;
+  password?: string;
+  passwordConfirmation?: string;
 };
 
 export interface AuthResponse {
   phoneNumber: string;
   userId: string;
+  token: string;
   isNewUser: boolean;
 };
 

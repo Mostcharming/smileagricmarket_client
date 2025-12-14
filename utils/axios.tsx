@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
     headers,
 });
 
-const cookieName = "resvailCookie";
+const cookieName = "smileAgrimarketCookie";
 
 axiosInstance.interceptors.request.use(
     (config) => {

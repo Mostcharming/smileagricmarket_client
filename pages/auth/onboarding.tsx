@@ -1,69 +1,73 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
-import { AddIcon, ArrowLeftIcon } from "@/components/icons"
+import { useRouter } from "next/navigation"
+import { ArrowLeftIcon } from "@/components/icons"
 import { Button, Typography, Input, Select } from "@/components/ui"
-
-const emptyFarm = () => ({
-  type: "",
-  size: "",
-  state: "",
-  lga: "",
-  address: "",
-})
-
-const FARM_TYPES = [
-  { label: "Poultry", value: "poultry" },
-  { label: "Vegetable", value: "vegetable" },
-  { label: "Livestock", value: "livestock" },
-  // add real options from your codebase if available
-]
-
-const STATES = [
-  { label: "Lagos", value: "lagos" },
-  { label: "Oyo", value: "oyo" },
-  { label: "Kano", value: "kano" },
-  // add remaining states
-]
+import { useCompleteUserProfile, useSetPassword } from "@/mutation"
+import { SelectOptions } from "@/types"
+import { toast } from "sonner"
 
 const Onboarding = () => {
+  const router = useRouter()
   const [step, setStep] = useState<1 | 2>(1)
-  const [farms, setFarms] = useState([emptyFarm()])
-  const [nin, setNin] = useState("")
 
-  const updateFarm = (index: number, field: string, value: string) => {
-    setFarms(prev => {
-      const copy = [...prev]
-      copy[index] = { ...copy[index], [field]: value }
-      return copy
-    })
-  }
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [gender, setGender] = useState("")
 
-  const handleSelectChange =
-    (index: number, field: string) =>
-    (valueOrEvent: any) => {
-      const value =
-        typeof valueOrEvent === "string"
-          ? valueOrEvent
-          : valueOrEvent?.target?.value ?? ""
-      updateFarm(index, field, value)
-    }
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
-  const addFarm = () => setFarms(prev => [...prev, emptyFarm()])
-  const removeFarm = (index: number) =>
-    setFarms(prev => prev.filter((_, i) => i !== index))
+  const { mutate, isPending } = useCompleteUserProfile()
+  const { mutate: mutateComplete, isPending: isPendingComplete } = useSetPassword()
 
-  const isStep1Valid = () => {
-    // require at least one farm with all fields filled
-    return farms.some(f =>
-      f.type.trim() && f.size.trim() && f.state.trim() && f.lga.trim() && f.address.trim()
-    )
-  }
+  const genderOptions: SelectOptions[] = [
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+  ]
 
   const handleContinue = () => {
-    if (step === 1 && isStep1Valid()) setStep(2)
-    // submit logic for step2 would go here
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    const payload = {
+      fullName: name,
+      gender,
+      email,
+    };
+
+    mutate(payload, {
+      onSuccess: () => {
+        if (step === 1) setStep(2)
+      },
+      onError: (error) => {
+        toast.error(error?.message || "An Error occured, please try again.");
+      },
+    });
+  }
+
+  const handleComplete = () => {
+    const payload = {
+      fullName: name,
+      gender,
+      email,
+      password,
+      passwordConfirmation: confirmPassword,
+    };
+
+    mutateComplete(payload, {
+      onSuccess: () => {
+        router.push("/dashboard");
+      },
+      onError: (error) => {
+        toast.error(error?.message || "An Error occured, please try again.");
+      },
+    });
   }
 
   const handleBack = () => {
@@ -73,141 +77,97 @@ const Onboarding = () => {
 
   return (
     <>
-      <div className="w-full mb-7">
+      <div className="w-full flex items-center gap-2 mb-7">
         <div onClick={handleBack} className="w-fit cursor-pointer">
           <ArrowLeftIcon size={20} />
         </div>
-      </div>
-
-      <Typography variant="intro" className="w-full mb-4">Sign up as a farmer</Typography>
-
-      <div className="w-full mb-4">
-        <div className="h-1 bg-primary/30 rounded-full overflow-hidden">
-          <div
-            className={`h-full bg-primary rounded-full transition-all`}
-            style={{ width: step === 1 ? "50%" : "100%" }}
-          />
+        <div className="flex-1">
+          <div className="h-1 bg-primary/30 rounded-full overflow-hidden">
+            <div
+              className={`h-full bg-primary rounded-full transition-all`}
+              style={{ width: step === 1 ? "50%" : "100%" }}
+            />
+          </div>
         </div>
       </div>
 
+      <Typography variant="intro" className="w-full mb-4">Sign up on Smile Agrimarket</Typography>
+
       {step === 1 ? (
         <>
-          {farms.map((farm, idx) => (
-            <div key={idx} className="w-full mb-4">
-              <div className="flex justify-between items-center mb-4">
-                <Typography variant="normal" className="font-bold">Farm {idx + 1}</Typography>
-                {farms.length > 1 && (
-                  <button
-                    onClick={() => removeFarm(idx)}
-                    className="text-sm text-red-500 cursor-pointer"
-                    aria-label={`Remove farm ${idx + 1}`}
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
+          <Input
+            label="Enter your Fullname"
+            id="name"
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            className="mb-4"
+          />
 
-              <Select
-                label="What type of farm do you run?"
-                id={`farm-type-${idx}`}
-                value={farm.type}
-                options={FARM_TYPES}
-                onChange={handleSelectChange(idx, "type")}
-                className="mb-4"
-              />
+          <Select
+            options={genderOptions}
+            value={genderOptions.find(opt => opt.value === gender) ? gender : ''}
+            onChange={e => setGender(e.target.value as string)}
+            placeholder="Select your Gender"
+            label="Select your Gender"
+            className="w-full mb-4"
+          />
 
-              <Input
-                label="Farm Size (Sqm)"
-                id={`farm-size-${idx}`}
-                type="text"
-                value={farm.size}
-                onChange={e => updateFarm(idx, "size", e.target.value)}
-                className="mb-4"
-              />
-
-              <Select
-                label="Select state that the farm is located?"
-                id={`farm-state-${idx}`}
-                value={farm.state}
-                options={STATES}
-                onChange={handleSelectChange(idx, "state")}
-                className="mb-4"
-              />
-
-              <Input
-                label="Enter Local Government Area of farm"
-                id={`farm-lga-${idx}`}
-                type="text"
-                value={farm.lga}
-                onChange={e => updateFarm(idx, "lga", e.target.value)}
-                className="mb-4"
-              />
-
-              <Input
-                label="Enter farm address"
-                id={`farm-address-${idx}`}
-                type="text"
-                value={farm.address}
-                onChange={e => updateFarm(idx, "address", e.target.value)}
-              />
-            </div>
-          ))}
-
-          <div className="w-full">
-            <button
-              onClick={addFarm}
-              className="flex items-center gap-1 cursor-pointer mb-4"
-              type="button"
-            >
-              <AddIcon color="var(--primary)" size={20} />
-              <Typography variant="normal" className="text-primary font-medium">Add another farm</Typography>
-            </button>
-          </div>
+          <Input
+            label="Enter your email address"
+            id="email"
+            type="text"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            bottomText="Please confirm that your email address is valid"
+          />
 
           <Button
             variant="primary"
-            className="w-full uppercase mt-2"
+            className="w-full uppercase mt-4 mb-3"
             size="large"
             onClick={handleContinue}
-            disabled={!isStep1Valid()}
+            isLoading={isPending}
+            disabled={!name || !email || !gender}
           >
             Continue
-          </Button>
-
-          <Typography className="uppercase text-foreground200 font-medium mt-3 p-4 cursor-pointer" onClick={() => {/* skip action */}}>
-            Skip for later
-          </Typography>
+          </Button>      
         </>
       ) : (
         <>
           <Input
-            label="Enter your National Identification Number (NIN)"
-            id="nin"
-            type="text"
-            value={nin}
-            onChange={e => setNin(e.target.value)}
-            bottomText="Your NIN is needed to verify your identity"
+            label="Enter your password"
+            id="password"
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            containerClassName="mb-4"
           />
 
-          <div className="w-full mt-4">
-            <Button
-              variant="primary"
-              className="w-full uppercase"
-              size="large"
-              disabled={!nin}
-              onClick={() => {
-                // submit farms + nin
-              }}
-            >
-              Complete signup
-            </Button>
-          </div>
+          <Input
+            label="Enter your password again"
+            id="confirm-password"
+            type="password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+          />
 
-          <Typography className="uppercase text-foreground200 font-medium mt-3 p-4 cursor-pointer">
-            Skip for later
-          </Typography>
+          <Button
+            variant="primary"
+            className="w-full uppercase mt-4 mb-3"
+            size="large"
+            disabled={!password || password !== confirmPassword}
+            isLoading={isPendingComplete}
+            onClick={handleComplete}
+          >
+            Complete signup
+          </Button>
         </>
       )}
+
+      <Typography variant="normal" className="text-center">
+        Already have an account? <Link href="/login" className="text-primary font-medium">Log in</Link>
+      </Typography>
     </>
   )
 }
