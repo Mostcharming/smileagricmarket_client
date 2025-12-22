@@ -1,6 +1,9 @@
 export { AddIcon } from './add';
 export { ArrowLeftIcon } from "./arrowLeft";
 export { ChevronIcon } from "./chevron";
+export { CloseIcon } from "./close";
 export { EyeIcon } from "./eye";
 export { EyeOffIcon } from "./eyeOff";
 export { LogoIcon } from "./logo";
+export { PhotoIcon } from "./photo";
+export { UploadIcon } from "./upload";

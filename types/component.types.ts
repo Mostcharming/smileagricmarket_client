@@ -41,3 +41,28 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   children: React.ReactNode;
   isLoading?: boolean;
 }
+
+export interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  ariaLabel?: string;
+  maxWidth?: string;
+  maxHeight?: string;
+  bottomRight?: boolean;
+  closeOnOverlayClick?: boolean;
+}
+
+export interface KycModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  number: string;
+  setNumber: (number: string) => void;
+  identification: string;
+  setIdentification: (identification: string) => void;
+  identificationOptions: SelectOptions[];
+  photo: File | null;
+  setPhoto?: (photo: File | null) => void;
+  isPending?: boolean;
+  onDone: () => void;
+}
