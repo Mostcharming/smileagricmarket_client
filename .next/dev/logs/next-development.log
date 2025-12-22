@@ -1,0 +1,439 @@
+[00:00:04.697] Server  LOG      ✓ Ready in 3.5s
+[00:00:27.789] Server  LOG      ○ Compiling / ...
+[00:00:32.939] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:35.272] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:10.585] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:56.902] Server  LOG      ✓ Compiled in 230ms
+[00:09:54.619] Server  LOG      ✓ Compiled in 208ms
+[00:09:55.405] Browser ERROR   ./components/icons/close.tsx:32:1
+Parsing ecmascript source code failed
+  30 |     </svg>
+  31 |   );
+> 32 | } 
+     | ^
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./components/icons/close.tsx
+    ./components/icons/index.ts
+    ./app/loading.tsx
+[00:11:41.842] Server  LOG      ✓ Compiled in 138ms
+[00:11:42.396] Browser ERROR   ./components/modal/kycModal.tsx:55:9
+Parsing ecmascript source code failed
+  53 |
+  54 |           <
+> 55 |         </div>
+     |         ^
+  56 |         <div className="w-full mb-5">
+  57 |           <div className="h-1 bg-primary/30 rounded-full overflow-hidden">
+  58 |             <div
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[00:11:42.396] Browser ERROR   ./components/modal/kycModal.tsx:55:10
+Parsing ecmascript source code failed
+  53 |
+  54 |           <
+> 55 |         </div>
+     |          ^^^^^
+  56 |         <div className="w-full mb-5">
+  57 |           <div className="h-1 bg-primary/30 rounded-full overflow-hidden">
+  58 |             <div
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[00:11:46.832] Server  LOG      ✓ Compiled in 179ms
+[00:11:47.404] Browser ERROR   ./components/modal/kycModal.tsx:135:1
+Parsing ecmascript source code failed
+  133 |     </Modal>
+  134 |   );
+> 135 | };
+      | ^
+  136 |
+  137 | export default KycModal;
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[00:11:49.560] Server  LOG      ✓ Compiled in 259ms
+[00:11:50.395] Browser ERROR   ./components/modal/kycModal.tsx:135:5
+Parsing ecmascript source code failed
+  133 |         )}   
+  134 |       </div>
+> 135 |     </Modal>
+      |     ^
+  136 |   );
+  137 | };
+  138 |
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[00:11:50.395] Browser ERROR   ./components/modal/kycModal.tsx:135:6
+Parsing ecmascript source code failed
+  133 |         )}   
+  134 |       </div>
+> 135 |     </Modal>
+      |      ^^^^^^^
+  136 |   );
+  137 | };
+  138 |
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[00:12:06.902] Server  LOG      ✓ Compiled in 140ms
+[00:12:07.401] Browser ERROR   ./components/modal/kycModal.tsx:54:20
+Parsing ecmascript source code failed
+  52 |           </div>
+  53 |
+> 54 |           < onClick={onClose} className="w-fit cursor-pointer">
+     |                    ^
+  55 |             <ArrowLeftIcon size={24} className="rotate-45" />
+  56 |           </div>
+  57 |         </div>
+
+Expected '</', got '='
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[00:12:11.066] Server  LOG      ✓ Compiled in 312ms
+[00:12:11.402] Browser ERROR   ./components/modal/kycModal.tsx:56:17
+Parsing ecmascript source code failed
+  54 |           <DIV onClick={onClose} className="w-fit cursor-pointer">
+  55 |             <ArrowLeftIcon size={24} className="rotate-45" />
+> 56 |           </div>
+     |                 ^
+> 57 |         </div>
+     | ^^^^^^^^^
+  58 |         <div className="w-full mb-5">
+  59 |           <div className="h-1 bg-primary/30 rounded-full overflow-hidden">
+  60 |             <div
+
+Expected '</', got 'jsx text (
+        )'
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[00:12:13.933] Server  LOG      ✓ Compiled in 162ms
+[00:12:14.397] Browser ERROR   ./components/modal/kycModal.tsx:54:20
+Parsing ecmascript source code failed
+  52 |           </div>
+  53 |
+> 54 |           < onClick={onClose} className="w-fit cursor-pointer">
+     |                    ^
+  55 |             <ArrowLeftIcon size={24} className="rotate-45" />
+  56 |           </div>
+  57 |         </div>
+
+Expected '</', got '='
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[06:50:00.365] Server  LOG      ✓ Compiled in 204ms
+[06:50:01.506] Browser ERROR   ./components/modal/kycModal.tsx:55:27
+Parsing ecmascript source code failed
+  53 |
+  54 |           <div onClick={onClose} className="w-fit cursor-pointer">
+> 55 |             <ArrowLeftIcon" />
+     |                           ^^^^
+  56 |           </div>
+  57 |         </div>
+  58 |         <div className="w-full mb-5">
+
+Unterminated string constant
+
+Import traces:
+  Client Component Browser:
+    ./components/modal/kycModal.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Client Component Browser]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/modal/kycModal.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Client Component SSR]
+    ./pages/main/dashboard.tsx [Server Component]
+    ./app/(main)/dashboard/page.tsx [Server Component]
+[06:50:14.263] Server  LOG      ✓ Compiled in 106ms
+[06:50:15.404] Browser ERROR   uncaughtError: ReferenceError: Close is not defined
+[06:50:15.604] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[06:50:16.310] Server  LOG      ✓ Compiled in 152ms
+[06:50:17.646] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:50:20.780] Browser ERROR   Invalid DOM property `%s`. Did you mean `%s`? clip-path clipPath
+[06:50:51.033] Server  LOG      ✓ Compiled in 114ms
+[06:50:54.370] Server  LOG      ✓ Compiled in 191ms
+[06:55:43.242] Server  LOG      ✓ Compiled in 235ms
+[06:55:48.443] Server  LOG      ✓ Compiled in 166ms
+[06:56:18.202] Server  LOG      ✓ Compiled in 102ms
+[06:56:24.176] Server  LOG      ✓ Compiled in 271ms
+[06:56:31.859] Server  LOG      ✓ Compiled in 151ms
+[06:56:43.055] Server  LOG      ✓ Compiled in 160ms
+[06:56:45.269] Server  LOG      ✓ Compiled in 127ms
+[06:56:55.890] Server  LOG      ✓ Compiled in 148ms
+[06:56:59.433] Server  LOG      ✓ Compiled in 222ms
+[06:57:02.456] Server  LOG      ✓ Compiled in 132ms
+[06:57:04.266] Server  LOG      ✓ Compiled in 339ms
+[06:57:31.561] Server  LOG      ✓ Compiled in 183ms
+[06:57:33.580] Server  LOG      ✓ Compiled in 109ms
+[06:57:37.452] Server  LOG      ✓ Compiled in 197ms
+[06:57:42.360] Server  LOG      ✓ Compiled in 148ms
+[06:57:58.075] Server  LOG      ✓ Compiled in 152ms
+[06:57:59.199] Server  LOG      ✓ Compiled in 168ms
+[06:58:02.375] Server  LOG      ✓ Compiled in 188ms
+[06:59:42.944] Server  LOG      ✓ Compiled in 128ms
+[06:59:59.764] Server  LOG      ✓ Compiled in 194ms
+[07:00:12.246] Server  LOG      ✓ Compiled in 164ms
+[07:00:12.480] Browser ERROR   uncaughtError: ReferenceError: photo is not defined
+[07:00:29.727] Server  LOG      ✓ Compiled in 245ms
+[07:00:30.398] Browser ERROR   ./pages/main/dashboard.tsx:16:3
+Parsing ecmascript source code failed
+  14 |   const [identification, setIdentification] = useState("");
+  15 |   const 
+> 16 |   const [isPending, setIsPending] = useState(false);
+     |   ^^^^^
+  17 |
+  18 |   const identificationOptions: SelectOptions[] = [
+  19 |     { label: "National ID Card", value: "id-card" },
+
+Expected ident
+
+Import trace:
+  Server Component:
+    ./pages/main/dashboard.tsx
+    ./app/(main)/dashboard/page.tsx
+[07:00:31.691] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[07:00:34.336] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:00:44.294] Server  LOG      ✓ Compiled in 141ms
+[07:00:46.007] Server  LOG      ✓ Compiled in 136ms
+[07:00:48.051] Server  LOG      ✓ Compiled in 137ms
+[07:00:50.278] Server  LOG      ✓ Compiled in 110ms
+[07:00:53.812] Server  LOG      ✓ Compiled in 223ms
+[07:00:55.182] Server  LOG      ✓ Compiled in 135ms
+[07:03:04.702] Server  LOG      ✓ Compiled in 85ms
+[07:03:07.756] Server  LOG      ✓ Compiled in 83ms
+[07:03:09.312] Server  LOG      ✓ Compiled in 203ms
+[07:03:21.503] Server  LOG      ✓ Compiled in 117ms
+[07:03:23.561] Server  LOG      ✓ Compiled in 165ms
+[07:03:27.520] Server  LOG      ✓ Compiled in 109ms
+[07:03:34.972] Server  LOG      ✓ Compiled in 159ms
+[07:03:37.650] Browser ERROR   Invalid DOM property `%s`. Did you mean `%s`? clip-path clipPath
+[07:04:45.702] Server  LOG      ✓ Compiled in 203ms
+[07:04:58.482] Server  LOG      ✓ Compiled in 108ms
+[07:05:07.182] Server  LOG      ✓ Compiled in 117ms
+[07:05:12.321] Server  LOG      ✓ Compiled in 221ms
+[07:05:31.133] Server  LOG      ✓ Compiled in 203ms
+[07:05:51.626] Server  LOG      ✓ Compiled in 211ms
+[07:05:59.466] Server  LOG      ✓ Compiled in 99ms
+[07:06:08.439] Server  LOG      ✓ Compiled in 138ms
+[07:06:09.840] Server  LOG      ✓ Compiled in 121ms
+[07:06:20.726] Server  LOG      ✓ Compiled in 320ms
+[07:06:22.023] Server  LOG      ✓ Compiled in 154ms
+[07:06:23.031] Server  LOG      ✓ Compiled in 150ms
+[07:06:36.207] Server  LOG      ✓ Compiled in 164ms
+[07:06:57.539] Server  LOG      ✓ Compiled in 170ms
+[07:07:17.164] Server  LOG      ✓ Compiled in 236ms
+[07:07:30.771] Server  LOG      ✓ Compiled in 266ms
+[07:07:34.944] Server  LOG      ✓ Compiled in 155ms
+[07:07:38.265] Server  LOG      ✓ Compiled in 175ms
+[07:07:47.831] Server  LOG      ✓ Compiled in 126ms
+[07:08:56.770] Server  LOG      ✓ Compiled in 132ms
+[07:10:15.435] Server  LOG      ✓ Compiled in 203ms
+[07:10:25.505] Server  LOG      ✓ Compiled in 132ms
+[07:10:30.413] Server  LOG      ✓ Compiled in 205ms
+[07:10:31.857] Server  LOG      ✓ Compiled in 115ms
+[07:10:35.621] Server  LOG      ✓ Compiled in 106ms
+[07:10:39.818] Server  LOG      ✓ Compiled in 244ms
+[07:10:40.410] Browser ERROR   uncaughtError: ReferenceError: handleU is not defined
+[07:10:42.706] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[07:10:42.729] Server  LOG      ✓ Compiled in 119ms
+[07:10:44.933] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:10:45.591] Server  LOG      ✓ Compiled in 152ms
+[07:10:53.576] Server  LOG      ✓ Compiled in 214ms
+[07:10:55.094] Server  LOG      ✓ Compiled in 147ms
+[07:21:22.468] Browser ERROR   Invalid DOM property `%s`. Did you mean `%s`? clip-path clipPath
+[07:22:23.999] Server  LOG      ✓ Compiled in 341ms
+[07:22:24.427] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_76d7d784._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.433] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.434] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__a7c529fd._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.480] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\node_modules_next_dist_ed8702e8._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.764] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.768] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.783] Server  ERROR    ⨯ ReferenceError: expo is not defined
+[07:22:24.808] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_76d7d784._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.811] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.815] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__a7c529fd._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.817] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\node_modules_next_dist_ed8702e8._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.823] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.826] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:24.836] Server  ERROR    ⨯ ReferenceError: expo is not defined
+[07:22:25.099] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_76d7d784._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.108] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.125] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__a7c529fd._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.205] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\node_modules_next_dist_ed8702e8._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.239] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.247] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.283] Server  ERROR    ⨯ ReferenceError: expo is not defined
+[07:22:25.320] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_76d7d784._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.323] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.325] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__a7c529fd._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.328] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\node_modules_next_dist_ed8702e8._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.336] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.339] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[07:22:25.350] Server  ERROR    ⨯ ReferenceError: expo is not defined
+[07:22:28.174] Server  LOG      ✓ Compiled in 127ms
+[07:22:29.093] Browser ERROR   uncaughtError: ReferenceError: expo is not defined
+[07:22:30.391] Server  LOG      ✓ Compiled in 208ms
+[07:22:32.397] Browser ERROR   ./components/icons/index.ts:9:26
+Parsing ecmascript source code failed
+  7 | export { EyeOffIcon } from "./eyeOff";
+  8 | export { LogoIcon } from "./logo";
+> 9 | export { PhotoIcon } from
+    |                          ^
+
+Unexpected token `<eof>`. Expected a string literal
+
+Import trace:
+  Server Component:
+    ./components/icons/index.ts
+    ./app/loading.tsx
+[07:22:32.752] Server  LOG      ✓ Compiled in 132ms
+[07:22:34.776] Server  LOG      ✓ Compiled in 208ms
+[07:22:35.997] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:23:31.011] Server  LOG      ✓ Compiled in 167ms
+[07:23:31.406] Browser ERROR   ./components/icons/upload.tsx:32:1
+Parsing ecmascript source code failed
+  30 |     </svg>
+  31 |   );
+> 32 | } 
+     | ^
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./components/icons/upload.tsx
+    ./components/icons/index.ts
+    ./app/loading.tsx
+[07:23:40.366] Server  LOG      ✓ Compiled in 146ms
+[07:25:51.085] Server  LOG      ✓ Compiled in 92ms
+[07:28:07.940] Server  LOG      ✓ Compiled in 227ms
+[07:28:10.995] Server  LOG      ✓ Compiled in 129ms
+[07:28:13.362] Server  LOG      ✓ Compiled in 147ms
+[07:28:20.693] Server  LOG      ✓ Compiled in 138ms
+[07:28:32.609] Server  LOG      ✓ Compiled in 289ms
+[07:28:36.071] Server  LOG      ✓ Compiled in 202ms
+[07:28:43.353] Server  LOG      ✓ Compiled in 154ms
+[07:28:44.541] Server  LOG      ✓ Compiled in 199ms
+[07:29:06.112] Browser ERROR   Invalid DOM property `%s`. Did you mean `%s`? clip-path clipPath
+[07:29:40.215] Server  LOG      ✓ Compiled in 247ms
+[07:30:04.722] Server  LOG      ✓ Compiled in 137ms
+[07:30:05.394] Browser ERROR   ./components/icons/photo.tsx:37:1
+Parsing ecmascript source code failed
+  35 |     </svg>
+  36 |   );
+> 37 | } 
+     | ^
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./components/icons/photo.tsx
+    ./components/icons/index.ts
+    ./app/loading.tsx
+[07:30:57.121] Server  LOG      ✓ Compiled in 202ms
+[07:38:36.232] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:41:04.602] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:41:05.576] Browser ERROR   Invalid DOM property `%s`. Did you mean `%s`? clip-path clipPath
+[07:53:45.258] Server  LOG      ✓ Compiled in 200ms
+[08:02:53.612] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

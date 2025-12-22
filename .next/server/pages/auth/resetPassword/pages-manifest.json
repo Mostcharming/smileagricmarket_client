@@ -1,0 +1,3 @@
+{
+  "/auth/resetPassword": "pages/auth/resetPassword.js"
+}
