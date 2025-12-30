@@ -3,7 +3,9 @@
 import { useState } from "react";
 import KycModal from "../../components/modal/kycModal";
 import { Button } from "../../components/ui";
+import { useSubmitKyc } from "@/mutation";
 import { SelectOptions } from "@/types";
+import { toast } from "sonner";
 
 const Dashboard = () => {
   const [verificationStatus, setVerificationStatus] = useState<"not_verified" | "in_progress" | "verified">("not_verified");
@@ -13,7 +15,8 @@ const Dashboard = () => {
   const [number, setNumber] = useState("");
   const [identification, setIdentification] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
-  const [isPending, setIsPending] = useState(false);
+
+  const { mutate, isPending } = useSubmitKyc();
 
   const identificationOptions: SelectOptions[] = [
     { label: "National ID Card", value: "id-card" },
@@ -25,13 +28,29 @@ const Dashboard = () => {
   ];
 
   const handleKycDone = () => {
-    setIsPending(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsPending(false);
-      setIsKycModalOpen(false);
-      setVerificationStatus("in_progress");
-    }, 1000);
+    if (!photo) {
+        toast.error("Please upload a photo");
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append("identificationType", identification);
+    formData.append("identificationNumber", number);
+    formData.append("selfie", photo);
+
+    mutate(formData, {
+        onSuccess: () => {
+            toast.success("KYC submitted successfully");
+            setIsKycModalOpen(false);
+            setVerificationStatus("in_progress");
+            setNumber("");
+            setIdentification("");
+            setPhoto(null);
+        },
+        onError: (error) => {
+            toast.error(error?.message || "Failed to submit KYC");
+        }
+    });
   };
 
   return (

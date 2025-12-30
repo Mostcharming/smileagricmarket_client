@@ -27,7 +27,8 @@ const Signup = () => {
     mutate(payload, {
       onSuccess: () => {
         toast.success("Signup successful! OTP has been sent to your phone number.")
-        router.push(`/verify-otp?phone=${phone}`)
+        sessionStorage.setItem("otp_phone", phone)
+        router.push(`/verify-otp`)
       },
       onError: (error) => {
         toast.error(error?.message || "Failed to signup, please try again.")

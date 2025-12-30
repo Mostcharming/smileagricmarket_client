@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useState, useMemo, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { LogoIcon } from "@/components/icons"
 import { Button, Typography, Input } from "@/components/ui"
 import { useVerifyOtp, useRequestOtp } from "@/mutation"
@@ -10,11 +10,23 @@ import { toast } from "sonner"
 
 const VerifyOTP = () => {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [otp, setOtp] = useState("")
+  const [phoneParam] = useState(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("otp_phone") || ""
+    }
+    return ""
+  })
 
   const { mutate: verifyMutate, isPending } = useVerifyOtp()
   const { mutate: resendMutate, isPending: isResending } = useRequestOtp()
+
+  useEffect(() => {
+    if (!phoneParam) {
+      toast.error("Phone number not found. Please sign up again.")
+      router.push("/signup")
+    }
+  }, [phoneParam, router])
 
   const maskPhone = (num: string) => {
     const s = num.trim()
@@ -30,7 +42,6 @@ const VerifyOTP = () => {
     setOtp(cleaned)
   }
 
-  const phoneParam = searchParams?.get("phone") ?? ""
   const maskedPhone = useMemo(() => (phoneParam ? maskPhone(phoneParam) : ""), [phoneParam])
 
   const handleVerify = () => {

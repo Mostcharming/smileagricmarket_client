@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react";
-import Modal from "./modal";
+import Image from "next/image";
+import { useState, useRef, ChangeEvent } from "react";
 import { ArrowLeftIcon, CloseIcon, PhotoIcon, UploadIcon } from "../icons";
 import { Button, Input, Select, Typography } from "../ui";
+import Modal from "./modal";
 import { KycModalProps } from "@/types";
 
 const KycModal = ({
@@ -15,17 +16,13 @@ const KycModal = ({
   setIdentification,
   identificationOptions,
   photo,
-  // setPhoto,
+  setPhoto,
   isPending,
   onDone,
 }: KycModalProps) => {
   const [step, setStep] = useState<1 | 2>(1)
-
-  const handleSubmit = () => {
-    setTimeout(() => {
-      onDone();
-    }, 900);
-  };
+  const uploadInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const handleContinue = () => {
     setStep(2);
@@ -35,6 +32,21 @@ const KycModal = ({
     setStep(1);
   }
 
+  const handleUploadClick = () => {
+    uploadInputRef.current?.click();
+  };
+
+  const handleCameraClick = () => {
+    cameraInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && setPhoto) {
+      setPhoto(file);
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -43,7 +55,7 @@ const KycModal = ({
       maxHeight="h-fit max-h-[85vh]"
     >
       <div className="w-full flex flex-col px-6 py-7">
-        <div className="flex items-center justify-between gap-2  mb-3">
+        <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2">
             {step === 2 && (
               <div onClick={handleBack} className="w-fit cursor-pointer">
@@ -103,13 +115,40 @@ const KycModal = ({
             <Typography className="font-semibold mb-2">ID & Selfie</Typography>
             <Typography variant="normal">Please add a photo of yourself showing your face and holding your NIN slip or card like shown below. Slip details must be clearly visible.</Typography>
 
-            <div className="w-full flex items-center gap-5 mt-4">
+            <div className="w-full h-fit mt-5 flex justify-center">
+              <div className="relative w-[200px] h-[191px]">
+                <Image 
+                  src={photo ? URL.createObjectURL(photo) : "/picture-preview.jpg"} 
+                  alt="kyc example" 
+                  fill
+                  className="mx-auto border border-border100 object-cover rounded-md" 
+                />
+              </div>
+            </div>
+
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              ref={uploadInputRef}
+              onChange={handleFileChange}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              capture="user"
+              className="hidden"
+              ref={cameraInputRef}
+              onChange={handleFileChange}
+            />
+
+            <div className="w-full flex items-center gap-5 mt-5">
               <Button
                 variant="light"
                 className="flex-1 uppercase"
                 size="small"
                 icon={<UploadIcon />}
-                // onClick={handleUpload}
+                onClick={handleUploadClick}
               >
                 upload
               </Button>
@@ -118,7 +157,7 @@ const KycModal = ({
                 className="flex-1 uppercase"
                 size="small"
                 icon={<PhotoIcon />}
-                // onClick={handleUpload}
+                onClick={handleCameraClick}
               >
                 take a photo
               </Button>
@@ -128,7 +167,7 @@ const KycModal = ({
               variant="primary"
               className="w-full uppercase mt-4"
               size="large"
-              onClick={handleSubmit}
+              onClick={onDone}
               isLoading={isPending}
               disabled={!photo}
             >

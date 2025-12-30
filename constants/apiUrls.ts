@@ -7,3 +7,9 @@ export const authUrl = {
     forgotPassword: () => `/web/auth/forgot-password`,
     resetPassword: () => `/web/auth/reset-password`,
 };
+
+export const kycUrl = {
+    submitKyc: () => `/web/kyc/submit`,
+    getKycStatus: () => `/web/kyc/status`,
+    updateKyc: () => `/web/kyc/update`,
+};
