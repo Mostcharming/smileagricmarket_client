@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { ArrowLeftIcon } from "@/components/icons"
 import { Button, Typography, Input, Select } from "@/components/ui"
 import { useCompleteUserProfile, useSetPassword } from "@/mutation"
+import { setCookie } from "@/utils"
 import { SelectOptions } from "@/types"
 import { toast } from "sonner"
 
@@ -61,7 +62,8 @@ const Onboarding = () => {
     };
 
     mutateComplete(payload, {
-      onSuccess: () => {
+      onSuccess: async (response) => {
+        setCookie(response.data.token);
         router.push("/dashboard");
       },
       onError: (error) => {

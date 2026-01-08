@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { LogoIcon } from "@/components/icons"
 import { Button, Typography, Input } from "@/components/ui"
 import { useLoginPassword } from "@/mutation"
+import { setCookie } from "@/utils"
 import { toast } from "sonner"
 
 const Login = () => {
@@ -23,8 +24,9 @@ const Login = () => {
     };
 
     mutate(payload, {
-      onSuccess: () => {
+      onSuccess: async (response) => {
         toast.success("Login successful!");
+        setCookie(response.data.token);
         router.push('/dashboard');
       },
       onError: (error) => {
