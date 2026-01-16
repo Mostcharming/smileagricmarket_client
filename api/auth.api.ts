@@ -1,4 +1,4 @@
-import { authUrl } from "@/constants";
+import { adminUrl, authUrl } from "@/constants";
 import { post } from "@/utils";
 import { ApiResponse, AuthPayload, AuthResponse, ProfileResponse } from "@/types";
 
@@ -34,6 +34,13 @@ export async function loginPassword(
     payload: AuthPayload
 ): Promise<ApiResponse<ProfileResponse>> {
     const response = await post<ProfileResponse>(authUrl.loginPassword(), payload);
+    return response;
+}
+
+export async function adminLogin(
+    payload: AuthPayload
+): Promise<ApiResponse<ProfileResponse>> {
+    const response = await post<ProfileResponse>(adminUrl.adminLogin(), payload);
     return response;
 }
 

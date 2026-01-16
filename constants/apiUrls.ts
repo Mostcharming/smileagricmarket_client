@@ -13,3 +13,11 @@ export const kycUrl = {
     getKycStatus: () => `/web/kyc/status`,
     updateKyc: () => `/web/kyc/update`,
 };
+
+export const adminUrl = {
+    adminLogin: () => `/web/admin/login`,
+    getUsers: (query: string) => `/web/admin/users${query}`,
+    getKycDetails: (userId: string) => `/web/admin/users/${userId}/kyc`,
+    approveKyc: () => `/web/admin/kyc/approve`,
+    rejectKyc: () => `/web/admin/kyc/reject`,
+};

@@ -17,13 +17,15 @@ export interface AuthResponse {
 
 export interface ProfileResponse {
   token: string;
-  user: profileSchema;
+  user?: profileSchema;
+  admin?: profileSchema;
 };
 
 export interface profileSchema {
   id: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   fullName: string;
   email: string;
-  gender: string;
+  gender?: string;
+  role?: string;
 };

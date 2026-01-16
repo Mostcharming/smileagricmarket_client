@@ -1,3 +1,4 @@
+export type * from './admin.types';
 export type * from './apiResponse.types';
 export type * from './auth.types';
 export type * from './component.types';

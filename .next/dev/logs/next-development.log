@@ -1,5 +1,5 @@
-[00:00:02.294] Server  LOG      ✓ Ready in 1617ms
-[00:00:49.151] Server  LOG      ○ Compiling / ...
-[00:00:50.636] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:52.250] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:33:43.708] Browser WARN    Image with src "/picture-preview.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:06.582] Server  LOG      ✓ Ready in 4.7s
+[00:00:09.809] Server  LOG      ○ Compiling /admin/users ...
+[00:00:23.897] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:03.701] Server  LOG      ✓ Compiled in 1534ms
+[00:05:14.897] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

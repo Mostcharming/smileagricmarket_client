@@ -1,3 +1,4 @@
+import { UsersDetailsDirectory } from "./admin.types";
 import { SelectOptions } from "./shared.types";
 
 export interface SelectProps
@@ -24,12 +25,14 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   label?: string;
   id: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   className?: string;
   labelClassName?: string;
   containerClassName?: string;
   bottomText?: string;
   bottomClassName?: string;
+  as?: 'input' | 'textarea';
+  rows?: number;
 }
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -65,4 +68,13 @@ export interface KycModalProps {
   setPhoto?: (photo: File | null) => void;
   isPending?: boolean;
   onDone: () => void;
+}
+
+export interface VerificationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  user: UsersDetailsDirectory | null;
+  onApprove: (id: string) => void;
+  onReject: (id: string, reason: string) => void;
+  isPending?: boolean;
 }

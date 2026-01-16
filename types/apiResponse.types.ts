@@ -12,6 +12,7 @@ export interface PaginatedFilter {
     filter?: string;
     sort?: string;
     category?: string;
+    status?: string;
 }
 
 export interface ApiError {

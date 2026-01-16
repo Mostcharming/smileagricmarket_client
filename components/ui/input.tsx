@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState } from 'react';
@@ -15,12 +16,14 @@ const Input = ({
   bottomText = '',
   bottomClassName = '',
   type = 'text',
+  as = 'input',
+  rows = 4,
   ...props
 }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [focused, setFocused] = useState(false);
 
-  const isPasswordType = type === 'password';
+  const isPasswordType = type === 'password' && as === 'input';
   const inputType = isPasswordType && showPassword ? 'text' : type;
   const hasValue = Boolean(value && value.toString().length > 0);
   const isFloating = focused || hasValue;
@@ -32,16 +35,29 @@ const Input = ({
   return (
     <div className={`w-full flex flex-col text-sm ${containerClassName}`}>
       <div className="relative">
-        <input
-          id={id}
-          type={inputType}
-          value={value}
-          onChange={onChange}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          className={`peer w-full bg-transparent border border-border rounded-lg px-3 py-4 text-appBlack placeholder:text-border focus:outline-none focus:ring-2 focus:ring-primary ${isPasswordType ? 'pr-10' : ''} ${className}`}
-          {...props}
-        />
+        {as === 'textarea' ? (
+          <textarea
+            id={id}
+            value={value}
+            onChange={onChange as any}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            rows={rows}
+            className={`peer w-full bg-transparent border border-border rounded-lg px-3 py-4 text-appBlack placeholder:text-border focus:outline-none focus:ring-2 focus:ring-primary resize-vertical ${className}`}
+            {...(props as any)}
+          />
+        ) : (
+          <input
+            id={id}
+            type={inputType}
+            value={value}
+            onChange={onChange as any}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            className={`peer w-full bg-transparent border border-border rounded-lg px-3 py-4 text-appBlack placeholder:text-border focus:outline-none focus:ring-2 focus:ring-primary ${isPasswordType ? 'pr-10' : ''} ${className}`}
+            {...props}
+          />
+        )}
 
         {label && (
           <label

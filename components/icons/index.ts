@@ -1,9 +1,16 @@
 export { AddIcon } from './add';
 export { ArrowLeftIcon } from "./arrowLeft";
+export { BellIcon } from "./bell";
+export { CheckIcon } from "./check";
 export { ChevronIcon } from "./chevron";
 export { CloseIcon } from "./close";
+export { CopyIcon } from "./copy";
+export { DashboardIcon } from "./dashboard";
 export { EyeIcon } from "./eye";
 export { EyeOffIcon } from "./eyeOff";
 export { LogoIcon } from "./logo";
+export { MoreIcon } from "./more";
 export { PhotoIcon } from "./photo";
+export { SearchIcon } from "./search";
 export { UploadIcon } from "./upload";
+export { UsersIcon } from "./users";

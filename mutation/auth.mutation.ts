@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { completeUserProfile, forgotPassword, loginPassword, requestOtp, resetPassword, setPassword, verifyOtp } from "@/api";
+import { adminLogin, completeUserProfile, forgotPassword, loginPassword, requestOtp, resetPassword, setPassword, verifyOtp } from "@/api";
 import { useMutation } from "@tanstack/react-query";
 import { ApiResponse, AuthPayload, TokenResponse } from "@/types";
 
@@ -38,6 +38,12 @@ export const useSetPassword = () => {
 export const useLoginPassword = () => {
     return useMutation({
         mutationFn: (payload: AuthPayload) => loginPassword(payload),
+    });
+};
+
+export const useAdminLogin = () => {
+    return useMutation({
+        mutationFn: (payload: AuthPayload) => adminLogin(payload),
     });
 };
 
