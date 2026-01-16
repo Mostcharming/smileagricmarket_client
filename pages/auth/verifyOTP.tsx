@@ -37,7 +37,7 @@ const VerifyOTP = () => {
     return `${first}${stars}${last}`
   }
 
-  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const cleaned = e.target.value.replace(/\D/g, "").slice(0, 6)
     setOtp(cleaned)
   }

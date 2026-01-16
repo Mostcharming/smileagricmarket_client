@@ -39,7 +39,7 @@ const VerificationDashboard = () => {
     page,
     limit: DEFAULT_PAGE_SIZE,
     search: debouncedSearch,
-    status: 'unverified',
+    kycStatus: 'unverified',
   });
 
   const handleOpenModal = (user: UsersApiResponse) => {
