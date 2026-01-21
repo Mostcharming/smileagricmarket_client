@@ -12,12 +12,12 @@ const Login = () => {
   const router = useRouter()
   const { mutate, isPending } = useAdminLogin()
 
-  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const handleLogin = () => {
     const payload = {
-      phoneNumber: phone,
+      email,
       password,
     };
 
@@ -41,10 +41,10 @@ const Login = () => {
 
       <Input
         label="Enter your email address or username"
-        id="phone"
+        id="email"
         type="text"
-        value={phone}
-        onChange={e => setPhone(e.target.value)}
+        value={email}
+        onChange={e => setEmail(e.target.value)}
       />
 
       <Input
@@ -62,7 +62,7 @@ const Login = () => {
         size="large"
         onClick={handleLogin}
         isLoading={isPending}
-        disabled={!phone}
+        disabled={!email}
       >
         Log in
       </Button>

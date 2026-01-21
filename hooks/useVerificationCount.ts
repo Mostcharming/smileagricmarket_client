@@ -8,7 +8,7 @@ export const useVerificationCount = () => {
     page: 1,
     limit: DEFAULT_PAGE_SIZE,
     search: '',
-    kycStatus: 'unverified',
+    kycStatus: 'pending',
   });
 
   return data?.data?.pagination?.totalUsers || 0;

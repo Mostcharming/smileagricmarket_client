@@ -19,12 +19,11 @@ const Dashboard = () => {
   const { mutate, isPending } = useSubmitKyc();
 
   const identificationOptions: SelectOptions[] = [
-    { label: "National ID Card", value: "id-card" },
+    { label: "National ID Card", value: "national_id" },
     { label: "International Passport", value: "passport" },
-    { label: "Driver's License", value: "license" },
-    { label: "NIN Slip/Card", value: "nin" },
-    { label: "Permanent Voter's Card", value: "voter" },
-    { label: "Resident Permit", value: "permit" },
+    { label: "Driver's License", value: "driver_license" },
+    { label: "Taxpayer Identification Number", value: "tin" },
+    { label: "Permanent Voter's Card", value: "voter_card" },
   ];
 
   const handleKycDone = () => {

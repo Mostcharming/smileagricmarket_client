@@ -6,7 +6,8 @@ import {
   Table, 
   Pagination, 
   SearchInput, 
-  Typography
+  Typography,
+  KycStatusBadge
 } from '@/components/ui';
 import { Column } from '@/components/ui/table';
 import { EyeIcon } from '@/components/icons';
@@ -39,7 +40,7 @@ const VerificationDashboard = () => {
     page,
     limit: DEFAULT_PAGE_SIZE,
     search: debouncedSearch,
-    kycStatus: 'unverified',
+    kycStatus: 'pending',
   });
 
   const handleOpenModal = (user: UsersApiResponse) => {
@@ -94,22 +95,7 @@ const VerificationDashboard = () => {
       header: 'KYC Status',
       key: 'kycStatus',
       render: (user) => (
-        <div className={`w-fit flex items-center text-xs gap-2 font-medium ${
-          user.kycStatus === 'Active' ? 'bg-green-50 px-2 py-1 rounded-full' : 
-          user.kycStatus === 'Unverified' ? 'bg-gray-50 px-2 py-1 rounded-full' : 
-          'bg-yellow-50 px-2 py-1 rounded-full'
-        }`}>
-          <span className={`w-2 h-2 rounded-full ${
-            user.kycStatus === 'Active' ? 'bg-green-500' : 
-            user.kycStatus === 'Unverified' ? 'bg-gray-400' : 
-            'bg-yellow-500'
-          }`}></span>
-          <span className={
-            user.kycStatus === 'Active' ? 'text-green-500' : 
-            user.kycStatus === 'Unverified' ? 'text-gray-400' : 
-            'text-yellow-500'
-          }>{user.kycStatus}</span>
-        </div>
+        <KycStatusBadge status={user.kycStatus} />
       ),
     },
     {
