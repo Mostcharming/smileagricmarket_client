@@ -24,22 +24,28 @@ const VerificationModal = ({
   const [rejectReason, setRejectReason] = useState("");
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
-  if (!user) return null;
+  const kyc = user?.kyc;
+  const profile =
+    user?.users ||
+    (user as { user?: { fullName?: string } } | null)?.user;
+  const fullName = profile?.fullName || "User";
+
+  if (!user || !kyc) return null;
 
   const handleCopyNIN = () => {
-    if (user.kyc.identificationNumber) {
-      navigator.clipboard.writeText(user.kyc.identificationNumber);
+    if (kyc.identificationNumber) {
+      navigator.clipboard.writeText(kyc.identificationNumber);
       toast.success("NIN copied to clipboard");
     }
   };
 
   const handleApprove = () => {
-    onApprove(user.kyc.id);
+    onApprove(kyc.id);
     setStep("main");
   };
 
   const handleReject = () => {
-    onReject(user.kyc.id, rejectReason);
+    onReject(kyc.id, rejectReason);
     setStep("main");
     setRejectReason("");
   };
@@ -68,13 +74,13 @@ const VerificationModal = ({
         {step === "main" && (
           <>
             <Typography variant="subheading" className="mb-6">
-              {user.users.fullName}
+              {fullName}
             </Typography>
 
             <div className="relative w-32 h-32 mb-4">
               <Image
-                src={user.kyc.selfieImageUrl || "/picture-preview.jpg"}
-                alt={user.users.fullName || "User"}
+                src={kyc.selfieImageUrl || "/picture-preview.jpg"}
+                alt={fullName}
                 fill
                 className="rounded-full object-cover border-4 border-gray-100"
               />
@@ -93,9 +99,9 @@ const VerificationModal = ({
               </Typography>
               <div className="flex items-center justify-center gap-2">
                 <Typography className="text-gray-900 font-medium text-lg">
-                  {user.kyc.identificationNumber || "N/A"}
+                  {kyc.identificationNumber || "N/A"}
                 </Typography>
-                {user.kyc.identificationNumber && (
+                {kyc.identificationNumber && (
                   <button
                     onClick={handleCopyNIN}
                     className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -134,10 +140,10 @@ const VerificationModal = ({
             </div>
 
             <Typography variant="subheading" className="mb-2">
-              Approve {user.users.fullName}
+              Approve {fullName}
             </Typography>
             <Typography className="text-gray-500 mb-8 px-4">
-              You have confirmed that {user.users.fullName} is authentic & will be verified.
+              You have confirmed that {fullName} is authentic & will be verified.
             </Typography>
 
             <div className="flex w-full gap-4">
@@ -162,7 +168,7 @@ const VerificationModal = ({
         {step === "reject" && (
           <div className="w-full pt-2">
             <Typography variant="subheading" className="mb-6">
-              Reject {user.users.fullName}
+              Reject {fullName}
             </Typography>
 
             <div className="w-full mt-4 mb-8">
@@ -199,7 +205,7 @@ const VerificationModal = ({
       <Viewer
         visible={isViewerOpen}
         onClose={() => setIsViewerOpen(false)}
-        images={[{ src: user.kyc.selfieImageUrl || "/picture-preview.jpg", alt: user.users.fullName }]}
+        images={[{ src: kyc.selfieImageUrl || "/picture-preview.jpg", alt: fullName }]}
         zIndex={1000}
       />
     </Modal>
