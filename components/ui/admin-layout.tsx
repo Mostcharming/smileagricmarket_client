@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import Sidebar from './sidebar';
 import { BellIcon, SearchIcon } from '../icons';
 
@@ -11,6 +12,9 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout = ({ children, breadcrumbs = [] }: AdminLayoutProps) => {
+  const pathname = usePathname();
+  const isMilestonesPage = pathname === '/admin/milestones';
+
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
@@ -51,7 +55,7 @@ const AdminLayout = ({ children, breadcrumbs = [] }: AdminLayoutProps) => {
           </div>
         </header>
 
-        <main className="p-8">
+        <main className={isMilestonesPage ? 'p-0' : 'p-8'}>
           {children}
         </main>
       </div>

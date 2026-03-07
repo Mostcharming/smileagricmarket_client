@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { DashboardIcon, UsersIcon, ChevronIcon, LogoIcon } from '../icons';
+import { DashboardIcon, UsersIcon, ChevronIcon, LogoIcon, FarmIcon } from '../icons';
 import { useUserCount, useVerificationCount } from '@/hooks';
 
 const Sidebar = () => {
   const pathname = usePathname() ?? '';
-  const [usersOpen, setUsersOpen] = useState(true);
+  const [usersOpen, setUsersOpen] = useState(pathname.includes('/admin/users') || pathname.includes('/admin/verification'));
+  const [farmsOpen, setFarmsOpen] = useState(pathname.includes('/admin/milestones'));
   const totalUsers = useUserCount();
   const totalVerification = useVerificationCount();
 
@@ -79,6 +80,38 @@ const Sidebar = () => {
                       <span className="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded-full text-gray-600">{totalVerification}</span>
                     </div>
                   )}
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <button
+              onClick={() => setFarmsOpen(!farmsOpen)}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
+                pathname.includes('/admin/milestones') ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <FarmIcon size={20} />
+                <span className="font-medium text-sm">Farms</span>
+              </div>
+              <ChevronIcon
+                size={16}
+                color={pathname.includes('/admin/milestones') ? '#FFFFFF' : '#92998E'}
+                className={`transition-transform ${farmsOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+
+            {farmsOpen && (
+              <div className="mt-1 space-y-1">
+                <Link
+                  href="/admin/milestones"
+                  className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
+                    isActive('/admin/milestones') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="text-sm">Milestones</span>
                 </Link>
               </div>
             )}

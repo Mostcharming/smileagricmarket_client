@@ -11,12 +11,9 @@ import { toast } from "sonner"
 const VerifyOTP = () => {
   const router = useRouter()
   const [otp, setOtp] = useState("")
-  const [phoneParam] = useState(() => {
-    if (typeof window !== "undefined") {
-      return sessionStorage.getItem("otp_phone") || ""
-    }
-    return ""
-  })
+  const [phoneParam] = useState(() => 
+    typeof window !== "undefined" ? sessionStorage.getItem("otp_phone") || "" : ""
+  )
 
   const { mutate: verifyMutate, isPending } = useVerifyOtp()
   const { mutate: resendMutate, isPending: isResending } = useRequestOtp()

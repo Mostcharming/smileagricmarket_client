@@ -14,6 +14,7 @@ self.__BUILD_MANIFEST = {
     "/auth/resetPassword",
     "/auth/signup",
     "/auth/verifyOTP",
+    "/main/admin/milestones",
     "/main/admin/users",
     "/main/admin/verification",
     "/main/dashboard"

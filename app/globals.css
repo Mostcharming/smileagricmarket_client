@@ -11,6 +11,7 @@
   --primary100: #64B03F;
   --border: #AAB3A6;
   --border100: #C2CCBE;
+  --red100: #FF383C;
 }
 
 @theme {
@@ -24,6 +25,7 @@
   --color-primary100: var(--primary100);
   --color-border: var(--border);
   --color-border100: var(--border100);
+  --color-red100: var(--red100);
 }
 
 body {
