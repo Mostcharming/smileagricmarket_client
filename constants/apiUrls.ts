@@ -21,3 +21,20 @@ export const adminUrl = {
     approveKyc: () => `/web/admin/kyc/approve`,
     rejectKyc: () => `/web/admin/kyc/reject`,
 };
+
+export const adminFarmCategories = {
+    createCategory: () => `/web/admin/farm-categories`,
+    getCategory: () => `/web/admin/farm-categories`,
+    getCategoryById: (categoryId: string) => `/web/admin/farm-categories/${categoryId}`,
+    updateCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}`,
+    deleteCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}`,
+};
+
+export const adminMilestones = {
+    createMilestone: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones`,
+    getMilestonesByCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones`,
+    getMilestones: () => `/web/admin/milestones`,
+    updateMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
+    deleteMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
+    deleteAllMilestonesByCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones/delete-all`,
+};

@@ -1,366 +1,492 @@
-[00:00:05.488] Server  LOG      ✓ Ready in 3.9s
-[00:15:31.820] Server  LOG      ○ Compiling / ...
-[00:15:40.504] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:15:44.354] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:16:58.020] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:18:40.138] Server  LOG      ✓ Compiled in 220ms
-[00:18:45.606] Server  LOG      ✓ Compiled in 164ms
-[00:18:49.478] Server  LOG      ✓ Compiled in 263ms
-[00:21:31.148] Server  LOG      ✓ Compiled in 260ms
-[00:21:37.307] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:22:05.728] Server  LOG      ✓ Compiled in 214ms
-[00:22:06.160] Browser ERROR   uncaughtError: ReferenceError: Typo is not defined
-[00:22:06.955] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:22:06.980] Server  LOG      ✓ Compiled in 319ms
-[00:22:07.826] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[00:22:07.832] Server  ERROR    ⨯ ReferenceError: Typography is not defined
-[00:22:08.311] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:22:09.171] Browser ERROR   uncaughtError: ReferenceError: Typography is not defined
-[00:22:14.689] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:22:14.701] Server  LOG      ✓ Compiled in 155ms
-[00:22:15.657] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[00:22:15.659] Server  ERROR    ⨯ ReferenceError: Typography is not defined
-[00:22:16.076] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:22:17.159] Browser ERROR   uncaughtError: ReferenceError: Typography is not defined
-[00:22:22.270] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:22:23.203] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[00:22:23.207] Server  ERROR    ⨯ ReferenceError: Typography is not defined
-[00:22:23.220] Server  LOG      ✓ Compiled in 253ms
-[00:22:23.774] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:22:25.172] Browser ERROR   uncaughtError: ReferenceError: Typography is not defined
-[00:22:26.995] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:22:26.997] Server  LOG      ✓ Compiled in 170ms
-[00:22:28.139] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[00:22:28.141] Server  ERROR    ⨯ ReferenceError: Typography is not defined
-[00:22:28.183] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:22:28.629] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:22:28.790] Server  LOG      ✓ Compiled in 4ms
-[00:22:29.167] Browser ERROR   uncaughtError: ReferenceError: Typography is not defined
-[00:22:31.395] Server  LOG      ✓ Compiled in 185ms
-[00:22:32.167] Browser ERROR   ./components/modal/farmCategoryModal.tsx:46:30
+[00:00:04.703] Server  LOG      ✓ Ready in 3.5s
+[00:00:36.029] Server  LOG      ○ Compiling / ...
+[00:00:48.650] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:52.904] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:38.788] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:19.042] Server  LOG      ✓ Compiled in 201ms
+[00:06:20.150] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:06:20.153] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:06:20.427] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:06:20.465] Server  ERROR    ⨯ ReferenceError: exp is not defined
+[00:06:21.113] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:22.604] Browser ERROR   uncaughtError: ReferenceError: exp is not defined
+[00:06:32.975] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:06:32.979] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:06:32.992] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:06:32.995] Server  LOG      ✓ Compiled in 187ms
+[00:06:34.320] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:53.331] Server  LOG      ✓ Compiled in 190ms
+[00:06:54.187] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:06:54.192] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:06:54.199] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:06:54.228] Server  ERROR    ⨯ ReferenceError: create is not defined
+[00:06:54.812] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:55.605] Browser ERROR   uncaughtError: ReferenceError: create is not defined
+[00:07:01.577] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:01.579] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:07:01.581] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:01.607] Server  LOG      ✓ Compiled in 244ms
+[00:07:03.292] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:14.786] Server  LOG      ✓ Compiled in 158ms
+[00:07:20.142] Server  LOG      ✓ Compiled in 242ms
+[00:07:21.178] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:21.193] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:21.225] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:21.264] Server  ERROR    ⨯ ReferenceError: ge is not defined
+[00:07:21.678] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:22.594] Browser ERROR   uncaughtError: ReferenceError: ge is not defined
+[00:07:23.808] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:23.810] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:07:23.816] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:23.827] Server  LOG      ✓ Compiled in 230ms
+[00:07:24.866] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:24.870] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:24.875] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:24.898] Server  ERROR    ⨯ ReferenceError: getC is not defined
+[00:07:25.665] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:26.592] Browser ERROR   uncaughtError: ReferenceError: getC is not defined
+[00:07:27.567] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:27.569] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:07:27.570] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:27.596] Server  LOG      ✓ Compiled in 192ms
+[00:07:28.384] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:28.387] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:28.393] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:28.414] Server  ERROR    ⨯ ReferenceError: getCategory is not defined
+[00:07:29.033] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:29.597] Browser ERROR   uncaughtError: ReferenceError: getCategory is not defined
+[00:07:29.640] Server  LOG      ✓ Compiled in 202ms
+[00:07:30.600] Browser ERROR   ./constants/apiUrls.ts:27:16
 Parsing ecmascript source code failed
-  44 |         </button>
-  45 |
-> 46 |         <Typography variant= className="font-semibold text-foreground">Create Farm Category</Typography>
-     |                              ^^^^^^^^^
-  47 |         <p className="text-2xl md:text-3xl text-appBlack/80 mt-3 leading-[1.2]">Please enter a name for this category.</p>
-  48 |
-  49 |         <div className="mt-10">
+  25 | export const adminFarmCategories = {
+  26 |     createCategory: () => `/web/admin/farm-categories`,
+> 27 |     getCategory;
+     |                ^
+  28 | };
 
-Expected '</', got 'className'
+Expected a semicolon
 
 Import traces:
   Client Component Browser:
-    ./components/modal/farmCategoryModal.tsx [Client Component Browser]
-    ./pages/main/admin/milestones.tsx [Client Component Browser]
-    ./pages/main/admin/milestones.tsx [Server Component]
-    ./app/(main)/admin/milestones/page.tsx [Server Component]
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
 
   Client Component SSR:
-    ./components/modal/farmCategoryModal.tsx [Client Component SSR]
-    ./pages/main/admin/milestones.tsx [Client Component SSR]
-    ./pages/main/admin/milestones.tsx [Server Component]
-    ./app/(main)/admin/milestones/page.tsx [Server Component]
-[00:22:32.284] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:22:32.310] Server  LOG      ✓ Compiled in 183ms
-[00:22:33.309] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[00:22:33.311] Server  ERROR    ⨯ ReferenceError: Typography is not defined
-[00:22:33.698] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:22:35.157] Browser ERROR   uncaughtError: ReferenceError: Typography is not defined
-[00:23:24.556] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:23:25.492] Server  LOG      ✓ Compiled in 196ms
-[00:23:25.853] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:23:46.355] Server  LOG      ✓ Compiled in 310ms
-[00:25:23.741] Server  LOG      ✓ Compiled in 351ms
-[00:25:24.170] Browser ERROR   ./components/modal/farmCategoryModal.tsx:67:5
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:07:31.990] Server  LOG      ✓ Compiled in 375ms
+[00:07:32.593] Browser ERROR   ./constants/apiUrls.ts:28:1
 Parsing ecmascript source code failed
-  65 |         </Button>
-  66 |       </div>
-> 67 |     </Modal>
-     |     ^
-  68 |   );
-  69 | };
-  70 |
-
-Expression expected
-
-Import traces:
-  Client Component Browser:
-    ./components/modal/farmCategoryModal.tsx [Client Component Browser]
-    ./pages/main/admin/milestones.tsx [Client Component Browser]
-    ./pages/main/admin/milestones.tsx [Server Component]
-    ./app/(main)/admin/milestones/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./components/modal/farmCategoryModal.tsx [Client Component SSR]
-    ./pages/main/admin/milestones.tsx [Client Component SSR]
-    ./pages/main/admin/milestones.tsx [Server Component]
-    ./app/(main)/admin/milestones/page.tsx [Server Component]
-[00:25:24.170] Browser ERROR   ./components/modal/farmCategoryModal.tsx:67:6
-Parsing ecmascript source code failed
-  65 |         </Button>
-  66 |       </div>
-> 67 |     </Modal>
-     |      ^^^^^^^
-  68 |   );
-  69 | };
-  70 |
-
-Unterminated regexp literal
-
-Import traces:
-  Client Component Browser:
-    ./components/modal/farmCategoryModal.tsx [Client Component Browser]
-    ./pages/main/admin/milestones.tsx [Client Component Browser]
-    ./pages/main/admin/milestones.tsx [Server Component]
-    ./app/(main)/admin/milestones/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./components/modal/farmCategoryModal.tsx [Client Component SSR]
-    ./pages/main/admin/milestones.tsx [Client Component SSR]
-    ./pages/main/admin/milestones.tsx [Server Component]
-    ./app/(main)/admin/milestones/page.tsx [Server Component]
-[00:25:29.160] Server  LOG      ✓ Compiled in 127ms
-[00:25:40.410] Server  LOG      ✓ Compiled in 251ms
-[00:26:07.511] Server  LOG      ✓ Compiled in 415ms
-[04:19:25.640] Server  LOG      ✓ Compiled in 74ms
-[04:19:26.840] Server  LOG      ✓ Compiled in 63ms
-[04:19:27.168] Browser ERROR   uncaughtError: ReferenceError: step is not defined
-[04:19:32.734] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:19:32.749] Server  LOG      ✓ Compiled in 61ms
-[04:19:33.153] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[04:19:33.154] Server  ERROR    ⨯ ReferenceError: step is not defined
-[04:19:33.161] Browser ERROR   uncaughtError: ReferenceError: step is not defined
-[04:19:33.706] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:19:34.160] Browser ERROR   uncaughtError: ReferenceError: step is not defined
-[04:19:39.986] Server  LOG      ✓ Compiled in 66ms
-[04:19:40.156] Browser ERROR   ./components/modal/farmCategoryModal.tsx:83:1
-Parsing ecmascript source code failed
-  81 |     </Modal>
-  82 |   );
-> 83 | };
+  26 |     createCategory: () => `/web/admin/farm-categories`,
+  27 |     getCategory: 
+> 28 | };
      | ^
-  84 |
-  85 | export default FarmCategoryModal;
 
-Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+Expression expected
 
 Import traces:
   Client Component Browser:
-    ./components/modal/farmCategoryModal.tsx [Client Component Browser]
-    ./pages/main/admin/milestones.tsx [Client Component Browser]
-    ./pages/main/admin/milestones.tsx [Server Component]
-    ./app/(main)/admin/milestones/page.tsx [Server Component]
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
 
   Client Component SSR:
-    ./components/modal/farmCategoryModal.tsx [Client Component SSR]
-    ./pages/main/admin/milestones.tsx [Client Component SSR]
-    ./pages/main/admin/milestones.tsx [Server Component]
-    ./app/(main)/admin/milestones/page.tsx [Server Component]
-[04:19:44.941] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:19:45.607] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:19:47.429] Server  LOG      ✓ Compiled in 97ms
-[04:19:49.429] Server  LOG      ✓ Compiled in 73ms
-[04:20:58.862] Server  LOG      ✓ Compiled in 77ms
-[04:21:00.375] Server  LOG      ✓ Compiled in 76ms
-[04:21:01.155] Browser ERROR   uncaughtError: ReferenceError: handleContinue is not defined
-[04:21:16.567] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:21:17.014] Server  LOG      ✓ Compiled in 60ms
-[04:21:17.222] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:21:30.958] Server  LOG      ✓ Compiled in 62ms
-[04:21:35.123] Server  LOG      ✓ Compiled in 66ms
-[04:22:06.020] Server  LOG      ✓ Compiled in 88ms
-[04:22:17.480] Server  LOG      ✓ Compiled in 83ms
-[04:22:18.525] Server  LOG      ✓ Compiled in 91ms
-[04:22:46.779] Server  LOG      ✓ Compiled in 68ms
-[04:23:02.142] Server  LOG      ✓ Compiled in 84ms
-[04:24:33.533] Server  LOG      ✓ Compiled in 114ms
-[04:24:35.487] Server  LOG      ✓ Compiled in 68ms
-[04:25:21.144] Server  LOG      ✓ Compiled in 72ms
-[04:25:37.912] Server  LOG      ✓ Compiled in 67ms
-[04:25:39.186] Server  LOG      ✓ Compiled in 101ms
-[04:25:42.468] Server  LOG      ✓ Compiled in 71ms
-[04:25:44.794] Server  LOG      ✓ Compiled in 138ms
-[04:25:48.711] Server  LOG      ✓ Compiled in 91ms
-[04:25:52.402] Server  LOG      ✓ Compiled in 111ms
-[04:25:56.494] Server  LOG      ✓ Compiled in 102ms
-[04:26:26.984] Server  LOG      ✓ Compiled in 64ms
-[04:26:28.148] Server  LOG      ✓ Compiled in 75ms
-[04:26:29.163] Browser ERROR   uncaughtError: ReferenceError: number is not defined
-[04:31:00.798] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:31:00.811] Server  LOG      ✓ Compiled in 74ms
-[04:31:01.629] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:31:05.736] Server  LOG      ✓ Compiled in 91ms
-[04:31:13.208] Server  LOG      ✓ Compiled in 77ms
-[04:31:24.195] Server  LOG      ✓ Compiled in 67ms
-[04:31:26.872] Server  LOG      ✓ Compiled in 78ms
-[04:31:34.564] Server  LOG      ✓ Compiled in 73ms
-[04:31:43.823] Server  LOG      ✓ Compiled in 111ms
-[04:32:13.740] Server  LOG      ✓ Compiled in 70ms
-[04:32:14.164] Browser ERROR   uncaughtError: ReferenceError: number is not defined
-[04:32:15.951] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:32:15.975] Server  LOG      ✓ Compiled in 72ms
-[04:32:16.465] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[04:32:16.468] Server  ERROR    ⨯ ReferenceError: number is not defined
-[04:32:16.475] Browser ERROR   uncaughtError: ReferenceError: number is not defined
-[04:32:16.693] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:32:17.165] Browser ERROR   uncaughtError: ReferenceError: number is not defined
-[04:32:30.963] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:32:31.470] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[04:32:31.471] Server  ERROR    ⨯ ReferenceError: number is not defined
-[04:32:31.479] Server  LOG      ✓ Compiled in 72ms
-[04:32:31.759] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:32:33.161] Browser ERROR   uncaughtError: ReferenceError: number is not defined
-[04:32:37.296] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:32:37.778] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[04:32:37.779] Server  ERROR    ⨯ ReferenceError: number is not defined
-[04:32:37.783] Server  LOG      ✓ Compiled in 70ms
-[04:32:38.140] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:32:39.175] Browser ERROR   uncaughtError: ReferenceError: number is not defined
-[04:32:46.998] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:32:47.012] Server  LOG      ✓ Compiled in 107ms
-[04:32:47.672] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:32:52.957] Server  LOG      ✓ Compiled in 110ms
-[04:33:06.370] Server  LOG      ✓ Compiled in 67ms
-[04:33:21.968] Server  LOG      ✓ Compiled in 89ms
-[04:33:24.474] Server  LOG      ✓ Compiled in 86ms
-[04:33:39.089] Server  LOG      ✓ Compiled in 214ms
-[04:37:52.583] Server  LOG      ✓ Compiled in 131ms
-[04:38:08.566] Server  LOG      ✓ Compiled in 101ms
-[04:38:18.847] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:46:03.996] Server  LOG      ✓ Compiled in 268ms
-[04:48:50.023] Server  LOG      ✓ Compiled in 150ms
-[04:50:32.020] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:51:14.200] Server  LOG      ✓ Compiled in 104ms
-[04:53:42.271] Server  LOG      ✓ Compiled in 131ms
-[04:53:44.298] Server  LOG      ✓ Compiled in 156ms
-[04:53:45.156] Browser ERROR   ./pages/main/admin/milestones.tsx:113:17
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:07:44.927] Server  LOG      ✓ Compiled in 187ms
+[00:07:45.664] Browser ERROR   ./constants/apiUrls.ts:27:18
 Parsing ecmascript source code failed
-  111 |                 </svg>
-  112 |                 <
-> 113 |                 <span className="text-xl leading-none">{category.name}</span>
-      |                 ^
-  114 |               </button>
-  115 |             );
-  116 |           })}
+  25 | export const adminFarmCategories = {
+  26 |     createCategory: () => `/web/admin/farm-categories`,
+> 27 |     getCategory: ()
+     |                  ^^
+  28 | };
+
+Parenthesized expression cannot be empty
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:07:48.251] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:48.254] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:07:48.257] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:07:48.259] Server  LOG      ✓ Compiled in 228ms
+[00:07:50.056] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:58.147] Server  LOG      ✓ Compiled in 181ms
+[00:07:59.216] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:59.222] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:59.231] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:59.263] Server  ERROR    ⨯ ReferenceError: get is not defined
+[00:07:59.702] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:00.589] Browser ERROR   uncaughtError: ReferenceError: get is not defined
+[00:08:04.322] Server  LOG      ✓ Compiled in 173ms
+[00:08:04.589] Browser ERROR   ./constants/apiUrls.ts:29:1
+Parsing ecmascript source code failed
+  27 |     getCategory: () => `/web/admin/farm-categories`,
+  28 |     getCategoryById: (categoryId: string) =>
+> 29 | };
+     | ^
 
 Expression expected
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[04:53:58.788] Server  LOG      ✓ Compiled in 155ms
-[04:53:59.163] Browser ERROR   ./pages/main/admin/milestones.tsx:113:17
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:08:05.928] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:08:05.932] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:08:05.934] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:08:05.960] Server  LOG      ✓ Compiled in 155ms
+[00:08:07.923] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:21.860] Server  LOG      ✓ Compiled in 222ms
+[00:08:50.354] Server  LOG      ✓ Compiled in 350ms
+[00:08:50.589] Browser ERROR   ./constants/apiUrls.ts:33:13
 Parsing ecmascript source code failed
-  111 |                 </svg>
-  112 |                 <
-> 113 |                 <span className="text-xl leading-none">{category.name}</span>
-      |                 ^
-  114 |               </button>
-  115 |             );
-  116 |           })}
+  31 | };
+  32 |
+> 33 | export const 
+     |             ^
 
-Expression expected
+Unexpected token `<eof>`. Expected yield, an identifier, [ or {
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[04:54:02.159] Browser ERROR   ./pages/main/admin/milestones.tsx:113:17
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:08:52.606] Server  LOG      ✓ Compiled in 266ms
+[00:08:53.593] Browser ERROR   ./constants/apiUrls.ts:33:14
 Parsing ecmascript source code failed
-  111 |                 </svg>
-  112 |                 <
-> 113 |                 <span className="text-xl leading-none">{category.name}</span>
-      |                 ^
-  114 |               </button>
-  115 |             );
-  116 |           })}
+  31 | };
+  32 |
+> 33 | export const admin
+     |              ^^^^^
 
-Expression expected
+'const' declarations must be initialized
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[04:54:02.159] Browser ERROR   ./pages/main/admin/milestones.tsx:113:17
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:08:57.589] Browser ERROR   ./constants/apiUrls.ts:33:14
 Parsing ecmascript source code failed
-  111 |                 </svg>
-  112 |                 <Farm
-> 113 |                 <span className="text-xl leading-none">{category.name}</span>
-      |                 ^
-  114 |               </button>
-  115 |             );
-  116 |           })}
+  31 | };
+  32 |
+> 33 | export const adminMil
+     |              ^^^^^^^^
 
-Expression expected
+'const' declarations must be initialized
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[04:54:05.166] Browser ERROR   ./pages/main/admin/milestones.tsx:113:17
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:09:00.592] Browser ERROR   ./constants/apiUrls.ts:33:14
 Parsing ecmascript source code failed
-  111 |                 </svg>
-  112 |                 <FarmIcon
-> 113 |                 <span className="text-xl leading-none">{category.name}</span>
-      |                 ^
-  114 |               </button>
-  115 |             );
-  116 |           })}
+  31 | };
+  32 |
+> 33 | export const adminMilestones
+     |              ^^^^^^^^^^^^^^^
 
-Expression expected
+'const' declarations must be initialized
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[04:54:54.744] Server  LOG      ✓ Compiled in 93ms
-[04:54:59.996] Server  LOG      ✓ Compiled in 146ms
-[04:56:07.795] Server  LOG      ✓ Compiled in 168ms
-[04:56:21.272] Server  LOG      ✓ Compiled in 124ms
-[04:56:24.361] Server  LOG      ✓ Compiled in 127ms
-[04:56:29.154] Server  LOG      ✓ Compiled in 169ms
-[04:57:24.005] Server  LOG      ✓ Compiled in 85ms
-[04:57:29.367] Server  LOG      ✓ Compiled in 129ms
-[04:57:36.612] Server  LOG      ✓ Compiled in 115ms
-[04:57:42.641] Server  LOG      ✓ Compiled in 111ms
-[04:57:44.441] Server  LOG      ✓ Compiled in 114ms
-[04:57:53.422] Server  LOG      ✓ Compiled in 101ms
-[04:58:23.758] Server  LOG      ✓ Compiled in 236ms
-[04:58:25.561] Server  LOG      ✓ Compiled in 194ms
-[04:58:34.891] Server  LOG      ✓ Compiled in 210ms
-[04:58:35.163] Browser ERROR   uncaughtError: ReferenceError: Farm is not defined
-[04:58:36.173] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[04:58:37.364] Server  LOG      ✓ Compiled in 185ms
-[04:58:38.817] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[05:01:33.181] Server  LOG      ✓ Compiled in 159ms
-[05:08:00.741] Server  LOG      ✓ Compiled in 97ms
-[05:08:02.520] Server  LOG      ✓ Compiled in 87ms
-[05:08:06.036] Server  LOG      ✓ Compiled in 119ms
-[05:08:11.456] Server  LOG      ✓ Compiled in 123ms
-[05:08:13.498] Server  LOG      ✓ Compiled in 153ms
-[05:08:29.753] Server  LOG      ✓ Compiled in 122ms
-[05:08:35.161] Server  LOG      ✓ Compiled in 140ms
-[05:09:52.115] Server  LOG      ✓ Compiled in 108ms
-[05:09:53.514] Server  LOG      ✓ Compiled in 98ms
-[05:10:15.702] Server  LOG      ✓ Compiled in 84ms
-[05:10:29.951] Server  LOG      ✓ Compiled in 103ms
-[05:10:53.480] Server  LOG      ✓ Compiled in 143ms
-[05:10:54.176] Browser ERROR   uncaughtError: ReferenceError: Ty is not defined
-[05:10:55.157] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[05:10:55.984] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\_aa46538d._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-[05:10:55.990] Server  ERROR    ⨯ ReferenceError: Typography is not defined
-[05:10:55.997] Server  LOG      ✓ Compiled in 136ms
-[05:10:57.035] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[05:10:58.161] Browser ERROR   uncaughtError: ReferenceError: Typography is not defined
-[05:11:05.486] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[05:11:05.533] Server  LOG      ✓ Compiled in 257ms
-[05:11:07.617] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[05:11:28.470] Server  LOG      ✓ Compiled in 120ms
-[05:11:30.572] Server  LOG      ✓ Compiled in 143ms
-[05:11:37.027] Server  LOG      ✓ Compiled in 113ms
-[05:11:46.460] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:09:11.674] Server  LOG      ✓ Compiled in 245ms
+[00:09:12.638] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:12.644] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:12.655] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:12.678] Server  ERROR    ⨯ ReferenceError: create is not defined
+[00:09:14.393] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:09:14.863] Browser ERROR   uncaughtError: ReferenceError: create is not defined
+[00:09:14.873] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:09:14.874] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:09:14.875] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:09:14.895] Server  LOG      ✓ Compiled in 270ms
+[00:09:17.118] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:09:17.955] Server  LOG      ✓ Compiled in 144ms
+[00:09:30.861] Server  LOG      ✓ Compiled in 154ms
+[00:09:35.271] Server  LOG      ✓ Compiled in 207ms
+[00:09:50.769] Server  LOG      ✓ Compiled in 135ms
+[00:09:52.500] Server  LOG      ✓ Compiled in 264ms
+[00:09:54.347] Server  LOG      ✓ Compiled in 171ms
+[00:10:07.775] Server  LOG      ✓ Compiled in 133ms
+[00:10:09.910] Server  LOG      ✓ Compiled in 238ms
+[00:10:11.562] Server  LOG      ✓ Compiled in 232ms
+[00:10:14.624] Server  LOG      ✓ Compiled in 136ms
+[00:10:35.063] Server  LOG      ✓ Compiled in 263ms
+[00:10:35.950] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:35.957] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:35.966] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:35.993] Server  ERROR    ⨯ ReferenceError: g is not defined
+[00:10:36.030] Server  LOG      ✓ Compiled in 141ms
+[00:10:36.800] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:36.803] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:36.809] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:36.827] Server  ERROR    ⨯ ReferenceError: ge is not defined
+[00:10:37.260] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:38.140] Browser ERROR   uncaughtError: ReferenceError: ge is not defined
+[00:10:38.523] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:38.524] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:10:38.525] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:38.536] Server  LOG      ✓ Compiled in 198ms
+[00:10:39.575] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:39.579] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:39.583] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:39.614] Server  ERROR    ⨯ ReferenceError: get is not defined
+[00:10:40.101] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:40.602] Browser ERROR   uncaughtError: ReferenceError: get is not defined
+[00:10:47.541] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:47.542] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:10:47.545] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:47.587] Server  LOG      ✓ Compiled in 182ms
+[00:10:48.645] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:48.648] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:48.653] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:48.676] Server  ERROR    ⨯ ReferenceError: getMilestone is not defined
+[00:10:49.102] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:49.596] Browser ERROR   uncaughtError: ReferenceError: getMilestone is not defined
+[00:10:51.608] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:51.609] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:10:51.610] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:52.657] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:52.700] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:52.738] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:52.781] Server  ERROR    ⨯ ReferenceError: getMilestones is not defined
+[00:10:52.798] Server  LOG      ✓ Compiled in 225ms
+[00:10:53.430] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:53.989] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:53.990] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:10:53.991] Browser ERROR   uncaughtError: ReferenceError: getMilestones is not defined
+[00:10:53.992] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:54.019] Server  LOG      ✓ Compiled in 141ms
+[00:10:54.904] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:54.909] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:54.916] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:55.048] Server  ERROR    ⨯ ReferenceError: getMilestonesBy is not defined
+[00:10:55.883] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:56.594] Browser ERROR   ./constants/apiUrls.ts:35:94
+Parsing ecmascript source code failed
+  33 | export const adminMilestones = {
+  34 |     createMilestone: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones`,
+> 35 |     getMilestonesByCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                                                              ^^^^^^^^^^^^
+> 36 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:10:56.594] Browser ERROR   ./constants/apiUrls.ts:35:94
+Parsing ecmascript source code failed
+  33 | export const adminMilestones = {
+  34 |     createMilestone: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones`,
+> 35 |     getMilestonesByCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                                                              ^^^^^^^^^^^^
+> 36 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/admin-layout.tsx [Client Component Browser]
+    ./app/(main)/admin/layout.tsx [Client Component Browser]
+    ./app/(main)/admin/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/admin-layout.tsx [Client Component SSR]
+    ./app/(main)/admin/layout.tsx [Client Component SSR]
+    ./app/(main)/admin/layout.tsx [Server Component]
+[00:10:56.594] Browser ERROR   ./constants/apiUrls.ts:35:94
+Parsing ecmascript source code failed
+  33 | export const adminMilestones = {
+  34 |     createMilestone: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones`,
+> 35 |     getMilestonesByCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                                                              ^^^^^^^^^^^^
+> 36 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/admin-layout.tsx [Client Component Browser]
+    ./app/(main)/admin/layout.tsx [Client Component Browser]
+    ./app/(main)/admin/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/admin-layout.tsx [Client Component SSR]
+    ./app/(main)/admin/layout.tsx [Client Component SSR]
+    ./app/(main)/admin/layout.tsx [Server Component]
+[00:10:56.594] Browser ERROR   ./constants/apiUrls.ts:35:94
+Parsing ecmascript source code failed
+  33 | export const adminMilestones = {
+  34 |     createMilestone: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones`,
+> 35 |     getMilestonesByCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                                                              ^^^^^^^^^^^^
+> 36 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:10:56.594] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
 
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
@@ -373,428 +499,536 @@ It can also happen if the client has a browser extension installed which messes 
 %s%s https://react.dev/link/hydration-mismatch 
 
   ...
-    <LoadingBoundary name="(main)/" loading={null}>
-      <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>
-        <HTTPAccessFallbackErrorBoundary pathname="/admin/mil..." notFound={<SegmentViewNode>} forbidden={undefined} ...>
-          <RedirectBoundary>
-            <RedirectErrorBoundary router={{...}}>
-              <InnerLayoutRouter url="/admin/mil..." tree={[...]} params={{}} cacheNode={{lazyData:null, ...}} ...>
-                <SegmentViewNode type="layout" pagePath="(main)/adm...">
-                  <SegmentTrieNode>
-                  <script>
-                  <script>
-                  <script>
-                  <ClientSegmentRoot Component={function AdminRootLayout} slots={{...}} ...>
-                    <AdminRootLayout params={Promise}>
-                      <AdminLayout title="Milestones" breadcrumbs={[...]}>
-                        <div className="min-h-scre...">
-                          <Sidebar>
-                          <div className="ml-64 flex...">
-                            <header>
-                            <main
-+                             className="p-0"
--                             className="p-8"
-                            >
-                              ...
-                                <div className="flex flex-...">
-                                  <section className="w-full h-f...">
-                                    <Typography variant="normal" className="text-appBl...">
-                                      <span
-+                                       className="text-foreground text-xs md:text-sm text-appBlack mb-8"
--                                       className="text-foreground text-sm md:text-base text-xl font-semibold text-app..."
-                                      >
-+                                       Farm Categories
-                                    ...
-                                  ...
-              ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin/mil..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en">
+                          <body
+                            className="roboto_7197f6d-module__A0KAba__className"
+-                           style={{overflow-x:"hidden",overflow-y:"hidden"}}
+                          >
+                  ...
 
-[05:11:59.756] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[05:12:00.255] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-%s%s https://react.dev/link/hydration-mismatch 
-
-  ...
-    <LoadingBoundary name="(main)/" loading={null}>
-      <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>
-        <HTTPAccessFallbackErrorBoundary pathname="/admin/mil..." notFound={<SegmentViewNode>} forbidden={undefined} ...>
-          <RedirectBoundary>
-            <RedirectErrorBoundary router={{...}}>
-              <InnerLayoutRouter url="/admin/mil..." tree={[...]} params={{}} cacheNode={{lazyData:null, ...}} ...>
-                <SegmentViewNode type="layout" pagePath="(main)/adm...">
-                  <SegmentTrieNode>
-                  <script>
-                  <script>
-                  <script>
-                  <ClientSegmentRoot Component={function AdminRootLayout} slots={{...}} ...>
-                    <AdminRootLayout params={Promise}>
-                      <AdminLayout title="Milestones" breadcrumbs={[...]}>
-                        <div className="min-h-scre...">
-                          <Sidebar>
-                          <div className="ml-64 flex...">
-                            <header>
-                            <main
-+                             className="p-0"
--                             className="p-8"
-                            >
-              ...
-
-[05:12:37.933] Server  LOG      ✓ Compiled in 137ms
-[05:12:41.512] Server  LOG      ✓ Compiled in 278ms
-[05:13:13.688] Server  LOG      ✓ Compiled in 185ms
-[05:13:48.725] Server  LOG      ✓ Compiled in 129ms
-[05:13:51.518] Server  LOG      ✓ Compiled in 177ms
-[05:26:19.459] Server  LOG      ✓ Compiled in 76ms
-[05:26:30.170] Server  LOG      ✓ Compiled in 64ms
-[05:26:31.348] Server  LOG      ✓ Compiled in 112ms
-[05:26:35.848] Server  LOG      ✓ Compiled in 158ms
-[05:26:40.876] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[05:28:21.661] Server  LOG      ✓ Compiled in 73ms
-[05:28:25.003] Server  LOG      ✓ Compiled in 91ms
-[05:29:12.475] Server  LOG      ✓ Compiled in 79ms
-[05:29:16.785] Server  LOG      ✓ Compiled in 98ms
-[05:29:23.883] Server  LOG      ✓ Compiled in 120ms
-[05:29:29.095] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[05:29:57.665] Server  LOG      ✓ Compiled in 106ms
-[05:30:06.299] Server  LOG      ✓ Compiled in 135ms
-[05:30:51.010] Server  LOG      ✓ Compiled in 91ms
-[05:35:59.185] Server  LOG      ✓ Compiled in 131ms
-[05:36:37.637] Server  LOG      ✓ Compiled in 127ms
-[05:38:05.448] Server  LOG      ✓ Compiled in 80ms
-[05:38:09.457] Server  LOG      ✓ Compiled in 78ms
-[05:38:10.980] Server  LOG      ✓ Compiled in 126ms
-[05:38:13.689] Server  LOG      ✓ Compiled in 163ms
-[05:39:23.208] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[05:41:05.651] Server  LOG      ✓ Compiled in 133ms
-[05:41:07.901] Server  LOG      ✓ Compiled in 182ms
-[05:41:19.344] Server  LOG      ✓ Compiled in 158ms
-[05:41:25.123] Server  LOG      ✓ Compiled in 157ms
-[05:41:49.106] Server  LOG      ✓ Compiled in 182ms
-[05:42:26.052] Server  LOG      ✓ Compiled in 206ms
-[05:43:23.458] Server  LOG      ✓ Compiled in 156ms
-[05:43:24.345] Server  LOG      ✓ Compiled in 152ms
-[05:43:25.161] Browser ERROR   ./pages/main/admin/milestones.tsx:126:37
+[00:10:56.594] Browser ERROR   uncaughtError: ReferenceError: getMilestonesBy is not defined
+[00:10:56.594] Browser ERROR   ./constants/apiUrls.ts:35:94
 Parsing ecmascript source code failed
-  124 |
-  125 |         {!categories.length && (
-> 126 |           <Typography variant='small' className="mt-3 text-sm text-foreground100">Create your first farm category</Typography>
-      |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  127 |         )}
-  128 |       </section>
-  129 |
+  33 | export const adminMilestones = {
+  34 |     createMilestone: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones`,
+> 35 |     getMilestonesByCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                                                              ^^^^^^^^^^^^
+> 36 | };
+     | ^^^
 
-Unterminated string constant
+Unterminated template
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[05:43:25.161] Browser ERROR   ./pages/main/admin/milestones.tsx:126:37
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:10:58.801] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:58.801] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:10:58.802] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:10:58.828] Server  LOG      ✓ Compiled in 137ms
+[00:11:00.154] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:27.898] Server  LOG      ✓ Compiled in 250ms
+[00:11:29.116] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:11:29.128] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:11:29.142] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:11:29.166] Server  ERROR    ⨯ ReferenceError: get is not defined
+[00:11:29.572] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:30.611] Browser ERROR   uncaughtError: ReferenceError: get is not defined
+[00:11:31.555] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:11:31.556] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:11:31.561] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:11:31.583] Server  LOG      ✓ Compiled in 166ms
+[00:11:32.728] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[root-of-the-server]__7bdc4c38._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:11:32.731] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\ssr\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:11:32.735] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:11:32.753] Server  ERROR    ⨯ ReferenceError: getMilestones is not defined
+[00:11:33.482] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:34.611] Browser ERROR   uncaughtError: ReferenceError: getMilestones is not defined
+[00:11:36.191] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:11:36.192] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./constants/apiUrls.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:11:36.199] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:11:36.204] Server  LOG      ✓ Compiled in 167ms
+[00:11:37.440] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:39.107] Server  LOG      ✓ Compiled in 135ms
+[00:11:39.598] Browser ERROR   ./constants/apiUrls.ts:40:49
 Parsing ecmascript source code failed
-  124 |
-  125 |         {!categories.length && (
-> 126 |           <Typography variant='small' className="mt-3 text-sm text-foreground100">Create your first farm category</Typography>
-      |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  127 |         )}
-  128 |       </section>
-  129 |
+  38 |         `/web/admin/farm-categories/${categoryId}/milestones/${milestoneId}`,
+  39 |     deleteMilestone: (categoryId: string, milestoneId: string) =>
+> 40 |         `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                 ^^^^^^^^^^^^
+> 41 | };
+     | ^^^
 
-Unterminated string constant
+Unterminated template
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[05:44:00.481] Server  LOG      ✓ Compiled in 378ms
-[05:44:50.886] Server  LOG      ✓ Compiled in 601ms
-[05:44:59.222] Server  LOG      ✓ Compiled in 168ms
-[05:45:10.618] Server  LOG      ✓ Compiled in 364ms
-[05:45:20.876] Server  LOG      ✓ Compiled in 194ms
-[05:45:23.011] Server  LOG      ✓ Compiled in 137ms
-[05:45:26.889] Server  LOG      ✓ Compiled in 179ms
-[05:45:31.474] Server  LOG      ✓ Compiled in 376ms
-[05:45:45.724] Server  LOG      ✓ Compiled in 550ms
-[05:45:56.479] Server  LOG      ✓ Compiled in 208ms
-[05:46:24.341] Server  LOG      ✓ Compiled in 141ms
-[05:46:59.937] Server  LOG      ✓ Compiled in 449ms
-[05:47:13.852] Server  LOG      ✓ Compiled in 166ms
-[05:47:16.586] Server  LOG      ✓ Compiled in 171ms
-[05:47:17.994] Server  LOG      ✓ Compiled in 171ms
-[05:47:32.805] Server  LOG      ✓ Compiled in 153ms
-[05:47:34.896] Server  LOG      ✓ Compiled in 184ms
-[05:47:52.189] Server  LOG      ✓ Compiled in 432ms
-[05:48:05.015] Server  LOG      ✓ Compiled in 280ms
-[05:48:11.618] Server  LOG      ✓ Compiled in 221ms
-[05:48:35.230] Server  LOG      ✓ Compiled in 204ms
-[05:49:04.593] Server  LOG      ✓ Compiled in 257ms
-[05:49:06.628] Server  LOG      ✓ Compiled in 193ms
-[05:49:11.010] Server  LOG      ✓ Compiled in 636ms
-[05:49:33.537] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[05:50:46.061] Server  LOG      ✓ Compiled in 240ms
-[05:50:47.717] Server  LOG      ✓ Compiled in 150ms
-[05:50:53.780] Server  LOG      ✓ Compiled in 175ms
-[05:50:56.930] Server  LOG      ✓ Compiled in 323ms
-[05:51:34.137] Server  LOG      ✓ Compiled in 271ms
-[05:52:08.870] Server  LOG      ✓ Compiled in 245ms
-[06:09:21.770] Server  LOG      ✓ Compiled in 211ms
-[06:09:22.158] Browser ERROR   ./components/icons/index.ts:9:8
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:12:03.595] Browser ERROR   ./constants/apiUrls.ts:40:49
 Parsing ecmascript source code failed
-   7 | export { CopyIcon } from "./copy";
-   8 | export { DashboardIcon } from "./dashboard";
->  9 | export ()
-     |        ^
-  10 | export { EyeIcon } from "./eye";
-  11 | export { EyeOffIcon } from "./eyeOff";
-  12 | export { FarmIcon } from "./farm";
+  38 |         `/web/admin/farm-categories/${categoryId}/milestones/${milestoneId}`,
+  39 |     deleteMilestone: (categoryId: string, milestoneId: string) =>
+> 40 |         `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                 ^^^^^^^^^^^^
+> 41 | };
+     | ^^^
 
-Expected '{', got '('
+Unterminated template
 
-Import trace:
-  Server Component:
-    ./components/icons/index.ts
-    ./app/loading.tsx
-[06:09:23.175] Browser ERROR   ./components/icons/index.ts:9:8
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:12:12.599] Browser ERROR   ./constants/apiUrls.ts:40:49
 Parsing ecmascript source code failed
-   7 | export { CopyIcon } from "./copy";
-   8 | export { DashboardIcon } from "./dashboard";
->  9 | export ( )
-     |        ^
-  10 | export { EyeIcon } from "./eye";
-  11 | export { EyeOffIcon } from "./eyeOff";
-  12 | export { FarmIcon } from "./farm";
+  38 |         `/web/admin/farm-categories/milestones/${milestoneId}`,
+  39 |     deleteMilestone: (categoryId: string, milestoneId: string) =>
+> 40 |         `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                 ^^^^^^^^^^^^
+> 41 | };
+     | ^^^
 
-Expected '{', got '('
+Unterminated template
 
-Import trace:
-  Server Component:
-    ./components/icons/index.ts
-    ./app/loading.tsx
-[06:09:25.221] Server  LOG      ✓ Compiled in 152ms
-[06:09:26.164] Browser ERROR   ./components/icons/index.ts:10:1
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:12:16.597] Browser ERROR   ./constants/apiUrls.ts:40:49
 Parsing ecmascript source code failed
-   8 | export { DashboardIcon } from "./dashboard";
-   9 | export 
-> 10 | export { EyeIcon } from "./eye";
-     | ^^^^^^
-  11 | export { EyeOffIcon } from "./eyeOff";
-  12 | export { FarmIcon } from "./farm";
-  13 | export { LogoIcon } from "./logo";
+  38 |         `/web/admin/farm-categories/milestones/${milestoneId}`,
+  39 |     deleteMilestone: (categoryId: string, milestoneId: string) =>
+> 40 |         `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                 ^^^^^^^^^^^^
+> 41 | };
+     | ^^^
 
-Expected '{', got 'export'
+Unterminated template
 
-Import trace:
-  Server Component:
-    ./components/icons/index.ts
-    ./app/loading.tsx
-[06:09:39.229] Server  LOG      ✓ Compiled in 389ms
-[06:09:40.487] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[06:11:08.872] Server  LOG      ✓ Compiled in 245ms
-[06:11:11.434] Server  LOG      ✓ Compiled in 272ms
-[06:11:31.440] Server  LOG      ✓ Compiled in 254ms
-[06:11:36.169] Server  LOG      ✓ Compiled in 135ms
-[06:11:59.659] Server  LOG      ✓ Compiled in 239ms
-[06:12:09.897] Server  LOG      ✓ Compiled in 164ms
-[06:12:16.312] Server  LOG      ✓ Compiled in 192ms
-[06:12:19.525] Server  LOG      ✓ Compiled in 300ms
-[06:12:35.813] Server  LOG      ✓ Compiled in 262ms
-[06:12:37.932] Server  LOG      ✓ Compiled in 161ms
-[06:12:49.483] Server  LOG      ✓ Compiled in 173ms
-[06:12:52.117] Server  LOG      ✓ Compiled in 177ms
-[06:12:53.174] Browser ERROR   ./pages/main/admin/milestones.tsx:197:17
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:12:19.599] Browser ERROR   ./constants/apiUrls.ts:40:49
 Parsing ecmascript source code failed
-  195 |           Save
-  196 |         </Button>
-> 197 |       </section>
-      |                 ^
-> 198 |
-      | ^
-> 199 |       <FarmCategoryModal
-      | ^^^^^^^
-  200 |         isOpen={isCategoryModalOpen}
-  201 |         onClose={() => setIsCategoryModalOpen(false)}
-  202 |         onCreate={handleCreateCategory}
+  38 |         `/web/admin/farm-categories/milestones/${milestoneId}`,
+  39 |     deleteMilestone: (milestoneId: string) =>
+> 40 |         `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                 ^^^^^^^^^^^^
+> 41 | };
+     | ^^^
 
-Expected '</', got 'jsx text (
+Unterminated template
 
-      )'
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[06:12:56.154] Browser ERROR   Received `%s` for a non-boolean attribute `%s`.
-
-If you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}. true clas clas true clas
-[06:12:56.568] Server  LOG      ✓ Compiled in 252ms
-[06:13:00.718] Server  LOG      ✓ Compiled in 125ms
-[06:13:05.574] Server  LOG      ✓ Compiled in 183ms
-[06:13:08.911] Server  LOG      ✓ Compiled in 180ms
-[06:13:18.999] Server  LOG      ✓ Compiled in 171ms
-[06:13:46.578] Server  LOG      ✓ Compiled in 447ms
-[06:13:57.829] Server  LOG      ✓ Compiled in 285ms
-[06:21:11.105] Server  LOG      ✓ Compiled in 128ms
-[06:21:12.170] Browser ERROR   ./components/icons/delete.tsx:22:11
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:12:55.589] Browser ERROR   ./constants/apiUrls.ts:40:49
 Parsing ecmascript source code failed
-  20 | </svg>
-  21 |
-> 22 |     <path d="M12.1625 7.78809C13.7764 5.12392 17.4684 3.68155 22.059 3.85059L22.5062 3.87207L22.6254 3.89062C22.7417 3.91941 22.8491 3.9796 22.9349 4.06543C23.0494 4.17995 23.1176 4.33255 23.1273 4.49414C23.4095 9.29134 21.9615 13.1719 19.2113 14.8359C18.4366 15.3068 17.5614 15.5823 16.6605 15.6416L16.2728 15.6543C15.2382 15.6542 14.1701 15.3803 13.1293 14.8428C12.3401 15.7959 11.9089 16.9963 11.9125 18.2354V21C11.9125 21.1757 11.8424 21.3445 11.7181 21.4688C11.594 21.5927 11.4258 21.662 11.2504 21.6621C11.0748 21.6621 10.9058 21.5929 10.7816 21.4688C10.6574 21.3445 10.5873 21.1757 10.5873 21V18.2744L8.17713 15.8701C7.48508 16.2175 6.72355 16.4041 5.94862 16.4121H5.94764C5.26938 16.4131 4.60255 16.2501 4.0033 15.9385L3.75037 15.7959C1.72165 14.5669 0.657346 11.7288 0.862679 8.23535C0.872171 8.07377 0.940824 7.9213 1.05506 7.80664C1.16963 7.69187 1.32287 7.62301 1.48475 7.61328C4.97943 7.40606 7.81742 8.47208 9.04627 10.501C9.84437 11.8187 9.85534 13.4078 9.11073 14.9238L10.7933 16.6074C11.0419 15.6169 11.5144 14.6966 12.1791 13.9199C11.0801 11.8193 11.0617 9.60629 12.1625 7.78809ZM2.16248 8.91211C2.12706 11.6636 2.97191 13.775 4.43787 14.6621C5.24641 15.153 6.1914 15.2158 7.16737 14.8535L4.78065 12.4678C4.65652 12.3435 4.58631 12.1747 4.58631 11.999C4.58643 11.8236 4.65666 11.6554 4.78065 11.5312C4.90492 11.407 5.07366 11.3369 5.2494 11.3369C5.42519 11.3369 5.59385 11.4069 5.71815 11.5312L8.10096 13.9141C8.43922 13.0023 8.40611 12.1175 8.00037 11.3457L7.90955 11.1846C7.02243 9.71862 4.9137 8.87315 2.16248 8.91211ZM21.8295 5.16895C17.7698 5.05739 14.6182 6.28893 13.2953 8.47559C12.503 9.78711 12.4549 11.3317 13.1566 12.9043L18.2816 7.78125C18.3431 7.71974 18.4161 7.67003 18.4965 7.63672C18.5769 7.60342 18.6634 7.58693 18.7504 7.58691C18.8374 7.58691 18.9239 7.60341 19.0043 7.63672C19.0847 7.67003 19.1576 7.71971 19.2191 7.78125C19.2806 7.84275 19.3294 7.91578 19.3627 7.99609C19.3959 8.07632 19.4134 8.1622 19.4135 8.24902C19.4135 8.33603 19.396 8.42254 19.3627 8.50293C19.3294 8.58327 19.2806 8.65626 19.2191 8.71777L14.0941 13.8408C15.6676 14.5435 17.2129 14.4986 18.5258 13.7041C20.7109 12.3801 21.9414 9.22557 21.8295 5.16895Z" fill={color} stroke={color} strokeWidth={strokeWidth} />
-     |           ^
-  23 |   </svg>
-  24 | );
-  25 |
+  38 |         `/web/admin/milestones/${milestoneId}`,
+  39 |     deleteMilestone: (milestoneId: string) =>
+> 40 |         `/web/admin/farm-categories/${categoryId}/milestones
+     |                                                 ^^^^^^^^^^^^
+> 41 | };
+     | ^^^
 
-Expected ',', got 'd'
+Unterminated template
 
-Import trace:
-  Server Component:
-    ./components/icons/delete.tsx
-    ./components/icons/index.ts
-    ./app/loading.tsx
-[07:54:16.252] Server  LOG      ✓ Compiled in 321ms
-[07:54:17.176] Server  LOG      ✓ Compiled in 161ms
-[07:54:18.157] Browser ERROR   uncaughtError: ReferenceError: color is not defined
-[07:54:19.486] Server  LOG      ✓ Compiled in 231ms
-[07:54:20.166] Browser ERROR   ./pages/main/admin/milestones.tsx:165:17
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:13:30.604] Browser ERROR   ./constants/apiUrls.ts:40:33
 Parsing ecmascript source code failed
-  163 |                   </button>
-  164 |                   <
-> 165 |                 </div>
-      |                 ^
-  166 |               ))}
-  167 |             </div>
-  168 |           ) : (
+  38 |         `/web/admin/milestones/${milestoneId}`,
+  39 |     deleteMilestone: (milestoneId: string) =>
+> 40 |         `/web/admin/${categoryId}/milestones
+     |                                 ^^^^^^^^^^^^
+> 41 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:13:36.234] Browser ERROR   ./constants/apiUrls.ts:40:34
+Parsing ecmascript source code failed
+  38 |         `/web/admin/milestones/${milestoneId}`,
+  39 |     deleteMilestone: (milestoneId: string) =>
+> 40 |         `/web/admin/${milestoneId}/milestones
+     |                                  ^^^^^^^^^^^^
+> 41 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:13:53.595] Browser ERROR   ./constants/apiUrls.ts:39:34
+Parsing ecmascript source code failed
+  37 |     updateMilestone: (milestoneId: string) =>`/web/admin/milestones/${milestoneId}`,
+  38 |     deleteMilestone: (milestoneId: string) =>
+> 39 |         `/web/admin/${milestoneId}/milestones
+     |                                  ^^^^^^^^^^^^
+> 40 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:13:54.602] Browser ERROR   ./constants/apiUrls.ts:39:34
+Parsing ecmascript source code failed
+  37 |     updateMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
+  38 |     deleteMilestone: (milestoneId: string) =>
+> 39 |         `/web/admin/${milestoneId}/milestones
+     |                                  ^^^^^^^^^^^^
+> 40 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:14:01.585] Browser ERROR   ./constants/apiUrls.ts:38:72
+Parsing ecmascript source code failed
+  36 |     getMilestones: () => `/web/admin/milestones`,
+  37 |     updateMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
+> 38 |     deleteMilestone: (milestoneId: string) => `/web/admin/${milestoneId}/milestones
+     |                                                                        ^^^^^^^^^^^^
+> 39 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:14:59.586] Browser ERROR   ./constants/apiUrls.ts:38:77
+Parsing ecmascript source code failed
+  36 |     getMilestones: () => `/web/admin/milestones`,
+  37 |     updateMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
+> 38 |     deleteMilestone: (milestoneId: string) => `/web/admin/miles${milestoneId}/milestones
+     |                                                                             ^^^^^^^^^^^^
+> 39 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:15:02.598] Browser ERROR   ./constants/apiUrls.ts:38:83
+Parsing ecmascript source code failed
+  36 |     getMilestones: () => `/web/admin/milestones`,
+  37 |     updateMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
+> 38 |     deleteMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}/milestones
+     |                                                                                   ^^^^^^^^^^^^
+> 39 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:15:05.599] Browser ERROR   ./constants/apiUrls.ts:38:83
+Parsing ecmascript source code failed
+  36 |     getMilestones: () => `/web/admin/milestones`,
+  37 |     updateMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
+> 38 |     deleteMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}
+     |                                                                                   ^
+> 39 | };
+     | ^^^
+
+Unterminated template
+
+Import traces:
+  Client Component Browser:
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:16:07.369] Server  LOG      ✓ Compiled in 195ms
+[00:16:07.600] Browser ERROR   ./constants/apiUrls.ts:40:1
+Parsing ecmascript source code failed
+  38 |     deleteMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
+  39 |     deleteAllMilestones: (categoryId: string) =>
+> 40 | };
+     | ^
 
 Expression expected
 
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[07:54:20.166] Browser ERROR   ./pages/main/admin/milestones.tsx:165:18
-Parsing ecmascript source code failed
-  163 |                   </button>
-  164 |                   <
-> 165 |                 </div>
-      |                  ^^^^^
-  166 |               ))}
-  167 |             </div>
-  168 |           ) : (
-
-Unterminated regexp literal
-
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[07:54:24.161] Browser ERROR   ./pages/main/admin/milestones.tsx:165:17
-Parsing ecmascript source code failed
-  163 |                   </button>
-  164 |                   <DeleteIcon
-> 165 |                 </div>
-      |                 ^
-  166 |               ))}
-  167 |             </div>
-  168 |           ) : (
-
-Expression expected
-
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[07:54:24.161] Browser ERROR   ./pages/main/admin/milestones.tsx:165:18
-Parsing ecmascript source code failed
-  163 |                   </button>
-  164 |                   <DeleteIcon
-> 165 |                 </div>
-      |                  ^^^^^
-  166 |               ))}
-  167 |             </div>
-  168 |           ) : (
-
-Unterminated regexp literal
-
-Import trace:
-  Server Component:
-    ./pages/main/admin/milestones.tsx
-    ./app/(main)/admin/milestones/page.tsx
-[07:54:26.108] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[07:54:28.517] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[07:55:01.380] Server  LOG      ✓ Compiled in 136ms
-[07:55:09.688] Server  LOG      ✓ Compiled in 295ms
-[07:55:13.384] Server  LOG      ✓ Compiled in 143ms
-[07:55:20.131] Server  LOG      ✓ Compiled in 170ms
-[07:55:22.035] Server  LOG      ✓ Compiled in 145ms
-[07:55:28.483] Server  LOG      ✓ Compiled in 174ms
-[07:55:54.252] Server  LOG      ✓ Compiled in 122ms
-[07:55:55.159] Browser ERROR   ./app/globals.css
-Error evaluating Node.js code
-CssSyntaxError: C:\Users\dell\Documents\code\SmileAgrimarket\app\globals.css:14:3: Unknown word --re
-    [at Input.error (turbopack:///[project]/node_modules/postcss/lib/input.js:135:16)]
-    [at Parser.unknownWord (turbopack:///[project]/node_modules/postcss/lib/parser.js:595:22)]
-    [at Parser.other (turbopack:///[project]/node_modules/postcss/lib/parser.js:437:12)]
-    [at Parser.parse (turbopack:///[project]/node_modules/postcss/lib/parser.js:472:16)]
-    [at parse (turbopack:///[project]/node_modules/postcss/lib/parse.js:11:12)]
-    [at new LazyResult (turbopack:///[project]/node_modules/postcss/lib/lazy-result.js:165:16)]
-    [at Processor.process (turbopack:///[project]/node_modules/postcss/lib/processor.js:53:14)]
-    [at transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:51)]
-    [at run (turbopack:///[turbopack-node]/ipc/evaluate.ts:92:29)]
-    [at run (turbopack:///[turbopack-node]/ipc/evaluate.ts:115:11)]
-
-Import trace:
+Import traces:
   Client Component Browser:
-    ./app/globals.css [Client Component Browser]
-    ./app/layout.tsx [Server Component]
-[07:56:08.816] Server  LOG      ✓ Compiled in 200ms
-[08:00:05.645] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[08:00:24.234] Server  LOG      ✓ Compiled in 96ms
-[08:00:25.160] Browser ERROR   ./app/globals.css
-Error evaluating Node.js code
-CssSyntaxError: C:\Users\dell\Documents\code\SmileAgrimarket\app\globals.css:28:3: Unknown word --
-    [at Input.error (turbopack:///[project]/node_modules/postcss/lib/input.js:135:16)]
-    [at Parser.unknownWord (turbopack:///[project]/node_modules/postcss/lib/parser.js:595:22)]
-    [at Parser.other (turbopack:///[project]/node_modules/postcss/lib/parser.js:437:12)]
-    [at Parser.parse (turbopack:///[project]/node_modules/postcss/lib/parser.js:472:16)]
-    [at parse (turbopack:///[project]/node_modules/postcss/lib/parse.js:11:12)]
-    [at new LazyResult (turbopack:///[project]/node_modules/postcss/lib/lazy-result.js:165:16)]
-    [at Processor.process (turbopack:///[project]/node_modules/postcss/lib/processor.js:53:14)]
-    [at transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:51)]
-    [at run (turbopack:///[turbopack-node]/ipc/evaluate.ts:92:29)]
-    [at run (turbopack:///[turbopack-node]/ipc/evaluate.ts:115:11)]
+    ./constants/apiUrls.ts [Client Component Browser]
+    ./constants/index.ts [Client Component Browser]
+    ./hooks/useUserCount.ts [Client Component Browser]
+    ./components/ui/sidebar.tsx [Client Component Browser]
+    ./components/ui/index.ts [Client Component Browser]
+    ./app/(auth)/layout.tsx [Client Component Browser]
+    ./app/(auth)/layout.tsx [Server Component]
 
-Import trace:
-  Client Component Browser:
-    ./app/globals.css [Client Component Browser]
-    ./app/layout.tsx [Server Component]
-[08:00:33.712] Server  LOG      ✓ Compiled in 4.1s
-[08:00:35.290] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[08:00:57.715] Server  LOG      ✓ Compiled in 193ms
-[08:01:02.449] Server  LOG      ✓ Compiled in 147ms
-[08:01:06.728] Server  LOG      ✓ Compiled in 128ms
-[08:01:08.468] Server  LOG      ✓ Compiled in 145ms
-[08:01:16.437] Server  LOG      ✓ Compiled in 331ms
-[08:01:27.325] Server  LOG      ✓ Compiled in 129ms
-[08:01:28.704] Server  LOG      ✓ Compiled in 195ms
-[08:03:08.092] Server  LOG      ✓ Compiled in 258ms
-[08:05:33.463] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[08:05:35.159] Server  LOG      ✓ Compiled in 545ms
-[08:05:38.341] Server  LOG      ✓ Compiled in 373ms
-[08:06:11.538] Server  LOG      ✓ Compiled in 175ms
-[08:06:18.100] Server  LOG      ✓ Compiled in 122ms
-[08:07:30.096] Server  LOG      ✓ Compiled in 187ms
-[08:07:34.572] Server  LOG      ✓ Compiled in 222ms
-[08:07:36.500] Server  LOG      ✓ Compiled in 157ms
-[08:07:40.059] Server  LOG      ✓ Compiled in 210ms
-[08:07:45.825] Server  LOG      ✓ Compiled in 429ms
-[08:07:52.399] Server  LOG      ✓ Compiled in 151ms
-[08:07:58.006] Server  LOG      ✓ Compiled in 306ms
-[08:08:03.762] Server  LOG      ✓ Compiled in 216ms
-[08:08:07.049] Server  LOG      ✓ Compiled in 150ms
-[08:08:46.206] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+  Client Component SSR:
+    ./constants/apiUrls.ts [Client Component SSR]
+    ./constants/index.ts [Client Component SSR]
+    ./hooks/useUserCount.ts [Client Component SSR]
+    ./components/ui/sidebar.tsx [Client Component SSR]
+    ./components/ui/index.ts [Client Component SSR]
+    ./app/(auth)/layout.tsx [Client Component SSR]
+    ./app/(auth)/layout.tsx [Server Component]
+[00:16:28.064] Server  LOG      ✓ Compiled in 169ms
+[00:16:31.277] Server  LOG      ✓ Compiled in 128ms
+[00:16:54.175] Server  LOG      ✓ Compiled in 146ms
+[00:16:58.962] Server  LOG      ✓ Compiled in 260ms
+[00:33:41.460] Server  LOG      ✓ Compiled in 263ms
+[00:33:43.427] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:33:46.861] Server  LOG      ✓ Compiled in 252ms
+[00:33:47.870] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:25:08.383] Server  LOG      ✓ Compiled in 436ms
+[01:25:12.589] Server  LOG        Reload env: .env
+[01:25:16.017] Server  LOG        Reload env: .env
+[01:25:16.914] Server  LOG      ✓ Compiled in 0ms
+[01:27:21.842] Server  LOG      ✓ Compiled in 454ms
+[01:31:19.274] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:31:30.812] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:31:33.573] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:41:19.004] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
