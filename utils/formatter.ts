@@ -28,3 +28,13 @@ export const buildQueryString = (filters: Record<string, any>): string => {
 
     return `?${params.toString()}`;
 };
+
+export const formatNumberWithCommas = (value: string | number): string => {
+    const numericValue = Number(value);
+
+    if (Number.isNaN(numericValue)) {
+        return String(value);
+    }
+
+    return numericValue.toLocaleString("en-NG");
+};

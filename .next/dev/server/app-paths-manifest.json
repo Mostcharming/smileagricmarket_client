@@ -1,7 +1,4 @@
 {
-  "/(auth)/admin/page": "app/(auth)/admin/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(main)/admin/dashboard/page": "app/(main)/admin/dashboard/page.js",
-  "/(main)/admin/milestones/page": "app/(main)/admin/milestones/page.js",
-  "/page": "app/page.js"
+  "/(main)/dashboard/page": "app/(main)/dashboard/page.js",
+  "/(main)/my-farms/page": "app/(main)/my-farms/page.js"
 }

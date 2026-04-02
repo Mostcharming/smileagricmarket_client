@@ -29,7 +29,7 @@ const Button = ({
   return (
     <button
       className={clsx(
-        'rounded-lg font-medium shadow-sm shadow-[#0A0D120D] flex items-center justify-center gap-3 transition-colors cursor-pointer disabled:cursor-not-allowed hover:opacity-90',
+        'rounded-lg font-medium shadow-sm shadow-[#0A0D120D] flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:cursor-not-allowed hover:opacity-90',
         variantClasses[variant],
         sizeClassesMap[size],
         className

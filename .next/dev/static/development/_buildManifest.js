@@ -17,6 +17,7 @@ self.__BUILD_MANIFEST = {
     "/main/admin/milestones",
     "/main/admin/users",
     "/main/admin/verification",
-    "/main/dashboard"
+    "/main/dashboard",
+    "/main/myFarms"
   ]
 };self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()
