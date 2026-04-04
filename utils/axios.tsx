@@ -14,6 +14,24 @@ const axiosInstance = axios.create({
 });
 
 const cookieName = "smileAgrimarketCookie";
+const userStorageKey = "smileAgrimarketUser";
+
+const handleUnauthorizedRedirect = (error: unknown) => {
+    if (!axios.isAxiosError(error)) return;
+    if (error.response?.status !== 401) return;
+    if (typeof window === "undefined") return;
+
+    const currentPath = window.location.pathname;
+    const isAdminRoute = currentPath.startsWith("/admin/") || currentPath === "/admin";
+    const redirectPath = isAdminRoute ? "/admin" : "/login";
+
+    Cookies.remove(cookieName);
+    localStorage.removeItem(userStorageKey);
+
+    if (currentPath !== redirectPath) {
+        window.location.assign(redirectPath);
+    }
+};
 
 axiosInstance.interceptors.request.use(
     (config) => {
@@ -29,6 +47,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
+        handleUnauthorizedRedirect(error);
         throw handleAxiosError(error);
     }
 );

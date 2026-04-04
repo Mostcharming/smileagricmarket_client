@@ -38,3 +38,25 @@ export const adminMilestones = {
     deleteMilestone: (milestoneId: string) => `/web/admin/milestones/${milestoneId}`,
     deleteAllMilestonesByCategory: (categoryId: string) => `/web/admin/farm-categories/${categoryId}/milestones/delete-all`,
 };
+
+export const webFarmCategories = {
+    getCategories: () => `/web/farm-categories`,
+    getMilestoneByCategory: (categoryId: string) => `/web/farm-categories/${categoryId}/milestones`,
+};
+
+export const webDashboard = {
+    getDashboard: () => `/web/dashboard`,
+    getStats: () => `/web/dashboard/stats`,
+};
+
+export const webFarms = {
+    getFarms: (query: string) => `/web/farms${query}`,
+    createFarm: () => `/web/farms`,
+    getFarmById: (farmId: string) => `/web/farms/${farmId}`,
+    updateFarm: (farmId: string) => `/web/farms/${farmId}`,
+    deleteFarm: (farmId: string) => `/web/farms/${farmId}`,
+    addMilestonesToFarm: (farmId: string) => `/web/farms/${farmId}/milestones`,
+    deleteFarmMilestone: (farmId: string, milestoneId: string) => `/web/farms/${farmId}/milestones/${milestoneId}`,
+    uploadDocToFarm: (farmId: string) => `/web/farms/${farmId}/documents`,
+    deleteFarmDoc: (documentId: string) => `/web/farms/documents/${documentId}`,
+};

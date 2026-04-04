@@ -60,17 +60,6 @@ export interface FarmCategoryPayload {
     description?: string;
 }
 
-export interface FarmCategoryResponse {
-    id: string;
-    name: string;
-    description?: string;
-    isActive?: boolean;
-    milestoneCount?: number;
-    milestones?: MilestoneResponse[];
-    createdAt?: string;
-    updatedAt?: string;
-}
-
 export interface MilestonePayload {
     name: string;
     order?: number;
@@ -78,18 +67,6 @@ export interface MilestonePayload {
 
 export interface MilestoneBulkPayload {
     milestones: MilestonePayload[];
-}
-
-export interface MilestoneResponse {
-    id: string;
-    farmCategoryId?: string;
-    farmCategoryName?: string;
-    name: string;
-    categoryId?: string;
-    order?: number;
-    isActive?: boolean;
-    createdAt?: string;
-    updatedAt?: string;
 }
 
 export interface DeleteResourceResponse {

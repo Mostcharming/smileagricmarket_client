@@ -4,6 +4,12 @@ import { useMemo, useRef, useState } from "react";
 import { AddIcon, CloseIcon, DocsIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, TickIcon, UploadIcon } from "@/components/icons";
 import { Button, Input, MainHeader, Select, Table, Typography } from "@/components/ui";
 import { Column } from "@/components/ui/table";
+import { DEFAULT_PAGE_SIZE } from "@/constants";
+import { useGetFarmCategories, useGetMilestonesByCategory } from "@/mutation/dashboard.mutation";
+import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm } from "@/mutation/farms.mutation";
+import { MilestoneResponse, SelectOptions } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 type FarmRecord = {
   id: string;
@@ -18,21 +24,14 @@ type PhotoItem = {
   id: string;
   name: string;
   preview: string;
+  file: File;
 };
 
 type DocItem = {
   id: string;
   name: string;
+  file: File;
 };
-
-const milestoneOptions = [
-  "Land Preparation",
-  "Purchase Seeds",
-  "Mid-Season Inspection",
-  "Harvest",
-];
-
-const farmCategories = ["Vegetable", "Poultry", "Crops", "Livestock"];
 
 const makeId = () => Math.random().toString(36).slice(2, 10);
 
@@ -46,6 +45,7 @@ const StepItem = ({ title, done }: { title: string; done: boolean }) => (
 );
 
 const MyFarms = () => {
+  const queryClient = useQueryClient();
   const [showAddFarm, setShowAddFarm] = useState(false);
   const [step, setStep] = useState<Step>(1);
   const [search, setSearch] = useState("");
@@ -59,17 +59,51 @@ const MyFarms = () => {
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const [documents, setDocuments] = useState<DocItem[]>([]);
 
-  const [farms, setFarms] = useState<FarmRecord[]>([]);
-
   const photoInputRef = useRef<HTMLInputElement>(null);
   const photoCaptureRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
 
+  const { data: farmsResponse, isLoading: isFarmsLoading } = useGetFarms({
+    page: 1,
+    limit: DEFAULT_PAGE_SIZE,
+    search,
+  });
+  const { data: farmCategoriesResponse, isLoading: isFarmCategoriesLoading } = useGetFarmCategories();
+  const { data: milestonesResponse, isLoading: isMilestonesLoading } = useGetMilestonesByCategory(farmCategory || undefined);
+
+  const createFarmMutation = useCreateFarm();
+  const addMilestonesMutation = useAddMilestonesToFarm();
+  const uploadDocumentsMutation = useUploadDocToFarm();
+
+  const isSubmittingFarm =
+    createFarmMutation.isPending || addMilestonesMutation.isPending || uploadDocumentsMutation.isPending;
+
+  const farmCategories = useMemo<SelectOptions[]>(() => {
+    const categories = farmCategoriesResponse?.data?.categories ?? [];
+
+    return categories.map((category) => ({
+      label: category.name,
+      value: category.id,
+    }));
+  }, [farmCategoriesResponse?.data?.categories]);
+
+  const milestoneOptions = useMemo(() => {
+    const milestones = (milestonesResponse?.data ?? []) as MilestoneResponse[];
+    return milestones.map((milestone: MilestoneResponse) => ({ id: milestone.id, name: milestone.name || "Unnamed milestone" }));
+  }, [milestonesResponse?.data]);
+
   const filteredFarms = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return farms;
-    return farms.filter((farm) => farm.name.toLowerCase().includes(term) || farm.category.toLowerCase().includes(term));
-  }, [farms, search]);
+    const farms = farmsResponse?.data?.farms ?? [];
+
+    return farms.map((farm) => ({
+      id: farm.id,
+      name: farm.name,
+      category: farm.Category?.name || "Uncategorized",
+      status: (farm.stats?.completionPercentage === 100 ? "Approved" : "Pending") as FarmRecord["status"],
+    }));
+  }, [farmsResponse?.data?.farms]);
+
+  const farmsCount = farmsResponse?.data?.pagination?.total ?? filteredFarms.length;
 
   const resetForm = () => {
     photos.forEach((item) => URL.revokeObjectURL(item.preview));
@@ -100,6 +134,7 @@ const MyFarms = () => {
       id: makeId(),
       name: file.name,
       preview: URL.createObjectURL(file),
+      file,
     }));
 
     setPhotos((prev) => [...prev, ...items]);
@@ -111,6 +146,7 @@ const MyFarms = () => {
     const items: DocItem[] = Array.from(fileList).map((file) => ({
       id: makeId(),
       name: file.name,
+      file,
     }));
 
     setDocuments((prev) => [...prev, ...items]);
@@ -141,21 +177,49 @@ const MyFarms = () => {
   const canContinueStepTwo = farmCategory.length > 0 && selectedMilestones.length > 0 && totalInvestment.trim().length > 0;
   const canSubmit = photos.length > 0 && documents.length > 0;
 
-  const handleSubmitFarm = () => {
+  const handleSubmitFarm = async () => {
     if (!canSubmit) return;
 
-    setFarms((prev) => [
-      {
-        id: makeId(),
-        name: farmName,
-        category: farmCategory,
-        status: "Pending",
-      },
-      ...prev,
-    ]);
+    try {
+      const createdFarm = await createFarmMutation.mutateAsync({
+        name: farmName.trim(),
+        size: Number(farmSize) || undefined,
+        farmCategoryId: farmCategory,
+        location: farmAddress.trim(),
+      });
 
-    resetForm();
-    setShowAddFarm(false);
+      const farmId = createdFarm?.data?.id;
+
+      if (!farmId) {
+        toast.error("Unable to create farm");
+        return;
+      }
+
+      if (selectedMilestones.length) {
+        await addMilestonesMutation.mutateAsync({
+          farmId,
+          payload: { milestones: selectedMilestones },
+        });
+      }
+
+      if (photos.length || documents.length) {
+        await uploadDocumentsMutation.mutateAsync({
+          farmId,
+          payload: {
+            pictures: photos.map((item) => item.file),
+            documents: documents.map((item) => item.file),
+          },
+        });
+      }
+
+      await queryClient.invalidateQueries({ queryKey: ["farms"] });
+      toast.success("Farm added successfully");
+      resetForm();
+      setShowAddFarm(false);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to add farm";
+      toast.error(message);
+    }
   };
 
   const progressWidth = step === 1 ? "25%" : step === 2 ? "50%" : "75%";
@@ -199,7 +263,7 @@ const MyFarms = () => {
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#EAECE8] p-5 sm:px-6">
               <div className="flex items-center gap-2">
                 <h1 className="text-[18px] font-medium text-[#1F2937]">My Farms</h1>
-                <span className="rounded-full bg-[#DDEDD6] px-3 py-1 text-xs font-medium text-[#4E8A35]">{farms.length} Farms</span>
+                <span className="rounded-full bg-[#DDEDD6] px-3 py-1 text-xs font-medium text-[#4E8A35]">{farmsCount} Farms</span>
               </div>
               <Button 
                 variant="primary" 
@@ -229,7 +293,7 @@ const MyFarms = () => {
               </button>
             </div>
 
-            {filteredFarms.length === 0 ? (
+            {!isFarmsLoading && filteredFarms.length === 0 ? (
               <div className="flex min-h-[360px] flex-col items-center justify-center px-6 py-14 text-center">
                 <div className="mb-4 flex h-18 w-18 items-center justify-center rounded-full bg-[#F1F9ED]">
                   <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#E2F3DA]">
@@ -249,6 +313,8 @@ const MyFarms = () => {
                   Add your Farm
                 </Button>
               </div>
+            ) : isFarmsLoading ? (
+              <div className="p-20 text-center text-gray-500">Loading farms...</div>
             ) : (
               <div className="p-4 sm:p-6">
                 <div className="overflow-hidden rounded-xl border border-[#E9EAEB] bg-white">
@@ -322,30 +388,43 @@ const MyFarms = () => {
                         value={farmCategory}
                         onChange={(event) => setFarmCategory(event.target.value)}
                         placeholder="Select Farm Category"
-                        options={farmCategories.map((option) => ({ label: option, value: option }))}
+                        options={farmCategories}
                       />
+
+                      {isFarmCategoriesLoading && (
+                        <p className="text-sm text-[#6B7280]">Loading farm categories...</p>
+                      )}
 
                       {farmCategory && (
                         <>
                           <Typography variant="small" className="font-semibold text-[#1F2937]">What do you need funds for? (Select farm milestones that apply)</Typography>
                           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 mt-3">
                             {milestoneOptions.map((option) => {
-                              const checked = selectedMilestones.includes(option);
+                              if (!option.id) return null;
+                              const checked = selectedMilestones.includes(option.id);
                               return (
                                 <button
-                                  key={option}
+                                  key={option.id}
                                   type="button"
-                                  onClick={() => toggleMilestone(option)}
+                                  onClick={() => toggleMilestone(option.id)}
                                   className="flex items-center gap-3 rounded-md shadow-xs border border-[#B8C3CF] bg-transparent px-4 py-3 text-left text-[#1F2937]"
                                 >
                                   <span className={`flex h-5 w-5 items-center justify-center rounded-sm border ${checked ? "border-[#3B82F6] bg-[#DBEAFE] text-[#2563EB]" : "border-[#8A93A4] text-transparent"}`}>
                                     ✓
                                   </span>
-                                  <span>{option}</span>
+                                  <span>{option.name}</span>
                                 </button>
                               );
                             })}
                           </div>
+
+                          {isMilestonesLoading && (
+                            <p className="text-sm text-[#6B7280]">Loading milestones...</p>
+                          )}
+
+                          {!isMilestonesLoading && milestoneOptions.length === 0 && (
+                            <p className="text-sm text-[#6B7280]">No milestones configured for this category yet.</p>
+                          )}
 
                           <Input
                             id="total-investment"
@@ -463,7 +542,7 @@ const MyFarms = () => {
                         <Button variant="light" className="rounded-md bg-[#E0E0E0] text-sm" onClick={() => setStep(2)}>
                           BACK
                         </Button>
-                        <Button variant="primary" disabled={!canSubmit} className="rounded-md text-sm" onClick={handleSubmitFarm}>
+                        <Button variant="primary" disabled={!canSubmit} className="rounded-md text-sm" onClick={handleSubmitFarm} isLoading={isSubmittingFarm}>
                           ADD FARM
                         </Button>
                       </div>

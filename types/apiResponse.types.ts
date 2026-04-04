@@ -9,6 +9,7 @@ export interface PaginatedFilter {
     page?: number;
     limit?: number;
     search?: string;
+    status?: string;
     filter?: string;
     sort?: string;
     category?: string;
@@ -24,4 +25,15 @@ export interface ApiError {
 
 export interface TokenResponse {
     token: string;
+}
+
+export interface Pagination {
+	page: number;
+	limit: number;
+	total: number;
+	totalPages: number;
+	hasNextPage: boolean;
+	hasPreviousPage: boolean;
+	startIndex: number;
+	endIndex: number;
 }
