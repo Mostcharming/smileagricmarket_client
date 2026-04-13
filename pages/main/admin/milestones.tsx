@@ -7,13 +7,13 @@ import { Button, Input, Typography } from '@/components/ui';
 import { FarmCategoryModal } from '@/components/modal';
 import {
   useCreateCategory,
+  useGetCategories,
   useCreateMilestone,
   useDeleteMilestone,
-  useGetCategories,
-  useGetMilestonesByCategory,
+  useGetAdminMilestonesByCategory,
   useUpdateMilestone,
 } from '@/mutation';
-import { MilestonePayload, MilestoneResponse } from '@/types';
+import { FarmCategoryResponse, MilestonePayload, MilestoneResponse } from '@/types';
 import { useQueryClient } from '@tanstack/react-query';
 
 type MilestoneDraft = {
@@ -31,7 +31,23 @@ const MilestonesDashboard = () => {
   const [dragOverMilestoneIndex, setDragOverMilestoneIndex] = useState<number | null>(null);
 
   const { data: categoriesResponse, isLoading: isCategoriesLoading } = useGetCategories();
-  const categories = useMemo(() => categoriesResponse?.data ?? [], [categoriesResponse?.data]);
+  const categories = useMemo<FarmCategoryResponse[]>(() => {
+    const categoryData = categoriesResponse?.data;
+
+    if (Array.isArray(categoryData)) {
+      return categoryData;
+    }
+
+    if (
+      categoryData &&
+      typeof categoryData === 'object' &&
+      Array.isArray((categoryData as { categories?: FarmCategoryResponse[] }).categories)
+    ) {
+      return (categoryData as { categories: FarmCategoryResponse[] }).categories;
+    }
+
+    return [];
+  }, [categoriesResponse?.data]);
 
   const selectedCategoryId = useMemo(() => {
     if (!categories.length) return null;
@@ -50,21 +66,32 @@ const MilestonesDashboard = () => {
     data: milestonesResponse,
     isLoading: isMilestonesLoading,
     isFetching: isMilestonesFetching,
-  } = useGetMilestonesByCategory(selectedCategoryId ?? undefined);
+  } = useGetAdminMilestonesByCategory(selectedCategoryId ?? undefined);
 
   const createCategoryMutation = useCreateCategory();
   const createMilestoneMutation = useCreateMilestone();
   const updateMilestoneMutation = useUpdateMilestone();
   const deleteMilestoneMutation = useDeleteMilestone();
 
-  const serverMilestones = useMemo(
-    () =>
-      (milestonesResponse?.data ?? []).map((milestone: MilestoneResponse) => ({
-        id: milestone.id,
-        name: milestone.name,
-      })),
-    [milestonesResponse?.data]
-  );
+  const serverMilestones = useMemo(() => {
+    const milestoneData = milestonesResponse?.data;
+    let milestones: MilestoneResponse[] = [];
+
+    if (Array.isArray(milestoneData)) {
+      milestones = milestoneData;
+    } else if (
+      milestoneData &&
+      typeof milestoneData === 'object' &&
+      Array.isArray((milestoneData as { milestones?: MilestoneResponse[] }).milestones)
+    ) {
+      milestones = (milestoneData as { milestones: MilestoneResponse[] }).milestones;
+    }
+
+    return milestones.map((milestone: MilestoneResponse) => ({
+      id: milestone.id,
+      name: milestone.name,
+    }));
+  }, [milestonesResponse?.data]);
 
   const milestonesDraft = useMemo(() => {
     if (!selectedCategoryId) return [];
@@ -205,31 +232,26 @@ const MilestonesDashboard = () => {
         )
       );
 
-      const existingMilestones = trimmedMilestones.filter((milestone) => milestone.id);
-      const newMilestones = trimmedMilestones.filter((milestone) => !milestone.id);
-
-      if (newMilestones.length) {
-        await createMilestoneMutation.mutateAsync({
-          categoryId: selectedCategoryId,
-          payload: {
-            milestones: newMilestones.map((milestone, index) => ({
-              name: milestone.name,
-              order: index,
-            })),
-          },
-        });
-      }
-
       await Promise.all(
-        existingMilestones.map((milestone, index) =>
-          updateMilestoneMutation.mutateAsync({
-            milestoneId: milestone.id!,
+        trimmedMilestones.map((milestone, index) => {
+          if (milestone.id) {
+            return updateMilestoneMutation.mutateAsync({
+              milestoneId: milestone.id,
+              payload: {
+                name: milestone.name,
+                order: index,
+              } as Partial<MilestonePayload>,
+            });
+          }
+
+          return createMilestoneMutation.mutateAsync({
+            categoryId: selectedCategoryId,
             payload: {
               name: milestone.name,
               order: index,
-            } as Partial<MilestonePayload>,
-          })
-        )
+            },
+          });
+        })
       );
 
       await queryClient.invalidateQueries({
@@ -308,61 +330,73 @@ const MilestonesDashboard = () => {
 
         <div className='mt-8'>
           {selectedCategory ? (
-            <div className="space-y-4">
-              {milestonesDraft.map((milestone, index) => (
-                <div
-                  key={milestone.id ?? `${selectedCategory.id}-${index}`}
-                  className={`flex items-center gap-3 rounded-md transition-colors ${
-                    dragOverMilestoneIndex === index && draggingMilestoneIndex !== index
-                      ? 'bg-foreground/5'
-                      : ''
-                  }`}
-                  onDragOver={(event) => {
-                    event.preventDefault();
-                    handleDragOver(index);
-                  }}
-                  onDrop={(event) => {
-                    event.preventDefault();
-                    handleDrop(index);
-                  }}
-                >
-                  <button
-                    type="button"
-                    draggable
-                    className="grid grid-cols-2 gap-0.5 cursor-grab active:cursor-grabbing p-1"
-                    aria-label={`Drag milestone ${index + 1} to reorder`}
-                    onDragStart={(event) => {
-                      event.dataTransfer.effectAllowed = 'move';
-                      handleDragStart(index);
+            milestonesDraft.length ? (
+              <div className="space-y-4">
+                {milestonesDraft.map((milestone, index) => (
+                  <div
+                    key={milestone.id ?? `${selectedCategory.id}-${index}`}
+                    className={`flex items-center gap-3 rounded-md transition-colors ${
+                      dragOverMilestoneIndex === index && draggingMilestoneIndex !== index
+                        ? 'bg-foreground/5'
+                        : ''
+                    }`}
+                    onDragOver={(event) => {
+                      event.preventDefault();
+                      handleDragOver(index);
                     }}
-                    onDragEnd={handleDragEnd}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      handleDrop(index);
+                    }}
                   >
-                    {Array.from({ length: 6 }).map((_, dotIndex) => (
-                      <span key={dotIndex} className="w-[3px] h-[3px] rounded-full bg-border" />
-                    ))}
-                  </button>
+                    <button
+                      type="button"
+                      draggable
+                      className="grid grid-cols-2 gap-0.5 cursor-grab active:cursor-grabbing p-1"
+                      aria-label={`Drag milestone ${index + 1} to reorder`}
+                      onDragStart={(event) => {
+                        event.dataTransfer.effectAllowed = 'move';
+                        handleDragStart(index);
+                      }}
+                      onDragEnd={handleDragEnd}
+                    >
+                      {Array.from({ length: 6 }).map((_, dotIndex) => (
+                        <span key={dotIndex} className="w-[3px] h-[3px] rounded-full bg-border" />
+                      ))}
+                    </button>
 
-                  <Input
-                    id={`milestone-${index}`}
-                    value={milestone.name}
-                    onChange={(event) => handleMilestoneChange(index, event.target.value)}
-                    placeholder={`Milestone/Stage ${index + 1}`}
-                    label={milestone.name.trim() ? `Milestone/Stage ${index + 1}` : ''}
-                    containerClassName="flex-1"
-                    labelClassName="text-base"
-                  />
+                    <Input
+                      id={`milestone-${index}`}
+                      value={milestone.name}
+                      onChange={(event) => handleMilestoneChange(index, event.target.value)}
+                      placeholder={`Milestone/Stage ${index + 1}`}
+                      label={milestone.name.trim() ? `Milestone/Stage ${index + 1}` : ''}
+                      containerClassName="flex-1"
+                      labelClassName="text-base"
+                    />
 
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveMilestone(index)}
-                    className="cursor-pointer"
-                    aria-label={`Remove milestone ${index + 1}`}
-                  >
-                    <DeleteIcon color='var(--red100)' />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveMilestone(index)}
+                      className="cursor-pointer"
+                      aria-label={`Remove milestone ${index + 1}`}
+                    >
+                      <DeleteIcon color='var(--red100)' />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-border100 bg-background/30 px-6 py-10 md:py-14 text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white border border-border100">
+                  <FarmIcon color="#599C38" size={18} />
                 </div>
-              ))}
-            </div>
+                <p className="text-lg md:text-xl font-semibold text-appBlack">No milestones yet</p>
+                <p className="mt-2 text-sm md:text-base text-foreground100">
+                  Add your first milestone for this farm category.
+                </p>
+              </div>
+            )
           ) : (
             <div className="rounded-xl border border-dashed border-border100 bg-background/30 px-6 py-10 md:py-14 text-center">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white border border-border100">

@@ -18,10 +18,18 @@ const Login = () => {
   const [password, setPassword] = useState("")
 
   const handleLogin = () => {
-    const payload = {
-      phoneNumber: phone,
-      password,
-    };
+    const normalizedInput = phone.trim();
+    const isEmailInput = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedInput);
+
+    const payload = isEmailInput
+      ? {
+          email: normalizedInput,
+          password,
+        }
+      : {
+          phoneNumber: normalizedInput,
+          password,
+        };
 
     mutate(payload, {
       onSuccess: async (response) => {

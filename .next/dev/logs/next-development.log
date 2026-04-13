@@ -1,143 +1,15 @@
-[00:00:03.847] Server  LOG      ✓ Ready in 2.9s
-[00:00:41.065] Server  LOG      ○ Compiling /dashboard ...
-[00:00:44.063] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:49.560] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-https://react.dev/link/hydration-mismatch
-
-  ...
-    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
-      <LoadingBoundary name="dashboard/" loading={null}>
-        <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
-          <RedirectBoundary>
-            <RedirectErrorBoundary router={{...}}>
-              <InnerLayoutRouter url="/dashboard" tree={[...]} params={{}} cacheNode={{lazyData:null, ...}} ...>
-                <SegmentViewNode type="page" pagePath="(main)/das...">
-                  <SegmentTrieNode>
-                  <DashboardPage>
-                    <Dashboard>
-                      <div className="min-h-scre...">
-                        <MainHeader activeTab="dashboard">
-                          <header className="w-full bor...">
-                            <div className="mx-auto fl...">
-                              <LinkComponent>
-                              <nav>
-                              <div className="flex items...">
-                                <button>
-                                <div
-                                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D1D5DB] text..."
-                                >
-+                                 OM
--                                 SA
-                        ...
-                ...
-              ...
-
-[00:02:02.516] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:02.668] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-https://react.dev/link/hydration-mismatch
-
-  ...
-    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
-      <LoadingBoundary name="dashboard/" loading={null}>
-        <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
-          <RedirectBoundary>
-            <RedirectErrorBoundary router={{...}}>
-              <InnerLayoutRouter url="/dashboard" tree={[...]} params={{}} cacheNode={{lazyData:null, ...}} ...>
-                <SegmentViewNode type="page" pagePath="(main)/das...">
-                  <SegmentTrieNode>
-                  <DashboardPage>
-                    <Dashboard>
-                      <div className="min-h-scre...">
-                        <MainHeader activeTab="dashboard">
-                          <header className="w-full bor...">
-                            <div className="mx-auto fl...">
-                              <LinkComponent>
-                              <nav>
-                              <div className="flex items...">
-                                <button>
-                                <div
-                                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D1D5DB] text..."
-                                >
-+                                 OM
--                                 SA
-                        ...
-                ...
-              ...
-
-[00:02:05.742] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:05.897] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
-
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
-
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
-
-https://react.dev/link/hydration-mismatch
-
-  ...
-    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
-      <LoadingBoundary name="dashboard/" loading={null}>
-        <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
-          <RedirectBoundary>
-            <RedirectErrorBoundary router={{...}}>
-              <InnerLayoutRouter url="/dashboard" tree={[...]} params={{}} cacheNode={{lazyData:null, ...}} ...>
-                <SegmentViewNode type="page" pagePath="(main)/das...">
-                  <SegmentTrieNode>
-                  <DashboardPage>
-                    <Dashboard>
-                      <div className="min-h-scre...">
-                        <MainHeader activeTab="dashboard">
-                          <header className="w-full bor...">
-                            <div className="mx-auto fl...">
-                              <LinkComponent>
-                              <nav>
-                              <div className="flex items...">
-                                <button>
-                                <div
-                                  className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D1D5DB] text..."
-                                >
-+                                 OM
--                                 SA
-                        ...
-                ...
-              ...
-
-[00:02:42.871] Server  LOG      ✓ Compiled in 2.5s
-[00:07:48.253] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:08:19.555] Server  LOG      ✓ Compiled in 110ms
-[03:32:19.509] Server  LOG      ✓ Compiled in 220ms
-[03:36:54.961] Server  LOG      ✓ Compiled in 159ms
-[03:40:50.716] Server  LOG      ✓ Compiled in 153ms
-[03:40:57.786] Server  LOG      ✓ Compiled in 218ms
-[03:41:42.395] Server  LOG      ✓ Compiled in 147ms
-[03:41:59.736] Server  LOG      ✓ Compiled in 241ms
-[03:46:09.091] Server  LOG      ○ Compiling /login ...
-[03:46:11.281] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:52:00.618] Server  LOG      ✓ Compiled in 453ms
-[03:52:12.890] Server  LOG      ✓ Compiled in 244ms
-[03:57:10.797] Server  LOG      ✓ Compiled in 357ms
-[03:57:56.031] Server  LOG      ✓ Compiled in 190ms
-[03:58:36.663] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[04:02:08.230] Server  LOG      ✓ Compiled in 363ms
-[04:03:02.600] Server  LOG      ✓ Compiled in 247ms
+[00:00:08.168] Server  LOG      ✓ Ready in 6.1s
+[00:01:30.918] Server  LOG      ○ Compiling / ...
+[00:01:41.521] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:47.070] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:15.846] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:16.172] Server  LOG      ✓ Compiled in 778ms
+[00:12:12.745] Server  LOG      ✓ Compiled in 2s
+[00:13:53.470] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:23.364] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:45.058] Server  LOG      ✓ Compiled in 290ms
+[00:18:52.444] Server  LOG      ✓ Compiled in 351ms
+[00:20:06.466] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:20:56.268] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:21:13.677] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:22:35.177] Server  LOG      ✓ Compiled in 392ms

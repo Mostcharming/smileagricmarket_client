@@ -198,7 +198,6 @@
     --color-white: #fff;
     --spacing: .25rem;
     --container-md: 28rem;
-    --container-2xl: 42rem;
     --container-3xl: 48rem;
     --container-4xl: 56rem;
     --container-6xl: 72rem;
@@ -671,10 +670,6 @@
     margin-top: calc(var(--spacing) * 10);
   }
 
-  .mr-1 {
-    margin-right: calc(var(--spacing) * 1);
-  }
-
   .mr-2 {
     margin-right: calc(var(--spacing) * 2);
   }
@@ -803,10 +798,6 @@
     height: 191px;
   }
 
-  .h-\[360px\] {
-    height: 360px;
-  }
-
   .h-\[calc\(100vh-4rem\)\] {
     height: calc(100vh - 4rem);
   }
@@ -835,20 +826,8 @@
     max-height: 85vh;
   }
 
-  .min-h-80 {
-    min-height: calc(var(--spacing) * 80);
-  }
-
   .min-h-\[120px\] {
     min-height: 120px;
-  }
-
-  .min-h-\[142px\] {
-    min-height: 142px;
-  }
-
-  .min-h-\[320px\] {
-    min-height: 320px;
   }
 
   .min-h-\[360px\] {
@@ -929,10 +908,6 @@
 
   .w-full {
     width: 100%;
-  }
-
-  .max-w-2xl {
-    max-width: var(--container-2xl);
   }
 
   .max-w-3xl {
@@ -1052,10 +1027,6 @@
     align-items: flex-end;
   }
 
-  .items-start {
-    align-items: flex-start;
-  }
-
   .justify-between {
     justify-content: space-between;
   }
@@ -1122,12 +1093,6 @@
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 5) * var(--tw-space-y-reverse));
     margin-block-end: calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)));
-  }
-
-  :where(.space-y-6 > :not(:last-child)) {
-    --tw-space-y-reverse: 0;
-    margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
-    margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
   }
 
   :where(.space-x-1 > :not(:last-child)) {
@@ -1368,10 +1333,6 @@
 
   .bg-\[\#E9EBEF\] {
     background-color: #e9ebef;
-  }
-
-  .bg-\[\#EAF4E2\] {
-    background-color: #eaf4e2;
   }
 
   .bg-\[\#EEEAFB\] {
@@ -1690,10 +1651,6 @@
     padding-top: calc(var(--spacing) * 4);
   }
 
-  .pt-10 {
-    padding-top: calc(var(--spacing) * 10);
-  }
-
   .pt-12 {
     padding-top: calc(var(--spacing) * 12);
   }
@@ -1782,10 +1739,6 @@
 
   .text-\[20px\] {
     font-size: 20px;
-  }
-
-  .text-\[40px\] {
-    font-size: 40px;
   }
 
   .text-\[44px\] {
@@ -2280,12 +2233,6 @@
   @media (min-width: 40rem) {
     .sm\:items-center {
       align-items: center;
-    }
-  }
-
-  @media (min-width: 40rem) {
-    .sm\:items-end {
-      align-items: flex-end;
     }
   }
 
