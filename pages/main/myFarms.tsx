@@ -5,7 +5,7 @@ import { AddIcon, CloseIcon, DocsIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon
 import { Button, Input, MainHeader, Select, Table, Typography } from "@/components/ui";
 import { Column } from "@/components/ui/table";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
-import { useGetFarmCategories, useGetMilestonesByCategory } from "@/mutation/dashboard.mutation";
+import { useGetFarmCategories, useGetWebMilestonesByCategory } from "@/mutation/dashboard.mutation";
 import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm } from "@/mutation/farms.mutation";
 import { MilestoneResponse, SelectOptions } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -69,7 +69,7 @@ const MyFarms = () => {
     search,
   });
   const { data: farmCategoriesResponse, isLoading: isFarmCategoriesLoading } = useGetFarmCategories();
-  const { data: milestonesResponse, isLoading: isMilestonesLoading } = useGetMilestonesByCategory(farmCategory || undefined);
+  const { data: milestonesResponse, isLoading: isMilestonesLoading } = useGetWebMilestonesByCategory(farmCategory || undefined);
 
   const createFarmMutation = useCreateFarm();
   const addMilestonesMutation = useAddMilestonesToFarm();

@@ -2,8 +2,8 @@ import {
 	createMilestone,
 	deleteAllMilestonesByCategory,
 	deleteMilestone,
+	getAdminMilestonesByCategory,
 	getMilestones,
-	getMilestonesByCategory,
 	updateMilestone,
 } from "@/api";
 import { MilestoneBulkPayload, MilestonePayload } from "@/types";
@@ -18,10 +18,10 @@ export const useGetMilestones = () => {
 	});
 };
 
-export const useGetMilestonesByCategory = (categoryId?: string) => {
+export const useGetAdminMilestonesByCategory = (categoryId?: string) => {
 	return useQuery({
 		queryKey: ["milestones", categoryId],
-		queryFn: () => getMilestonesByCategory(categoryId!),
+		queryFn: () => getAdminMilestonesByCategory(categoryId!),
 		enabled: !!categoryId,
 	});
 };

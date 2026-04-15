@@ -17,7 +17,7 @@ export const getFarmCategories = async (): Promise<
 	return response;
 };
 
-export const getMilestonesByCategory = async (
+export const getWebMilestonesByCategory = async (
 	categoryId: string
 ): Promise<ApiResponse<MilestonesByCategoryDirectory>> => {
 	const response = await get<MilestonesByCategoryDirectory>(

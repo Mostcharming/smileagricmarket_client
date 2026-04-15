@@ -2,7 +2,7 @@ import {
 	getDashboard,
 	getDashboardStats,
 	getFarmCategories,
-	getMilestonesByCategory,
+	getWebMilestonesByCategory,
 } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -13,10 +13,10 @@ export const useGetFarmCategories = () => {
 	});
 };
 
-export const useGetMilestonesByCategory = (categoryId?: string) => {
+export const useGetWebMilestonesByCategory = (categoryId?: string) => {
 	return useQuery({
 		queryKey: ["webMilestones", categoryId],
-		queryFn: () => getMilestonesByCategory(categoryId!),
+		queryFn: () => getWebMilestonesByCategory(categoryId!),
 		enabled: !!categoryId,
 	});
 };

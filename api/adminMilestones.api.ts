@@ -21,7 +21,7 @@ export const createMilestone = async (
 	return response;
 };
 
-export const getMilestonesByCategory = async (
+export const getAdminMilestonesByCategory = async (
 	categoryId: string
 ): Promise<ApiResponse<MilestoneResponse[]>> => {
 	const response = await get<MilestoneResponse[]>(
