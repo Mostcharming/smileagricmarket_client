@@ -1,14 +1,17 @@
 'use client'
 
 import { useMemo, useRef, useState } from "react";
-import { AddIcon, CloseIcon, DocsIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, TickIcon, UploadIcon } from "@/components/icons";
+import { AddIcon, CheckIcon, CloseIcon, DocsIcon, EqualIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, ShieldIcon, TickIcon, UploadIcon } from "@/components/icons";
+import { Modal } from "@/components/modal";
 import { Button, Input, MainHeader, Select, Table, Typography } from "@/components/ui";
 import { Column } from "@/components/ui/table";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { useGetFarmCategories, useGetWebMilestonesByCategory } from "@/mutation/dashboard.mutation";
 import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm } from "@/mutation/farms.mutation";
+import { useGetKycStatus } from "@/mutation";
 import { MilestoneResponse, SelectOptions } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 type FarmRecord = {
@@ -44,7 +47,15 @@ const StepItem = ({ title, done }: { title: string; done: boolean }) => (
   </div>
 );
 
+const normalizeKycStatus = (status?: string) => status?.trim().toLowerCase().replace(/\s+/g, "_") ?? "";
+
+const isKycVerifiedStatus = (status?: string) => {
+  const normalizedStatus = normalizeKycStatus(status);
+  return normalizedStatus === "approved" || normalizedStatus === "verified" || normalizedStatus === "active";
+};
+
 const MyFarms = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [showAddFarm, setShowAddFarm] = useState(false);
   const [step, setStep] = useState<Step>(1);
@@ -68,6 +79,7 @@ const MyFarms = () => {
     limit: DEFAULT_PAGE_SIZE,
     search,
   });
+  const { data: kycStatusResponse, isLoading: isKycStatusLoading } = useGetKycStatus();
   const { data: farmCategoriesResponse, isLoading: isFarmCategoriesLoading } = useGetFarmCategories();
   const { data: milestonesResponse, isLoading: isMilestonesLoading } = useGetWebMilestonesByCategory(farmCategory || undefined);
 
@@ -104,6 +116,8 @@ const MyFarms = () => {
   }, [farmsResponse?.data?.farms]);
 
   const farmsCount = farmsResponse?.data?.pagination?.total ?? filteredFarms.length;
+  const isKycVerified = isKycVerifiedStatus(kycStatusResponse?.data?.status);
+  const isVerificationRequired = !isKycStatusLoading && !isKycVerified;
 
   const resetForm = () => {
     photos.forEach((item) => URL.revokeObjectURL(item.preview));
@@ -119,7 +133,20 @@ const MyFarms = () => {
   };
 
   const handleOpenAddFarm = () => {
+    if (!isKycVerified) {
+      toast.error("Verify your account before listing a farm");
+      return;
+    }
+
     setShowAddFarm(true);
+  };
+
+  const handleExitMyFarms = () => {
+    router.push("/dashboard");
+  };
+
+  const handleVerifyAccount = () => {
+    router.push("/dashboard");
   };
 
   const handleBackToList = () => {
@@ -597,6 +624,115 @@ const MyFarms = () => {
           </div>
         )}
       </main>
+
+      <Modal
+        isOpen={isVerificationRequired}
+        onClose={handleExitMyFarms}
+        ariaLabel="Verification Required"
+        maxWidth="max-w-[446px]"
+        maxHeight="max-h-[90vh]"
+        closeOnOverlayClick={false}
+      >
+        <div className="relative w-full rounded-lg bg-white p-6 border-[#6FC346] border-t-4">
+          <button
+            type="button"
+            onClick={handleExitMyFarms}
+            className="absolute right-3 top-3 cursor-pointer text-[#7A8077] transition-opacity hover:opacity-80"
+            aria-label="Close verification prompt"
+          >
+            <CloseIcon size={24} color="currentColor" />
+          </button>
+
+          <div className="mx-auto mb-6 mt-2 flex h-[86px] w-[86px] items-center justify-center rounded-full bg-[#ECFDF3] sm:mb-7">
+            <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-[#D1FADF]">
+              <div className="flex h-[46px] w-[46px] items-center justify-center rounded-full text-[#039855]">
+                <CheckIcon size={28} color="currentColor" />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center items-center">
+            <Typography variant="subheading" className="text-[#0B1307] text-xl! text-center">
+              Verification Required to List Your Farm
+            </Typography>
+            <Typography variant="base" className="mt-2 text-center text-[#31332F]">
+              To protect buyers &amp; investors, all farm listings must be verified to ensure authenticity &amp; quality.
+            </Typography>
+          </div>
+
+          <div className="mx-auto mt-8 flex w-full max-w-[312px] items-center justify-between">
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#64B03F] text-white">
+                <CheckIcon size={16} color="currentColor" />
+              </div>
+              <Typography variant="small" className="font-semibold whitespace-nowrap tracking-[0.03em] text-[#599C38]!">UPLOAD ID</Typography>
+            </div>
+
+            <div className="h-0.5 w-[69px] rounded-full bg-[#C2E6CE]" />
+
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex h-5 w-5 items-center justify-center rounded-full border border-[#D3D5D8] bg-[#F6F7F7] text-sm font-semibold text-[#B5B9BE]">
+                2
+              </div>
+              <Typography variant="small" className="font-semibold whitespace-nowrap tracking-[0.03em] text-[#61665F]!">VERIFY PROFILE</Typography>
+            </div>
+          </div>
+
+          <div className="mx-auto mt-10 w-full max-w-[640px] space-y-6">
+            <div className="flex items-start gap-4">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-[#F1F9ED] text-[#4E8931]">
+                <ShieldIcon size={18} color="currentColor" />
+              </div>
+              <div className="flex flex-col">
+                <Typography variant="normal" className="font-semibold leading-[1.2] text-[#151917]!">Build trust with buyers &amp; investors</Typography>
+                <Typography variant="normal" className="leading-[1.4] text-[#61665F]!">Verified badges increase buyer confidence by 85%</Typography>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-[#F1F9ED] text-[#4E8931]">
+                <EqualIcon size={18} color="currentColor" />
+              </div>
+              <div className="flex flex-col">
+                <Typography variant="normal" className="font-semibold leading-[1.2] text-[#151917]!">Get higher visibility on listings</Typography>
+                <Typography variant="normal" className="leading-[1.4] text-[#61665F]!">Priority placement in search results &amp; category pages</Typography>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] bg-[#F1F9ED] text-[#4E8931]">
+                <FarmIcon size={18} color="currentColor" />
+              </div>
+              <div className="flex flex-col">
+                <Typography variant="normal" className="font-semibold leading-[1.2] text-[#151917]!">Access funding opportunities</Typography>
+                <Typography variant="normal" className="leading-[1.4] text-[#61665F]!">Eligible for institutional investments &amp; agricultural grants</Typography>
+              </div>
+            </div>
+          </div>
+
+          <div className="mx-auto mt-10 flex w-full max-w-[640px] flex-col gap-4">
+            <Button
+              variant="primary"
+              onClick={handleVerifyAccount}
+              className="py-4"
+            >
+              <span className="flex items-center gap-4">
+                <span>VERIFY YOUR ACCOUNT</span>
+                <div className="text-2xl -mt-1 leading-none">›</div>
+              </span>
+            </Button>
+
+            <Button
+              type="button"
+              variant="light"
+              onClick={handleExitMyFarms}
+              className="py-4 border border-[#D6D6D6] bg-[#DEDEDE] text-[#252525]"
+            >
+              MAYBE LATER
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
