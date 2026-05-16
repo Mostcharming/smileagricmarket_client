@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import { AddIcon, CheckIcon, CloseIcon, DocsIcon, EqualIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, ShieldIcon, TickIcon, UploadIcon } from "@/components/icons";
 import { Modal } from "@/components/modal";
-import { Button, Input, MainHeader, Select, Table, Typography } from "@/components/ui";
+import { Button, Input, MainHeader, Select, Table, Typography, FarmStatusBadge } from "@/components/ui";
 import { Column } from "@/components/ui/table";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { useGetFarmCategories, useGetWebMilestonesByCategory } from "@/mutation/dashboard.mutation";
@@ -18,7 +18,8 @@ type FarmRecord = {
   id: string;
   name: string;
   category: string;
-  status: "Pending" | "Approved";
+  status: string; // legacy label
+  verificationStatus?: string; // raw verificationStatus from API
 };
 
 type Step = 1 | 2 | 3;
@@ -129,7 +130,11 @@ const MyFarms = () => {
       id: farm.id,
       name: farm.name,
       category: farm.Category?.name || "Uncategorized",
-      status: (farm.stats?.completionPercentage === 100 ? "Approved" : "Pending") as FarmRecord["status"],
+      // keep legacy status for compatibility, but prefer verificationStatus when available
+      status: (farm as unknown as { verificationStatus?: string }).verificationStatus
+        ? String((farm as unknown as { verificationStatus?: string }).verificationStatus)
+        : (farm.stats?.completionPercentage === 100 ? "Approved" : "Pending"),
+      verificationStatus: (farm as unknown as { verificationStatus?: string }).verificationStatus ?? undefined,
     }));
   }, [farmsResponse?.data?.farms]);
 
@@ -300,7 +305,8 @@ const MyFarms = () => {
       header: "Verification Status",
       key: "status",
       render: (farm) => (
-        <span className="rounded-full bg-[#E5E5E5] px-3 py-1 text-xs font-medium text-[#555D66]">{farm.status}</span>
+        // Prefer the verificationStatus field when available
+        <FarmStatusBadge status={(farm as FarmRecord).verificationStatus ?? farm.status} />
       ),
     },
     {

@@ -7080,3 +7080,6 @@ https://react.dev/link/hydration-mismatch
 
 [02:50:12.308] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [02:50:24.343] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:54:14.325] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:54:57.759] Server  LOG      ✓ Compiled in 579ms
+[02:55:12.687] Server  LOG      ✓ Compiled in 400ms
