@@ -1,4 +1,7 @@
 self.__BUILD_MANIFEST = {
+  "/_error": [
+    "static/chunks/pages/_error.js"
+  ],
   "__rewrites": {
     "afterFiles": [],
     "beforeFiles": [],
@@ -14,6 +17,7 @@ self.__BUILD_MANIFEST = {
     "/auth/resetPassword",
     "/auth/signup",
     "/auth/verifyOTP",
+    "/main/admin/farms",
     "/main/admin/milestones",
     "/main/admin/users",
     "/main/admin/verification",

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 import { 
   Table, 
   Pagination, 
@@ -17,6 +18,7 @@ import { useApproveKyc, useGetUserDetails, useGetUsers, useRejectKyc } from '@/m
 import { UsersApiResponse } from '@/types';
 
 const VerificationDashboard = () => {
+  const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -36,7 +38,7 @@ const VerificationDashboard = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const { data, isLoading, refetch } = useGetUsers({
+  const { data, isLoading } = useGetUsers({
     page,
     limit: DEFAULT_PAGE_SIZE,
     search: debouncedSearch,
@@ -56,8 +58,8 @@ const VerificationDashboard = () => {
     approveKycMutate({ payload }, {
       onSuccess: async () => {
         toast.success("User approved successfully!");
+        await queryClient.invalidateQueries({ queryKey: ['users'] });
         setIsModalOpen(false);
-        refetch();
       },
       onError: (error) => {
         toast.error(error?.message || "Failed to approve user");
@@ -74,8 +76,8 @@ const VerificationDashboard = () => {
     rejectKycMutate({ payload }, {
       onSuccess: async () => {
         toast.success("User rejected successfully!");
+        await queryClient.invalidateQueries({ queryKey: ['users'] });
         setIsModalOpen(false);
-        refetch();
       },
       onError: (error) => {
         toast.error(error?.message || "Failed to reject user");

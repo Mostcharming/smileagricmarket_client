@@ -1,46 +1,14 @@
 'use client'
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { BellIcon, LogoIcon } from "@/components/icons";
-import { getStoredUser } from "@/utils";
+import ProfileMenu from "./profile-menu";
 
 type MainHeaderProps = {
   activeTab: "dashboard" | "my-farms";
 };
 
-const getInitialsFromFullName = (fullName?: string) => {
-  const cleanedName = fullName?.trim();
-
-  if (!cleanedName) {
-    return "SA";
-  }
-
-  const nameParts = cleanedName.split(/\s+/).filter(Boolean);
-  return nameParts.length === 1
-    ? nameParts[0].slice(0, 2).toUpperCase()
-    : `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase();
-};
-
-const getStoredInitials = () => {
-  const currentUser = getStoredUser();
-  return getInitialsFromFullName(currentUser?.fullName);
-};
-
 const MainHeader = ({ activeTab }: MainHeaderProps) => {
-  const [initials, setInitials] = useState("SA");
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setInitials(getStoredInitials());
-    };
-
-    handleStorageChange();
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
-
   const dashboardClassName = `flex px-2 pb-1 text-sm font-medium ${
     activeTab === "dashboard"
       ? "border-b-2 border-[#111827] text-[#111827]"
@@ -77,9 +45,7 @@ const MainHeader = ({ activeTab }: MainHeaderProps) => {
           >
             <BellIcon size={24} color="currentColor" strokeWidth={2.2} />
           </button>
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D1D5DB] text-base font-medium text-[#FFFFFF]">
-            {initials}
-          </div>
+          <ProfileMenu logoutRedirectPath="/login" />
         </div>
       </div>
     </header>

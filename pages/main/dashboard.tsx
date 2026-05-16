@@ -1,12 +1,13 @@
 'use client'
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import KycModal from "../../components/modal/kycModal";
 import { Button, MainHeader } from "../../components/ui";
 import { FarmIcon, InfoIcon } from "@/components/icons";
-import { useGetDashboard, useSubmitKyc } from "@/mutation";
+import { useGetDashboard, useGetKycStatus, useSubmitKyc } from "@/mutation";
 import type { DashboardSummaryResponse, SelectOptions } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { formatNumberWithCommas } from "@/utils";
 import { toast } from "sonner";
 
@@ -18,6 +19,22 @@ type StatCard = {
   value: string;
   tone: "primary" | "muted";
   currency?: boolean;
+};
+
+const normalizeKycStatus = (status?: string) => status?.trim().toLowerCase().replace(/\s+/g, "_") ?? "";
+
+const getVerificationStatus = (status?: string): VerificationStatus => {
+  const normalizedStatus = normalizeKycStatus(status);
+
+  if (["approved", "verified", "active"].includes(normalizedStatus)) {
+    return "verified";
+  }
+
+  if (["pending", "in_progress", "under_review", "reviewing"].includes(normalizedStatus)) {
+    return "in_progress";
+  }
+
+  return "not_verified";
 };
 
 const buildSummaryCards = (summary?: DashboardSummaryResponse): Record<RoleTab, StatCard[]> => ({
@@ -72,7 +89,7 @@ const buildSummaryCards = (summary?: DashboardSummaryResponse): Record<RoleTab, 
 });
 
 const Dashboard = () => {
-  const [verificationStatus, setVerificationStatus] = useState<VerificationStatus>("not_verified");
+  const queryClient = useQueryClient();
   const [isKycModalOpen, setIsKycModalOpen] = useState(false);
   const [activeRole, setActiveRole] = useState<RoleTab>("farmer");
   const [number, setNumber] = useState("");
@@ -80,6 +97,7 @@ const Dashboard = () => {
   const [photo, setPhoto] = useState<File | null>(null);
 
   const { data, isLoading, isError, error } = useGetDashboard();
+  const { data: kycStatusResponse, isLoading: isKycStatusLoading } = useGetKycStatus();
   const { mutate, isPending } = useSubmitKyc();
 
   const identificationOptions: SelectOptions[] = [
@@ -89,6 +107,10 @@ const Dashboard = () => {
     { label: "Taxpayer Identification Number", value: "tin" },
     { label: "Permanent Voter's Card", value: "voter_card" },
   ];
+
+  const verificationStatus = useMemo<VerificationStatus>(() => {
+    return getVerificationStatus(kycStatusResponse?.data?.status);
+  }, [kycStatusResponse?.data?.status]);
 
   const handleKycDone = () => {
     if (!photo) {
@@ -102,10 +124,10 @@ const Dashboard = () => {
     formData.append("selfie", photo);
 
     mutate(formData, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success("KYC submitted successfully");
+        await queryClient.invalidateQueries({ queryKey: ["kycStatus"] });
         setIsKycModalOpen(false);
-        setVerificationStatus("in_progress");
         setNumber("");
         setIdentification("");
         setPhoto(null);
@@ -123,7 +145,7 @@ const Dashboard = () => {
     <div className="min-h-screen w-full">
       <MainHeader activeTab="dashboard" />
 
-      {verificationStatus === "not_verified" && (
+      {!isKycStatusLoading && verificationStatus === "not_verified" && (
         <div className="w-full bg-[#E9EBEF]">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
@@ -143,7 +165,7 @@ const Dashboard = () => {
         </div>
       )}
 
-      {verificationStatus === "in_progress" && (
+      {!isKycStatusLoading && verificationStatus === "in_progress" && (
         <div className="w-full bg-[#E9EBEF]">
           <div className="mx-auto flex items-center justify-center gap-3 px-4 py-3">
             <InfoIcon className="shrink-0" />
@@ -152,7 +174,7 @@ const Dashboard = () => {
         </div>
       )}
 
-      {verificationStatus === "verified" && (
+      {!isKycStatusLoading && verificationStatus === "verified" && (
         <div className="w-full bg-[#D6F3E9]">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-3">
             <div className="flex items-center gap-3">

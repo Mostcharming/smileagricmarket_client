@@ -9,7 +9,7 @@ import { useUserCount, useVerificationCount } from '@/hooks';
 const Sidebar = () => {
   const pathname = usePathname() ?? '';
   const [usersOpen, setUsersOpen] = useState(pathname.includes('/admin/users') || pathname.includes('/admin/verification'));
-  const [farmsOpen, setFarmsOpen] = useState(pathname.includes('/admin/milestones'));
+  const [farmsOpen, setFarmsOpen] = useState(pathname.includes('/admin/milestones') || pathname.includes('/admin/farms'));
   const totalUsers = useUserCount();
   const totalVerification = useVerificationCount();
 
@@ -89,7 +89,7 @@ const Sidebar = () => {
             <button
               onClick={() => setFarmsOpen(!farmsOpen)}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
-                pathname.includes('/admin/milestones') ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-50'
+                pathname.includes('/admin/milestones') || pathname.includes('/admin/farms') ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-50'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -98,7 +98,7 @@ const Sidebar = () => {
               </div>
               <ChevronIcon
                 size={16}
-                color={pathname.includes('/admin/milestones') ? '#FFFFFF' : '#92998E'}
+                color={pathname.includes('/admin/milestones') || pathname.includes('/admin/farms') ? '#FFFFFF' : '#92998E'}
                 className={`transition-transform ${farmsOpen ? 'rotate-180' : ''}`}
               />
             </button>
@@ -112,6 +112,14 @@ const Sidebar = () => {
                   }`}
                 >
                   <span className="text-sm">Milestones</span>
+                </Link>
+                <Link
+                  href="/admin/farms"
+                  className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
+                    isActive('/admin/farms') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="text-sm">Farms</span>
                 </Link>
               </div>
             )}

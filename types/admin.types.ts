@@ -29,6 +29,20 @@ export interface UsersDetailsDirectory {
     kycStatus: string;
 };
 
+export interface AdminKycDetailsResponse {
+    user: AdminKycUserDetails;
+    kyc: kycDetailsResponse;
+    kycStatus: string;
+};
+
+export interface AdminKycUserDetails {
+    id: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    createdAt: string;
+};
+
 export interface kycDetailsResponse {
     id: string;
     identificationType: string;

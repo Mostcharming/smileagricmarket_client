@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
 import { ApiError, ApiResponse } from "@/types";
+import { clearAuthSession, getCookie } from "./cookies";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -13,9 +13,6 @@ const axiosInstance = axios.create({
     headers,
 });
 
-const cookieName = "smileAgrimarketCookie";
-const userStorageKey = "smileAgrimarketUser";
-
 const handleUnauthorizedRedirect = (error: unknown) => {
     if (!axios.isAxiosError(error)) return;
     if (error.response?.status !== 401) return;
@@ -25,17 +22,16 @@ const handleUnauthorizedRedirect = (error: unknown) => {
     const isAdminRoute = currentPath.startsWith("/admin/") || currentPath === "/admin";
     const redirectPath = isAdminRoute ? "/admin" : "/login";
 
-    Cookies.remove(cookieName);
-    localStorage.removeItem(userStorageKey);
+    clearAuthSession();
 
     if (currentPath !== redirectPath) {
-        window.location.assign(redirectPath);
+        window.location.replace(redirectPath);
     }
 };
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = Cookies.get(cookieName); // always get fresh token
+        const token = getCookie(); // always get fresh token
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

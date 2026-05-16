@@ -1,4 +1,4 @@
-import { UsersDetailsDirectory } from "./admin.types";
+import { AdminKycDetailsResponse } from "./admin.types";
 import { SelectOptions } from "./shared.types";
 
 export interface SelectProps
@@ -29,6 +29,8 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   className?: string;
   labelClassName?: string;
   containerClassName?: string;
+  prefix?: React.ReactNode;
+  prefixClassName?: string;
   bottomText?: string;
   bottomClassName?: string;
   as?: 'input' | 'textarea';
@@ -73,7 +75,7 @@ export interface KycModalProps {
 export interface VerificationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  user: UsersDetailsDirectory | null;
+  user: AdminKycDetailsResponse | null;
   onApprove: (id: string) => void;
   onReject: (id: string, reason: string) => void;
   isPending?: boolean;

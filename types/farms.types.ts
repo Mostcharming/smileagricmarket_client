@@ -76,3 +76,25 @@ export interface FarmsDirectory {
 	farms: FarmResponse[];
 	pagination: Pagination;
 }
+
+export interface AdminFarmDetailsResponse extends FarmResponse {}
+
+export interface AdminFarmApprovalPayload {
+	farmId: string;
+}
+
+export interface AdminFarmApprovalResponse {
+	farmId: string;
+	status: string;
+}
+
+export interface AdminFarmRejectionPayload {
+	farmId: string;
+	note: string;
+}
+
+export interface AdminFarmRejectionResponse {
+	farmId: string;
+	status: string;
+	rejectionNote: string;
+}

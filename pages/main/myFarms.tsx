@@ -36,14 +36,27 @@ type DocItem = {
   file: File;
 };
 
+type SelectedMilestone = {
+  milestoneId: string;
+  amount: string;
+};
+
 const makeId = () => Math.random().toString(36).slice(2, 10);
 
-const StepItem = ({ title, done }: { title: string; done: boolean }) => (
-  <div className="flex items-center gap-3 text-base font-medium text-[#111827]">
+const StepItem = ({
+  title,
+  done,
+  className = "",
+}: {
+  title: string;
+  done: boolean;
+  className?: string;
+}) => (
+  <div className={`flex flex-col md:flex-row items-center gap-3 text-xs font-medium text-[#111827] sm:text-sm text-center ${className}`.trim()}>
     <div className={`flex h-5 w-5 items-center justify-center rounded-full ${done ? "" : "opacity-50"}`}>
       <TickIcon />
     </div>
-    <span className={done ? "text-[#111827]" : "text-[#8A8F96]"}>{title}</span>
+    <span className={done ? "text-[#111827]" : "text-[#8A8F96]"}><span className="hidden sm:inline-flex">Farm&nbsp;</span>{title}</span>
   </div>
 );
 
@@ -65,8 +78,7 @@ const MyFarms = () => {
   const [farmSize, setFarmSize] = useState("");
   const [farmAddress, setFarmAddress] = useState("");
   const [farmCategory, setFarmCategory] = useState("");
-  const [totalInvestment, setTotalInvestment] = useState("");
-  const [selectedMilestones, setSelectedMilestones] = useState<string[]>([]);
+  const [selectedMilestones, setSelectedMilestones] = useState<SelectedMilestone[]>([]);
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const [documents, setDocuments] = useState<DocItem[]>([]);
 
@@ -100,8 +112,14 @@ const MyFarms = () => {
   }, [farmCategoriesResponse?.data?.categories]);
 
   const milestoneOptions = useMemo(() => {
-    const milestones = (milestonesResponse?.data ?? []) as MilestoneResponse[];
-    return milestones.map((milestone: MilestoneResponse) => ({ id: milestone.id, name: milestone.name || "Unnamed milestone" }));
+    const milestones = milestonesResponse?.data?.milestones ?? [];
+
+    return Array.isArray(milestones)
+      ? milestones.map((milestone: MilestoneResponse) => ({
+          id: milestone.id,
+          name: milestone.name || "Unnamed milestone",
+        }))
+      : [];
   }, [milestonesResponse?.data]);
 
   const filteredFarms = useMemo(() => {
@@ -126,7 +144,6 @@ const MyFarms = () => {
     setFarmSize("");
     setFarmAddress("");
     setFarmCategory("");
-    setTotalInvestment("");
     setSelectedMilestones([]);
     setPhotos([]);
     setDocuments([]);
@@ -152,6 +169,32 @@ const MyFarms = () => {
   const handleBackToList = () => {
     resetForm();
     setShowAddFarm(false);
+  };
+
+  const toggleMilestone = (milestoneId: string) => {
+    setSelectedMilestones((prev) => {
+      const exists = prev.some((item) => item.milestoneId === milestoneId);
+
+      if (exists) {
+        return prev.filter((item) => item.milestoneId !== milestoneId);
+      }
+
+      return [...prev, { milestoneId, amount: "" }];
+    });
+  };
+
+  const updateMilestoneAmount = (milestoneId: string, amount: string) => {
+    setSelectedMilestones((prev) => {
+      const exists = prev.some((item) => item.milestoneId === milestoneId);
+
+      if (!exists) {
+        return [...prev, { milestoneId, amount }];
+      }
+
+      return prev.map((item) =>
+        item.milestoneId === milestoneId ? { ...item, amount } : item
+      );
+    });
   };
 
   const handlePhotoFiles = (fileList: FileList | null) => {
@@ -191,17 +234,11 @@ const MyFarms = () => {
     setDocuments((prev) => prev.filter((doc) => doc.id !== id));
   };
 
-  const toggleMilestone = (value: string) => {
-    setSelectedMilestones((prev) => {
-      if (prev.includes(value)) {
-        return prev.filter((item) => item !== value);
-      }
-      return [...prev, value];
-    });
-  };
-
   const canContinueStepOne = farmName.trim().length > 0 && farmSize.trim().length > 0 && farmAddress.trim().length > 0;
-  const canContinueStepTwo = farmCategory.length > 0 && selectedMilestones.length > 0 && totalInvestment.trim().length > 0;
+  const canContinueStepTwo =
+    farmCategory.length > 0 &&
+    selectedMilestones.length > 0 &&
+    selectedMilestones.every((milestone) => Number(milestone.amount) > 0);
   const canSubmit = photos.length > 0 && documents.length > 0;
 
   const handleSubmitFarm = async () => {
@@ -225,7 +262,9 @@ const MyFarms = () => {
       if (selectedMilestones.length) {
         await addMilestonesMutation.mutateAsync({
           farmId,
-          payload: { milestones: selectedMilestones },
+          payload: {
+            milestones: selectedMilestones.map((milestone) => milestone.milestoneId),
+          },
         });
       }
 
@@ -358,13 +397,13 @@ const MyFarms = () => {
         {showAddFarm && (
           <section className="overflow-hidden rounded-xl border border-[#EAECE8] bg-white">
             <div className="grid grid-cols-1 md:grid-cols-[280px_1fr]">
-              <aside className="border-r border-[#EAECE8] p-5 sm:p-6">
-                <div className="space-y-0.5">
-                  <StepItem title="Farm Details" done={step >= 1} />
-                  <p className="ml-2 text-[#9CC98A]">:</p>
-                  <StepItem title="Farm Milestones" done={step >= 2} />
-                  <p className="ml-2 text-[#9CC98A]">:</p>
-                  <StepItem title="Farm Documentation" done={step >= 3} />
+              <aside className="border-b border-[#EAECE8] p-5 sm:p-6 md:border-b-0 md:border-r">
+                <div className="flex items-center justify-between gap-3 md:flex-col md:items-start md:gap-0 md:space-y-0.5">
+                  <StepItem title="Details" done={step >= 1} className="flex-1 md:flex-none" />
+                  <p className="ml-2 hidden text-[#9CC98A] md:block">:</p>
+                  <StepItem title="Milestones" done={step >= 2} className="flex-1 md:flex-none" />
+                  <p className="ml-2 hidden text-[#9CC98A] md:block">:</p>
+                  <StepItem title="Documentation" done={step >= 3} className="flex-1 md:flex-none" />
                 </div>
               </aside>
 
@@ -425,22 +464,43 @@ const MyFarms = () => {
                       {farmCategory && (
                         <>
                           <Typography variant="small" className="font-semibold text-[#1F2937]">What do you need funds for? (Select farm milestones that apply)</Typography>
-                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 mt-3">
+                          <div className="mt-3 space-y-3">
                             {milestoneOptions.map((option) => {
                               if (!option.id) return null;
-                              const checked = selectedMilestones.includes(option.id);
+                              const selectedMilestone = selectedMilestones.find((item) => item.milestoneId === option.id);
+                              const checked = Boolean(selectedMilestone);
                               return (
-                                <button
+                                <div
                                   key={option.id}
-                                  type="button"
-                                  onClick={() => toggleMilestone(option.id)}
-                                  className="flex items-center gap-3 rounded-md shadow-xs border border-[#B8C3CF] bg-transparent px-4 py-3 text-left text-[#1F2937]"
+                                  className="grid grid-cols-1 items-stretch gap-3 text-left text-[#1F2937] md:grid-cols-[1fr_320px] md:gap-4"
                                 >
-                                  <span className={`flex h-5 w-5 items-center justify-center rounded-sm border ${checked ? "border-[#3B82F6] bg-[#DBEAFE] text-[#2563EB]" : "border-[#8A93A4] text-transparent"}`}>
-                                    ✓
-                                  </span>
-                                  <span>{option.name}</span>
-                                </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleMilestone(option.id)}
+                                    className={`flex min-h-11 items-center gap-3 rounded-md border bg-transparent px-4 py-3 text-left transition-colors ${
+                                      checked
+                                        ? "border-[#5DA63D] bg-[#F7FBF4]"
+                                        : "border-[#B8C3CF]"
+                                    }`}
+                                  >
+                                    <span className={`flex h-5 w-5 items-center justify-center rounded-sm border ${checked ? "border-[#5DA63D] bg-[#5DA63D] text-white" : "border-[#8A93A4] text-transparent"}`}>
+                                      ✓
+                                    </span>
+                                    <span>{option.name}</span>
+                                  </button>
+
+                                  <Input
+                                    id={`milestone-amount-${option.id}`}
+                                    label="Enter Amount Needed For this Milestone"
+                                    labelClassName="bg-white"
+                                    containerClassName="w-full"
+                                    className="rounded-md border-[#D5D7DA] py-3 text-sm text-[#374151] placeholder:text-[#9AA0A6] focus:ring-0 focus:border-[#8FB57F]"
+                                    type="text"
+                                    value={selectedMilestone?.amount || ""}
+                                    onChange={(event) => updateMilestoneAmount(option.id, event.target.value)}
+                                    inputMode="numeric"
+                                  />
+                                </div>
                               );
                             })}
                           </div>
@@ -453,12 +513,6 @@ const MyFarms = () => {
                             <p className="text-sm text-[#6B7280]">No milestones configured for this category yet.</p>
                           )}
 
-                          <Input
-                            id="total-investment"
-                            value={totalInvestment}
-                            onChange={(event) => setTotalInvestment(event.target.value)}
-                            label="Enter Total Investment Amount Needed (NGN)"
-                          />
                         </>
                       )}
 

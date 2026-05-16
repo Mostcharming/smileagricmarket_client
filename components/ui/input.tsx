@@ -13,6 +13,8 @@ const Input = ({
   className = '',
   labelClassName = '',
   containerClassName = '',
+  prefix,
+  prefixClassName = '',
   bottomText = '',
   bottomClassName = '',
   type = 'text',
@@ -35,6 +37,12 @@ const Input = ({
   return (
     <div className={`w-full flex flex-col text-sm ${containerClassName}`}>
       <div className="relative">
+        {prefix && (
+          <span className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none z-10 ${prefixClassName}`}>
+            {prefix}
+          </span>
+        )}
+
         {as === 'textarea' ? (
           <textarea
             id={id}
@@ -43,7 +51,7 @@ const Input = ({
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             rows={rows}
-            className={`peer w-full bg-transparent border border-border rounded-lg px-3 py-4 text-appBlack placeholder:text-border focus:outline-none focus:ring-2 focus:ring-primary resize-vertical ${className}`}
+            className={`peer w-full bg-transparent border border-border rounded-lg px-3 py-4 text-appBlack placeholder:text-border focus:outline-none focus:ring-2 focus:ring-primary resize-vertical ${prefix ? 'pl-10' : ''} ${className}`}
             {...(props as any)}
           />
         ) : (
@@ -54,7 +62,7 @@ const Input = ({
             onChange={onChange as any}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className={`peer w-full bg-transparent border border-border rounded-lg px-3 py-4 text-appBlack placeholder:text-border focus:outline-none focus:ring-2 focus:ring-primary ${isPasswordType ? 'pr-10' : ''} ${className}`}
+            className={`peer w-full bg-transparent border border-border rounded-lg px-3 py-4 text-appBlack placeholder:text-border focus:outline-none focus:ring-2 focus:ring-primary ${isPasswordType ? 'pr-10' : ''} ${prefix ? 'pl-10' : ''} ${className}`}
             {...props}
           />
         )}

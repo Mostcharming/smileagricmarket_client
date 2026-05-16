@@ -25,9 +25,7 @@ const VerificationModal = ({
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   const kyc = user?.kyc;
-  const profile =
-    user?.users ||
-    (user as { user?: { fullName?: string } } | null)?.user;
+  const profile = user?.user;
   const fullName = profile?.fullName || "User";
 
   if (!user || !kyc) return null;
@@ -41,12 +39,10 @@ const VerificationModal = ({
 
   const handleApprove = () => {
     onApprove(kyc.id);
-    setStep("main");
   };
 
   const handleReject = () => {
     onReject(kyc.id, rejectReason);
-    setStep("main");
     setRejectReason("");
   };
 

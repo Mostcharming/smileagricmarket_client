@@ -9,7 +9,7 @@ export const ShieldIcon = ({ size = 24, color = "#4E8931", className = "" }: Ico
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
-    <g clip-path="url(#clip0_2726_2211)">
+    <g clipPath="url(#clip0_2726_2211)">
         <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM19 11C19 15.52 16.02 19.69 12 20.93C7.98 19.69 5 15.52 5 11V6.3L12 3.19L19 6.3V11ZM7.41 11.59L6 13L10 17L18 9L16.59 7.58L10 14.17L7.41 11.59Z" fill={color} />
     </g>
     <defs>

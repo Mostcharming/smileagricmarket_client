@@ -142,10 +142,10 @@ const KycModal = ({
               onChange={handleFileChange}
             />
 
-            <div className="w-full flex items-center gap-5 mt-5">
+            <div className="w-full flex flex-col md:flex-row items-center gap-3 md:gap-5 mt-5">
               <Button
                 variant="light"
-                className="flex-1 uppercase"
+                className="w-full flex-1 uppercase"
                 size="small"
                 icon={<UploadIcon />}
                 onClick={handleUploadClick}
@@ -154,7 +154,7 @@ const KycModal = ({
               </Button>
               <Button
                 variant="light"
-                className="flex-1 uppercase"
+                className="w-full flex-1 uppercase"
                 size="small"
                 icon={<PhotoIcon />}
                 onClick={handleCameraClick}

@@ -4,6 +4,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import Sidebar from './sidebar';
 import { BellIcon, SearchIcon } from '../icons';
+import ProfileMenu from './profile-menu';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -47,11 +48,7 @@ const AdminLayout = ({ children, breadcrumbs = [] }: AdminLayoutProps) => {
               <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
 
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
-                OP
-              </div>
-            </div>
+            <ProfileMenu logoutRedirectPath="/admin" />
           </div>
         </header>
 

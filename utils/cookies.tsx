@@ -48,3 +48,15 @@ export const removeStoredUser = () => {
     if (typeof window === "undefined") return;
     localStorage.removeItem(userStorageKey);
 };
+
+export const clearAuthSession = () => {
+    removeCookie();
+    removeStoredUser();
+};
+
+export const signOut = (redirectPath: string) => {
+    if (typeof window === "undefined") return;
+
+    clearAuthSession();
+    window.location.replace(redirectPath);
+};
