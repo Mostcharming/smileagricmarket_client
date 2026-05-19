@@ -1,13 +1,13 @@
 "use client"
 
 import { useState } from "react";
-import Image from "next/image";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
 import { CloseIcon, CopyIcon, CheckIcon } from "../icons";
 import { Button, Input, Typography } from "../ui";
 import Modal from "./modal";
 import { VerificationModalProps } from "@/types";
+import { getPreviewImageUrl } from "@/utils/image";
 
 // Import react-viewer dynamically to avoid SSR issues
 const Viewer = dynamic(() => import("react-viewer"), { ssr: false });
@@ -74,11 +74,10 @@ const VerificationModal = ({
             </Typography>
 
             <div className="relative w-32 h-32 mb-4">
-              <Image
-                src={kyc.selfieImageUrl || "/picture-preview.jpg"}
+              <img
+                src={getPreviewImageUrl(kyc.selfieImageUrl) || "/picture-preview.jpg"}
                 alt={fullName}
-                fill
-                className="rounded-full object-cover border-4 border-gray-100"
+                className="h-full w-full rounded-full border-4 border-gray-100 object-cover"
               />
             </div>
 
@@ -201,7 +200,7 @@ const VerificationModal = ({
       <Viewer
         visible={isViewerOpen}
         onClose={() => setIsViewerOpen(false)}
-        images={[{ src: kyc.selfieImageUrl || "/picture-preview.jpg", alt: fullName }]}
+        images={[{ src: getPreviewImageUrl(kyc.selfieImageUrl) || "/picture-preview.jpg", alt: fullName }]}
         zIndex={1000}
       />
     </Modal>

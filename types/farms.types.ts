@@ -16,8 +16,13 @@ export interface FarmMilestonePayload {
 	milestoneId: string;
 }
 
+export interface FarmMilestoneSelectionPayload {
+	milestoneId: string;
+	amount: number;
+}
+
 export interface AddFarmMilestonesPayload {
-	milestones: string[];
+	milestones: FarmMilestoneSelectionPayload[];
 }
 
 export interface UploadFarmDocumentsPayload {

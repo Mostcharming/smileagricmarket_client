@@ -7,11 +7,11 @@
   "pages": {
     "/auth/signup": [
       "static/chunks/acf5f8e10dc0ac62.js",
-      "static/chunks/dcdb85c5864a47a4.js",
-      "static/chunks/9e586bc6823d2cbe.js",
-      "static/chunks/43bda91046b8eba5.js",
+      "static/chunks/3c69260598da1247.js",
+      "static/chunks/0e852e91b7f83add.js",
+      "static/chunks/888951e569d18542.js",
       "static/chunks/cd69d2d650276d8a.js",
-      "static/chunks/turbopack-7d3001c5523d7f6b.js"
+      "static/chunks/turbopack-8a52472143139f18.js"
     ]
   },
   "ampFirstPages": []

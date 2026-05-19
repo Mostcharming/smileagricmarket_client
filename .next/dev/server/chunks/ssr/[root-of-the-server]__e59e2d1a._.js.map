@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 26, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/dell/Documents/code/SmileAgrimarket/app/%28auth%29/forgot-password/page.tsx"],"sourcesContent":["import Onboarding from \"@/pages/auth/onboarding\";\r\n\r\nexport default function ForgotPasswordPage() {\r\n  return <Forgot />\r\n}\r\n"],"names":[],"mappings":";;;;;;AAEe,SAAS;IACtB,qBAAO,8OAAC;;;;;AACV"}}]
-}

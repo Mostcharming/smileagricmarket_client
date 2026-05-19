@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from 'next/navigation';
 import { ChevronIcon } from "@/components/icons";
 import { getStoredUser, signOut } from "@/utils";
 import { profileSchema } from "@/types";
@@ -61,6 +62,12 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
   const initials = getInitialsFromFullName(user?.fullName);
   const displayName = user?.fullName || "My profile";
   const displayEmail = user?.email || "Account settings";
+  const router = useRouter();
+
+  const isAdmin = logoutRedirectPath?.startsWith?.('/admin');
+  const profilePath = isAdmin ? '/admin/profile' : '/profile';
+  const settingsPath = isAdmin ? '/admin/settings' : '/settings';
+  const changelogPath = '/changelog';
 
   return (
     <div ref={menuRef} className={`relative ${className}`.trim()}>
@@ -82,26 +89,64 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
 
       {open && (
         <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_20px_45px_rgba(15,23,42,0.12)]">
-          <div className="border-b border-[#E5E7EB] px-4 py-3">
-            <p className="truncate text-sm font-semibold text-[#111827]">{displayName}</p>
-            <p className="mt-1 truncate text-xs text-[#6B7280]">{displayEmail}</p>
+          <div className="flex items-center gap-3 border-b border-[#E5E7EB] px-4 py-3">
+            <div className="relative flex-shrink-0">
+              {user?.profileImage ? (
+                <img
+                  src={user.profileImage}
+                  alt={displayName}
+                  className="h-12 w-12 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#D1D5DB] text-base font-medium text-white">
+                  {initials}
+                </div>
+              )}
+
+              <span className="absolute right-0 bottom-0 block h-3 w-3 rounded-full border-2 border-white bg-[#34D399]" />
+            </div>
+
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-[#111827]">{displayName}</p>
+              <p className="mt-1 truncate text-xs text-[#6B7280]">{displayEmail}</p>
+            </div>
           </div>
 
           <div className="p-2">
             <button
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => { setOpen(false); router.push(profilePath); }}
               className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#374151] transition-colors hover:bg-[#F3F4F6]"
             >
-              <span>Profile</span>
+              <span>View profile</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => { setOpen(false); router.push(settingsPath); }}
+              className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#374151] transition-colors hover:bg-[#F3F4F6]"
+            >
+              <span>Settings</span>
+            </button>
+
+            <div className="my-2 h-px bg-[#F3F4F6]" />
+
+            <button
+              type="button"
+              onClick={() => { setOpen(false); router.push(changelogPath); }}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#374151] transition-colors hover:bg-[#F3F4F6]"
+            >
+              <span>Changelog</span>
+            </button>
+
+            <div className="my-2 h-px bg-[#F3F4F6]" />
 
             <button
               type="button"
               onClick={() => signOut(logoutRedirectPath)}
               className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#B42318] transition-colors hover:bg-[#FEF3F2]"
             >
-              <span>Logout</span>
+              <span>Log out</span>
             </button>
           </div>
         </div>

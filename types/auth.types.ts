@@ -28,4 +28,5 @@ export interface profileSchema {
   email: string;
   gender?: string;
   role?: string;
+  profileImage?: string;
 };

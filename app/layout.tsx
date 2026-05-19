@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
 import QueryProvider from "@/providers/QueryProvider";
 import { Toaster } from "sonner";
 import "./globals.css";
-
-const roboto = Roboto({
-  variable: "--font-roboto",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "SmileAgrimarket",
@@ -21,9 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={roboto.className}
-      >
+      <body>
         <QueryProvider>
           <Toaster position="top-center" />
           {children}

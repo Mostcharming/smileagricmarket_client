@@ -3,7 +3,8 @@
 import { SearchIcon } from '../icons';
 import { InputProps } from '@/types';
 
-interface SearchInputProps extends Omit<InputProps, 'label'> {
+interface SearchInputProps
+  extends Omit<InputProps, 'label' | 'prefix' | 'prefixClassName' | 'bottomText' | 'bottomClassName' | 'as' | 'rows'> {
     placeholder?: string;
 }
 

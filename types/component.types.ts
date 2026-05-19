@@ -21,7 +21,7 @@ export interface SelectProps
   labelClassName?: string;
 }
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
   label?: string;
   id: string;
   value: string;

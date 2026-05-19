@@ -82,6 +82,7 @@ const MyFarms = () => {
   const [selectedMilestones, setSelectedMilestones] = useState<SelectedMilestone[]>([]);
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const [documents, setDocuments] = useState<DocItem[]>([]);
+  const [previewPhoto, setPreviewPhoto] = useState<PhotoItem | null>(null);
 
   const photoInputRef = useRef<HTMLInputElement>(null);
   const photoCaptureRef = useRef<HTMLInputElement>(null);
@@ -152,6 +153,7 @@ const MyFarms = () => {
     setSelectedMilestones([]);
     setPhotos([]);
     setDocuments([]);
+    setPreviewPhoto(null);
   };
 
   const handleOpenAddFarm = () => {
@@ -268,7 +270,10 @@ const MyFarms = () => {
         await addMilestonesMutation.mutateAsync({
           farmId,
           payload: {
-            milestones: selectedMilestones.map((milestone) => milestone.milestoneId),
+            milestones: selectedMilestones.map((milestone) => ({
+              milestoneId: milestone.milestoneId,
+              amount: Number(milestone.amount),
+            })),
           },
         });
       }
@@ -552,7 +557,19 @@ const MyFarms = () => {
                       {photos.length > 0 && (
                         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
                           {photos.map((photo) => (
-                            <div key={photo.id} className="relative aspect-square overflow-hidden rounded-md bg-[#D9D9D9]">
+                            <div
+                              key={photo.id}
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => setPreviewPhoto(photo)}
+                              onKeyDown={(event) => {
+                                if (event.key === "Enter" || event.key === " ") {
+                                  event.preventDefault();
+                                  setPreviewPhoto(photo);
+                                }
+                              }}
+                              className="relative aspect-square cursor-pointer overflow-hidden rounded-md bg-[#D9D9D9]"
+                            >
                               <div
                                 role="img"
                                 aria-label={photo.name}
@@ -561,7 +578,10 @@ const MyFarms = () => {
                               />
                               <button
                                 type="button"
-                                onClick={() => removePhoto(photo.id)}
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  removePhoto(photo.id);
+                                }}
                                 className="absolute right-1 top-1 rounded-full bg-black/60 text-white"
                                 aria-label="Remove photo"
                               >
@@ -684,6 +704,45 @@ const MyFarms = () => {
           </div>
         )}
       </main>
+
+      <Modal
+        isOpen={!!previewPhoto}
+        onClose={() => setPreviewPhoto(null)}
+        ariaLabel="Photo preview"
+        maxWidth="max-w-4xl"
+        maxHeight="max-h-[90vh]"
+      >
+        {previewPhoto && (
+          <div className="bg-white p-4">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div>
+                <Typography variant="subheading" className="text-[#0B1307] text-lg!">
+                  Full Preview
+                </Typography>
+                <Typography variant="small" className="text-[#7A8077]">
+                  {previewPhoto.name}
+                </Typography>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPreviewPhoto(null)}
+                className="rounded-full bg-[#F3F4F6] p-2 text-[#111827] hover:bg-[#E5E7EB]"
+                aria-label="Close preview"
+              >
+                <CloseIcon size={18} />
+              </button>
+            </div>
+
+            <div className="flex max-h-[75vh] items-center justify-center overflow-hidden rounded-lg bg-black/5">
+              <img
+                src={previewPhoto.preview}
+                alt={previewPhoto.name}
+                className="max-h-[75vh] w-auto max-w-full object-contain"
+              />
+            </div>
+          </div>
+        )}
+      </Modal>
 
       <Modal
         isOpen={isVerificationRequired}

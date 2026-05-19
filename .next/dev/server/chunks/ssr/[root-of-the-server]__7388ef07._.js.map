@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 26, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/dell/Documents/code/SmileAgrimarket/app/%28auth%29/verify-otp/page.tsx"],"sourcesContent":["import Login from \"@/pages/auth/login\";\r\n\r\nexport default function LoginPage() {\r\n  return <Verify />\r\n}\r\n"],"names":[],"mappings":";;;;;;AAEe,SAAS;IACtB,qBAAO,8OAAC;;;;;AACV"}}]
-}
