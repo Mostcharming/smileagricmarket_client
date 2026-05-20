@@ -20,7 +20,11 @@ const buildStatusOptions = (): SelectOptions[] => [
 const formatFarmStatus = (farm: FarmResponse) => {
   // Prefer the explicit verificationStatus when available (some API payloads include this)
   const explicitStatus = (farm as unknown as { verificationStatus?: string }).verificationStatus;
-  if (explicitStatus) return String(explicitStatus).toLowerCase();
+  if (explicitStatus) {
+    const normalizedStatus = String(explicitStatus).toLowerCase();
+
+    return normalizedStatus === 'approved' ? 'active' : normalizedStatus;
+  }
 
   const rawStatus =
     farm.Investment?.status ||
@@ -28,7 +32,9 @@ const formatFarmStatus = (farm: FarmResponse) => {
       ? 'active'
       : 'unverified');
 
-  return String(rawStatus).toLowerCase();
+  const normalizedStatus = String(rawStatus).toLowerCase();
+
+  return normalizedStatus === 'approved' ? 'active' : normalizedStatus;
 };
 
 const formatFarmCategory = (farm: FarmResponse) => farm.Category?.name || 'Uncategorized';

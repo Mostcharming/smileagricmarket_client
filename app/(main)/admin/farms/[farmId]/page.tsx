@@ -56,6 +56,15 @@ const isImageUrl = (url?: string) => {
 
 type FarmDetailView = {
   user?: {
+    verifiedFarmsCount?: number;
+    totalFundsReceived?: string | number;
+    fullName?: string;
+    email?: string;
+    profileImage?: string;
+  };
+  User?: {
+    verifiedFarmsCount?: number;
+    totalFundsReceived?: string | number;
     fullName?: string;
     email?: string;
     profileImage?: string;
@@ -230,15 +239,17 @@ const FarmDetailPage = () => {
     return [];
   }, [farm]);
 
-  const ownerName = farm.user?.fullName || farm.investorName || 'Benjamin Taylor';
-  const ownerEmail = farm.user?.email || 'jamestaylor@gmail.com';
+  const farmUser = farm.user || farm.User;
+  const ownerName = farmUser?.fullName || farm.investorName || 'Benjamin Taylor';
+  const ownerEmail = farmUser?.email || 'jamestaylor@gmail.com';
   const farmName = farm.name || 'Farm details';
   const farmCategory = farm.Category?.name || 'Vegetable';
   const farmSize = typeof farm.size === 'number' ? `${formatNumberWithCommas(farm.size)} Acres` : '45.5 Acres';
   const inv = farm.Investment as unknown as { investmentReceived?: string; expectedInvestment?: string; amount?: number };
   const investmentVal = parseAmount(inv?.investmentReceived ?? inv?.expectedInvestment ?? (farm as unknown as { investmentAmount?: number }).investmentAmount ?? 0);
   const estInvestment = formatCurrency(investmentVal);
-  const totalFundingReceived = formatCurrency(inv?.investmentReceived ?? 0);
+  const totalFundingReceived = formatCurrency(farmUser?.totalFundsReceived ?? inv?.investmentReceived ?? 0);
+  const verifiedFarmsCount = typeof farmUser?.verifiedFarmsCount === 'number' ? farmUser.verifiedFarmsCount : 0;
   const verificationStatusNormalized = ((farm as unknown as { verificationStatus?: string }).verificationStatus ?? '').toLowerCase();
   // Viewer (gallery) state for image previews
   const [viewerVisible, setViewerVisible] = React.useState(false);
@@ -406,7 +417,7 @@ const FarmDetailPage = () => {
                 <div className="mt-5 space-y-4 text-xs">
                   <div className="flex items-center justify-between text-[#61665F]">
                     <span>Verified Farms</span>
-                    <span className="font-semibold text-sm text-[#181918]">0</span>
+                    <span className="font-semibold text-sm text-[#181918]">{verifiedFarmsCount}</span>
                   </div>
                   <hr className='text-[#DBE6D5]' />
                   <div className="flex items-center justify-between text-[#74806D]">

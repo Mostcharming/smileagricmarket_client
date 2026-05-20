@@ -1,6 +1,26 @@
-[00:00:01.631] Server  LOG      ✓ Ready in 1192ms
-[00:04:59.704] Server  LOG      ○ Compiling /admin ...
-[00:05:05.264] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:11:33.908] Server  LOG      ✓ Compiled in 351ms
-[00:11:43.903] Server  LOG      ✓ Compiled in 257ms
-[00:12:29.123] Server  LOG      ✓ Compiled in 93ms
+[00:00:05.627] Server  LOG      ✓ Ready in 4.2s
+[00:00:49.079] Server  LOG      ○ Compiling /admin ...
+[00:01:01.225] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:05.221] Server  LOG      ✓ Compiled in 762ms
+[00:09:57.027] Server  LOG      ✓ Compiled in 0ms
+[00:10:35.163] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:56.964] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\[root-of-the-server]__5503c345._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.056] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.129] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\node_modules_next_ef39f493._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.144] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.173] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.180] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.186] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.197] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.201] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.214] Server  ERROR   TypeError: fetch failed
+[00:10:57.228] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\[root-of-the-server]__5503c345._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.242] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.246] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\.next\dev\server\chunks\node_modules_next_ef39f493._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.248] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.252] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.258] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.261] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.270] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.273] Server  ERROR   C:\Users\dell\Documents\code\SmileAgrimarket\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:10:57.280] Server  ERROR   TypeError: fetch failed
