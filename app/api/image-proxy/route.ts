@@ -22,12 +22,28 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: "URL not allowed" }, { status: 403 });
   }
 
-  const upstreamResponse = await fetch(parsedUrl.toString(), {
-    cache: "no-store",
-  });
+  const candidateUrls = [parsedUrl.toString()];
 
-  if (!upstreamResponse.ok || !upstreamResponse.body) {
-    return NextResponse.json({ message: "Unable to load image" }, { status: upstreamResponse.status || 502 });
+  if (parsedUrl.protocol === "http:") {
+    const secureUrl = new URL(parsedUrl.toString());
+    secureUrl.protocol = "https:";
+    candidateUrls.unshift(secureUrl.toString());
+  }
+
+  let upstreamResponse: Response | undefined;
+
+  for (const candidateUrl of candidateUrls) {
+    upstreamResponse = await fetch(candidateUrl, {
+      cache: "no-store",
+    });
+
+    if (upstreamResponse.ok && upstreamResponse.body) {
+      break;
+    }
+  }
+
+  if (!upstreamResponse || !upstreamResponse.ok || !upstreamResponse.body) {
+    return NextResponse.json({ message: "Unable to load image" }, { status: upstreamResponse?.status || 502 });
   }
 
   const headers = new Headers();
