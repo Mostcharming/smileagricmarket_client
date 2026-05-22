@@ -72,6 +72,7 @@ const MyFarms = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [showAddFarm, setShowAddFarm] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [step, setStep] = useState<Step>(1);
   const [search, setSearch] = useState("");
 
@@ -158,15 +159,11 @@ const MyFarms = () => {
 
   const handleOpenAddFarm = () => {
     if (!isKycVerified) {
-      toast.error("Verify your account before listing a farm");
+      setShowVerificationModal(true);
       return;
     }
 
     setShowAddFarm(true);
-  };
-
-  const handleExitMyFarms = () => {
-    router.push("/dashboard");
   };
 
   const handleVerifyAccount = () => {
@@ -745,8 +742,8 @@ const MyFarms = () => {
       </Modal>
 
       <Modal
-        isOpen={isVerificationRequired}
-        onClose={handleExitMyFarms}
+        isOpen={showVerificationModal && isVerificationRequired}
+        onClose={() => setShowVerificationModal(false)}
         ariaLabel="Verification Required"
         maxWidth="max-w-[446px]"
         maxHeight="max-h-[90vh]"
@@ -755,7 +752,7 @@ const MyFarms = () => {
         <div className="relative w-full rounded-lg bg-white p-6 border-[#6FC346] border-t-4">
           <button
             type="button"
-            onClick={handleExitMyFarms}
+            onClick={() => setShowVerificationModal(false)}
             className="absolute right-3 top-3 cursor-pointer text-[#7A8077] transition-opacity hover:opacity-80"
             aria-label="Close verification prompt"
           >
@@ -844,7 +841,7 @@ const MyFarms = () => {
             <Button
               type="button"
               variant="light"
-              onClick={handleExitMyFarms}
+              onClick={() => setShowVerificationModal(false)}
               className="py-4 border border-[#D6D6D6] bg-[#DEDEDE] text-[#252525]"
             >
               MAYBE LATER

@@ -1,7 +1,6 @@
 {
-  "/(auth)/admin/page": "app/(auth)/admin/page.js",
-  "/(main)/admin/dashboard/page": "app/(main)/admin/dashboard/page.js",
-  "/(main)/admin/farms/[farmId]/page": "app/(main)/admin/farms/[farmId]/page.js",
-  "/(main)/admin/farms/page": "app/(main)/admin/farms/page.js",
-  "/api/image-proxy/route": "app/api/image-proxy/route.js"
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(main)/dashboard/page": "app/(main)/dashboard/page.js",
+  "/(main)/my-farms/page": "app/(main)/my-farms/page.js",
+  "/page": "app/page.js"
 }
