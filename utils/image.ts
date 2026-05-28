@@ -1,4 +1,4 @@
-export const getPreviewImageUrl = (url?: string) => {
+export const getPreviewImageUrl = (url?: string): string => {
   if (!url) return "";
 
   if (url.startsWith("/api/image-proxy")) {

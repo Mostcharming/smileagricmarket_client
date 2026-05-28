@@ -1,8 +1,1 @@
-{
-  "/(auth)/admin/page": "app/(auth)/admin/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(main)/admin/dashboard/page": "app/(main)/admin/dashboard/page.js",
-  "/(main)/admin/verification/page": "app/(main)/admin/verification/page.js",
-  "/api/image-proxy/route": "app/api/image-proxy/route.js",
-  "/page": "app/page.js"
-}
+{}
