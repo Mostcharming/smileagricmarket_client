@@ -19,6 +19,8 @@ self.__BUILD_MANIFEST = {
     "/main/admin/users",
     "/main/admin/verification",
     "/main/dashboard",
-    "/main/myFarms"
+    "/main/myFarms",
+    "/main/profile",
+    "/main/settings"
   ]
 };self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

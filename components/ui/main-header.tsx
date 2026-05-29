@@ -5,7 +5,7 @@ import { BellIcon, LogoIcon } from "@/components/icons";
 import ProfileMenu from "./profile-menu";
 
 type MainHeaderProps = {
-  activeTab: "dashboard" | "my-farms";
+  activeTab?: "dashboard" | "my-farms";
 };
 
 const MainHeader = ({ activeTab }: MainHeaderProps) => {

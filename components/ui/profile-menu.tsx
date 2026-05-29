@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { useEffect, useRef, useState } from "react";
@@ -78,9 +79,13 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
         aria-expanded={open}
         className="flex items-center gap-2 rounded-full outline-none"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D1D5DB] text-base font-medium text-white">
-          {initials}
-        </div>
+        {user?.profileImage ? (
+          <img src={user.profileImage} alt={displayName} className="h-10 w-10 rounded-full object-cover" />
+        ) : (
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D1D5DB] text-base font-medium text-white">
+            {initials}
+          </div>
+        )}
         <ChevronIcon
           size={14}
           className={`transition-transform ${open ? "rotate-180" : ""}`}
@@ -90,7 +95,7 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
       {open && (
         <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_20px_45px_rgba(15,23,42,0.12)]">
           <div className="flex items-center gap-3 border-b border-[#E5E7EB] px-4 py-3">
-            <div className="relative flex-shrink-0">
+            <div className="relative shrink-0">
               {user?.profileImage ? (
                 <img
                   src={user.profileImage}
