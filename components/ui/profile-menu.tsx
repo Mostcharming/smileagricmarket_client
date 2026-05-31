@@ -66,8 +66,6 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
   const router = useRouter();
 
   const isAdmin = logoutRedirectPath?.startsWith?.('/admin');
-  const profilePath = isAdmin ? '/admin/profile' : '/profile';
-  const settingsPath = isAdmin ? '/admin/settings' : '/settings';
   const changelogPath = '/changelog';
 
   return (
@@ -120,16 +118,18 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
           <div className="p-2">
             <button
               type="button"
-              onClick={() => { setOpen(false); router.push(profilePath); }}
-              className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#374151] transition-colors hover:bg-[#F3F4F6]"
+              onClick={isAdmin ? undefined : () => { setOpen(false); router.push('/profile'); }}
+              disabled={isAdmin}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#374151] transition-colors hover:bg-[#F3F4F6] disabled:cursor-default disabled:hover:bg-transparent disabled:opacity-70"
             >
               <span>View profile</span>
             </button>
 
             <button
               type="button"
-              onClick={() => { setOpen(false); router.push(settingsPath); }}
-              className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#374151] transition-colors hover:bg-[#F3F4F6]"
+              onClick={isAdmin ? undefined : () => { setOpen(false); router.push('/settings'); }}
+              disabled={isAdmin}
+              className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#374151] transition-colors hover:bg-[#F3F4F6] disabled:cursor-default disabled:hover:bg-transparent disabled:opacity-70"
             >
               <span>Settings</span>
             </button>

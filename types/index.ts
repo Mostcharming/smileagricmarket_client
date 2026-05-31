@@ -5,4 +5,5 @@ export type * from './component.types';
 export type * from './dashboard.types';
 export type * from './farms.types';
 export type * from "./kyc.types";
+export type * from './profile.types';
 export type * from './shared.types';

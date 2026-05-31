@@ -64,3 +64,12 @@ export const webFarms = {
     uploadDocToFarm: (farmId: string) => `/web/farms/${farmId}/documents`,
     deleteFarmDoc: (documentId: string) => `/web/farms/documents/${documentId}`,
 };
+
+export const webProfile = {
+    getProfile: () => `/web/profile/get`,
+    updateProfile: () => `/web/profile/update`,
+    uploadProfilePicture: () => `/web/profile/upload-picture`,
+    getProfileCompletionStatus: () => `/web/profile/completion-status`,
+    setupWallet: () => `/web/profile/wallet/setup`,
+    getWallet: () => `/web/profile/wallet/get`,
+};

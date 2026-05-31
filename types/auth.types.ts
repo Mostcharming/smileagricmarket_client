@@ -29,4 +29,10 @@ export interface profileSchema {
   gender?: string;
   role?: string;
   profileImage?: string;
+  profileImageUrl?: string;
+  bio?: string;
+  isPhoneVerified?: boolean;
+  kycStatus?: string;
+  kycInfo?: Record<string, unknown>;
+  wallet?: unknown;
 };

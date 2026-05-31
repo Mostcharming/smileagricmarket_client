@@ -6,7 +6,13 @@ import KycModal from "../../components/modal/kycModal";
 import { Button, MainHeader } from "../../components/ui";
 import { FarmIcon, InfoIcon } from "@/components/icons";
 import { useGetDashboard, useGetKycStatus, useSubmitKyc } from "@/mutation";
-import type { DashboardSummaryResponse, SelectOptions } from "@/types";
+import type {
+  ApiResponse,
+  DashboardSummaryResponse,
+  KycResponse,
+  SelectOptions,
+  WebProfileCompletionStatusResponse,
+} from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { formatNumberWithCommas } from "@/utils";
 import { toast } from "sonner";
@@ -126,7 +132,38 @@ const Dashboard = () => {
     mutate(formData, {
       onSuccess: async () => {
         toast.success("KYC submitted successfully");
+        queryClient.setQueryData<ApiResponse<KycResponse>>(["kycStatus"], (current) => ({
+          success: current?.success ?? true,
+          message: current?.message ?? "KYC status updated successfully",
+          status: current?.status ?? 200,
+          data: {
+            ...(current?.data ?? {}),
+            status: "pending",
+          },
+        }));
+        queryClient.setQueryData<ApiResponse<WebProfileCompletionStatusResponse>>(
+          ["webProfileCompletionStatus"],
+          (current) => {
+            if (!current) {
+              return current;
+            }
+
+            return {
+              ...current,
+              data: {
+                ...current.data,
+                profileStatus: {
+                  ...current.data.profileStatus,
+                  kycVerification: false,
+                },
+              },
+            };
+          }
+        );
         await queryClient.invalidateQueries({ queryKey: ["kycStatus"] });
+        await queryClient.invalidateQueries({ queryKey: ["webProfileCompletionStatus"] });
+        await queryClient.refetchQueries({ queryKey: ["kycStatus"] });
+        await queryClient.refetchQueries({ queryKey: ["webProfileCompletionStatus"] });
         setIsKycModalOpen(false);
         setNumber("");
         setIdentification("");

@@ -5,3 +5,4 @@ export * from './auth.mutation';
 export * from './dashboard.mutation';
 export * from './farms.mutation';
 export * from './kyc.mutation';
+export * from './profile.mutation';
