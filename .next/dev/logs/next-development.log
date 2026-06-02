@@ -1,5 +1,57 @@
-[00:00:06.257] Server  LOG      ✓ Ready in 4.6s
-[00:01:28.354] Server  LOG      ○ Compiling / ...
-[00:01:41.066] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:44.714] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:17.680] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:02.929] Server  LOG      ✓ Ready in 2.1s
+[00:02:40.806] Server  LOG      ○ Compiling /_not-found/page ...
+[00:02:46.493] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:48.922] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:48:41.167] Server  LOG      ✓ Compiled in 1180ms
+[02:50:59.466] Server  LOG      ✓ Compiled in 324ms
+[02:51:05.425] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:51:31.222] Server  LOG      ✓ Compiled in 274ms
+[02:52:39.997] Server  LOG      ✓ Compiled in 296ms
+[02:52:51.621] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:53:21.085] Server  LOG      ✓ Compiled in 275ms
+[02:55:10.376] Server  LOG      ✓ Compiled in 200ms
+[02:55:15.146] Server  LOG      ✓ Compiled in 279ms
+[02:55:30.640] Server  LOG      ✓ Compiled in 333ms
+[02:55:48.714] Server  LOG      ✓ Compiled in 161ms
+[02:56:10.119] Server  LOG      ✓ Compiled in 221ms
+[02:56:14.921] Server  LOG      ✓ Compiled in 239ms
+[02:56:21.592] Server  LOG      ✓ Compiled in 271ms
+[02:56:38.826] Server  LOG      ✓ Compiled in 207ms
+[02:56:39.948] Browser ERROR   ./pages/main/profile.tsx:140:78
+Parsing ecmascript source code failed
+  138 |     {
+  139 |       label: "KYC Verification",
+> 140 |       status: !completionData?.profileStatus?.kycVerification ? "Verified" : "Submit KYC,
+      |                                                                              ^^^^^^^^^^^^
+  141 |       tone: completionData?.profileStatus?.kycVerification ? completeTone : pendingTone,
+  142 |       complete: Boolean(completionData?.profileStatus?.kycVerification),
+  143 |       onClick: !completionData?.profileStatus?.kycVerification ? undefined : () => setIsKycModalOpen(true),
+
+Unterminated string constant
+
+Import trace:
+  Server Component:
+    ./pages/main/profile.tsx
+    ./app/(main)/profile/page.tsx
+[02:56:43.349] Server  LOG      ✓ Compiled in 195ms
+[02:56:46.454] Server  LOG      ✓ Compiled in 224ms
+[02:56:50.233] Server  LOG      ✓ Compiled in 199ms
+[02:56:53.124] Server  LOG      ✓ Compiled in 293ms
+[02:56:56.290] Server  LOG      ✓ Compiled in 328ms
+[02:57:09.005] Server  LOG      ✓ Compiled in 262ms
+[02:57:10.310] Server  LOG      ✓ Compiled in 254ms
+[02:57:12.437] Server  LOG      ✓ Compiled in 211ms
+[02:57:35.350] Server  LOG      ✓ Compiled in 275ms
+[02:58:48.468] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:59:57.724] Server  LOG      ✓ Compiled in 448ms
+[07:23:49.759] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:24:39.381] Server  LOG      ✓ Compiled in 214ms
+[07:27:42.450] Server  LOG      ✓ Compiled in 156ms
+[07:32:48.357] Server  LOG      ✓ Compiled in 189ms
+[07:32:51.794] Server  LOG      ✓ Compiled in 397ms
+[07:32:58.249] Server  LOG      ✓ Compiled in 208ms
+[07:33:04.532] Server  LOG      ✓ Compiled in 302ms
+[07:33:10.303] Server  LOG      ✓ Compiled in 261ms
+[07:33:14.644] Server  LOG      ✓ Compiled in 289ms
+[07:33:16.989] Server  LOG      ✓ Compiled in 243ms
+[07:33:19.335] Server  LOG      ✓ Compiled in 311ms

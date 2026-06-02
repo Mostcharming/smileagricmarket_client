@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { InfoIcon } from "@/components/icons";
+import KycModal from "@/components/modal/kycModal";
 import { Input, MainHeader, Select, ProfileCompletion } from "@/components/ui";
 import { getStoredUser, setStoredUser as setStoredUserInStorage } from "@/utils";
 import type { profileSchema, SelectOptions } from "@/types";
@@ -13,6 +14,7 @@ import {
   useGetWebProfileCompletionStatus,
   useGetWebProfileWallet,
   useSetupWebProfileWallet,
+  useSubmitKyc,
 } from "@/mutation";
 import { toast } from "sonner";
 
@@ -34,6 +36,14 @@ const getInitials = (fullName?: string) => {
 
 const completeTone = "bg-[#EAF6DF] text-[#7AB44A]";
 const pendingTone = "bg-[#F3F4F6] text-[#78716C]";
+
+const identificationOptions: SelectOptions[] = [
+  { label: "National ID Card", value: "national_id" },
+  { label: "International Passport", value: "passport" },
+  { label: "Driver's License", value: "driver_license" },
+  { label: "Taxpayer Identification Number", value: "tin" },
+  { label: "Permanent Voter's Card", value: "voter_card" },
+];
 
 const mapProfileToStoredUser = (profile?: {
   id: string;
@@ -71,12 +81,17 @@ const mapProfileToStoredUser = (profile?: {
 
 const SettingsPage = () => {
   const [storedUser, setStoredUser] = useState<profileSchema | null>(null);
+  const [isKycModalOpen, setIsKycModalOpen] = useState(false);
+  const [number, setNumber] = useState("");
+  const [identification, setIdentification] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
   const queryClient = useQueryClient();
   const { data: profileResponse } = useGetWebProfile();
   const { data: walletResponse } = useGetWebProfileWallet();
   const { data: banksResponse, isLoading: isBanksLoading } = useGetWebBanks();
   const { data: completionResponse } = useGetWebProfileCompletionStatus();
   const { mutate: setupWallet, isPending: isSavingWallet } = useSetupWebProfileWallet();
+  const { mutate: submitKyc, isPending: isSubmittingKyc } = useSubmitKyc();
 
   const profileSeed = useMemo(
     () => mapProfileToStoredUser(profileResponse?.data) ?? storedUser,
@@ -113,6 +128,35 @@ const SettingsPage = () => {
   const walletFormKey = walletResponse?.data
     ? [walletResponse.data.id, walletResponse.data.bankName, walletResponse.data.accountNumber, walletResponse.data.accountName].join("|")
     : `stored-${profileSeed?.id ?? "wallet-form"}`;
+
+  const handleKycDone = () => {
+    if (!photo) {
+      toast.error("Please upload a photo");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("identificationType", identification);
+    formData.append("identificationNumber", number);
+    formData.append("selfie", photo);
+
+    submitKyc(formData, {
+      onSuccess: async () => {
+        toast.success("KYC submitted successfully");
+        await queryClient.invalidateQueries({ queryKey: ["kycStatus"] });
+        await queryClient.invalidateQueries({ queryKey: ["webProfileCompletionStatus"] });
+        await queryClient.refetchQueries({ queryKey: ["kycStatus"] });
+        await queryClient.refetchQueries({ queryKey: ["webProfileCompletionStatus"] });
+        setIsKycModalOpen(false);
+        setNumber("");
+        setIdentification("");
+        setPhoto(null);
+      },
+      onError: (submitError) => {
+        toast.error(submitError?.message || "Failed to submit KYC");
+      },
+    });
+  };
 
   const WalletForm = () => {
     const [bank, setBank] = useState(walletResponse?.data?.bankName ?? "");
@@ -222,13 +266,15 @@ const SettingsPage = () => {
               },
               {
                 label: "KYC Verification",
-                status: completionResponse?.data?.profileStatus?.kycVerification ? "Complete" : "Pending",
+                status: completionResponse?.data?.profileStatus?.kycVerification ? "Verified" : "Submit",
                 tone: completionResponse?.data?.profileStatus?.kycVerification ? completeTone : pendingTone,
                 complete: Boolean(completionResponse?.data?.profileStatus?.kycVerification),
+                onClick: completionResponse?.data?.profileStatus?.kycVerification ? undefined : () => setIsKycModalOpen(true),
+                ctaLabel: "Submit",
               },
               {
                 label: "Wallet/Account",
-                status: walletComplete ? "Setup" : "Pending",
+                status: walletComplete ? "Complete" : "Setup",
                 tone: walletComplete ? completeTone : pendingTone,
                 href: "/settings",
                 complete: walletComplete,
@@ -237,6 +283,20 @@ const SettingsPage = () => {
           />
         </div>
       </main>
+
+      <KycModal
+        isOpen={isKycModalOpen}
+        onClose={() => setIsKycModalOpen(false)}
+        number={number}
+        setNumber={setNumber}
+        identification={identification}
+        setIdentification={setIdentification}
+        identificationOptions={identificationOptions}
+        photo={photo}
+        setPhoto={setPhoto}
+        isPending={isSubmittingKyc}
+        onDone={handleKycDone}
+      />
 
       <div className="pointer-events-none fixed right-4 top-16 hidden h-0 w-0 sm:block" aria-hidden="true">
         <span className="sr-only">{initials}</span>
