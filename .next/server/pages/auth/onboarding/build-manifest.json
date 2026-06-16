@@ -6,12 +6,13 @@
   "rootMainFiles": [],
   "pages": {
     "/auth/onboarding": [
+      "static/chunks/f7b834791d302d7b.js",
       "static/chunks/3c69260598da1247.js",
-      "static/chunks/54d0c24821af52a1.js",
-      "static/chunks/888951e569d18542.js",
-      "static/chunks/0e852e91b7f83add.js",
+      "static/chunks/2329f9e0b103fa69.js",
+      "static/chunks/44d96d1cac2ec8d8.js",
       "static/chunks/cd69d2d650276d8a.js",
-      "static/chunks/turbopack-9a61a02fc5cd810e.js"
+      "static/chunks/47973580913ff211.js",
+      "static/chunks/turbopack-6606a3f554948f40.js"
     ]
   },
   "ampFirstPages": []

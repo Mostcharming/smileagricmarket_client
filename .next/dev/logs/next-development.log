@@ -1,57 +1,155 @@
-[00:00:02.929] Server  LOG      ✓ Ready in 2.1s
-[00:02:40.806] Server  LOG      ○ Compiling /_not-found/page ...
-[00:02:46.493] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:48.922] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:48:41.167] Server  LOG      ✓ Compiled in 1180ms
-[02:50:59.466] Server  LOG      ✓ Compiled in 324ms
-[02:51:05.425] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:51:31.222] Server  LOG      ✓ Compiled in 274ms
-[02:52:39.997] Server  LOG      ✓ Compiled in 296ms
-[02:52:51.621] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:53:21.085] Server  LOG      ✓ Compiled in 275ms
-[02:55:10.376] Server  LOG      ✓ Compiled in 200ms
-[02:55:15.146] Server  LOG      ✓ Compiled in 279ms
-[02:55:30.640] Server  LOG      ✓ Compiled in 333ms
-[02:55:48.714] Server  LOG      ✓ Compiled in 161ms
-[02:56:10.119] Server  LOG      ✓ Compiled in 221ms
-[02:56:14.921] Server  LOG      ✓ Compiled in 239ms
-[02:56:21.592] Server  LOG      ✓ Compiled in 271ms
-[02:56:38.826] Server  LOG      ✓ Compiled in 207ms
-[02:56:39.948] Browser ERROR   ./pages/main/profile.tsx:140:78
+[00:00:04.839] Server  LOG      ✓ Ready in 3.7s
+[00:09:06.466] Server  LOG      ○ Compiling /invest/[farmId] ...
+[00:09:26.178] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:31:34.869] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:45:18.871] Server  LOG      ✓ Compiled in 380ms
+[00:45:20.142] Server  LOG      ✓ Compiled in 248ms
+[00:45:20.480] Browser ERROR   uncaughtError: ReferenceError: Typography is not defined
+[00:45:27.328] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:45:27.340] Server  LOG      ✓ Compiled in 289ms
+[00:45:31.890] Browser ERROR   uncaughtError: ReferenceError: Typography is not defined
+[00:45:33.040] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:45:39.090] Server  LOG      ✓ Compiled in 184ms
+[00:45:44.238] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:45:44.422] Server  LOG      ✓ Compiled in 3ms
+[00:46:46.770] Server  LOG      ✓ Compiled in 279ms
+[00:46:51.226] Server  LOG      ✓ Compiled in 302ms
+[00:47:26.269] Server  LOG      ✓ Compiled in 220ms
+[00:47:32.570] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:48:01.555] Server  LOG      ✓ Compiled in 347ms
+[00:48:14.646] Server  LOG      ✓ Compiled in 184ms
+[01:04:30.813] Server  LOG      ✓ Compiled in 820ms
+[01:20:32.740] Server  LOG      ✓ Compiled in 382ms
+[01:22:19.834] Server  LOG      ✓ Compiled in 247ms
+[01:23:02.196] Server  LOG      ✓ Compiled in 371ms
+[01:32:27.832] Server  LOG      ✓ Compiled in 214ms
+[01:32:33.762] Server  LOG      ✓ Compiled in 443ms
+[01:32:34.359] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:509:66
 Parsing ecmascript source code failed
-  138 |     {
-  139 |       label: "KYC Verification",
-> 140 |       status: !completionData?.profileStatus?.kycVerification ? "Verified" : "Submit KYC,
-      |                                                                              ^^^^^^^^^^^^
-  141 |       tone: completionData?.profileStatus?.kycVerification ? completeTone : pendingTone,
-  142 |       complete: Boolean(completionData?.profileStatus?.kycVerification),
-  143 |       onClick: !completionData?.profileStatus?.kycVerification ? undefined : () => setIsKycModalOpen(true),
+  507 |
+  508 |                 <p className="mt-3 text-center text-[10px] text-[#7D8678]">
+> 509 |                   Regulated by Financial Conduct Authority.<br / Your capital is protected by the NDIC
+      |                                                                  ^^^^
+  510 |                 </p>
+  511 |               </div>
+  512 |             </section>
 
-Unterminated string constant
+Expected '</', got 'Your'
 
-Import trace:
-  Server Component:
-    ./pages/main/profile.tsx
-    ./app/(main)/profile/page.tsx
-[02:56:43.349] Server  LOG      ✓ Compiled in 195ms
-[02:56:46.454] Server  LOG      ✓ Compiled in 224ms
-[02:56:50.233] Server  LOG      ✓ Compiled in 199ms
-[02:56:53.124] Server  LOG      ✓ Compiled in 293ms
-[02:56:56.290] Server  LOG      ✓ Compiled in 328ms
-[02:57:09.005] Server  LOG      ✓ Compiled in 262ms
-[02:57:10.310] Server  LOG      ✓ Compiled in 254ms
-[02:57:12.437] Server  LOG      ✓ Compiled in 211ms
-[02:57:35.350] Server  LOG      ✓ Compiled in 275ms
-[02:58:48.468] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:59:57.724] Server  LOG      ✓ Compiled in 448ms
-[07:23:49.759] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[07:24:39.381] Server  LOG      ✓ Compiled in 214ms
-[07:27:42.450] Server  LOG      ✓ Compiled in 156ms
-[07:32:48.357] Server  LOG      ✓ Compiled in 189ms
-[07:32:51.794] Server  LOG      ✓ Compiled in 397ms
-[07:32:58.249] Server  LOG      ✓ Compiled in 208ms
-[07:33:04.532] Server  LOG      ✓ Compiled in 302ms
-[07:33:10.303] Server  LOG      ✓ Compiled in 261ms
-[07:33:14.644] Server  LOG      ✓ Compiled in 289ms
-[07:33:16.989] Server  LOG      ✓ Compiled in 243ms
-[07:33:19.335] Server  LOG      ✓ Compiled in 311ms
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:32:34.785] Server  LOG      ✓ Compiled in 272ms
+[01:35:24.471] Server  LOG      ✓ Compiled in 277ms
+[01:35:25.675] Server  LOG      ✓ Compiled in 242ms
+[01:35:26.133] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:491:21
+Parsing ecmascript source code failed
+  489 |                   <div className="flex items-center justify-between">
+  490 |                     <
+> 491 |                     <div>
+      |                     ^
+  492 |                       <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Remaining Units</div>
+  493 |                       <div className="mt-1 text-[14px] font-semibold text-[#172017]">{remainingUnits} / 250</div>
+  494 |                     </div>
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:35:36.666] Server  LOG      ✓ Compiled in 303ms
+[01:35:41.823] Server  LOG      ✓ Compiled in 199ms
+[01:35:42.008] Browser ERROR   Received `%s` for a non-boolean attribute `%s`.
+
+If you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}. true clas clas true clas
+[01:35:43.050] Server  LOG      ✓ Compiled in 279ms
+[01:35:43.227] Browser ERROR   Invalid DOM property `%s`. Did you mean `%s`? class className
+[01:35:47.521] Server  LOG      ✓ Compiled in 274ms
+[01:47:23.155] Server  LOG      ✓ Compiled in 277ms
+[01:47:25.960] Server  LOG      ✓ Compiled in 781ms
+[01:47:36.038] Server  LOG      ✓ Compiled in 282ms
+[01:47:38.656] Server  LOG      ✓ Compiled in 280ms
+[01:47:47.324] Server  LOG      ✓ Compiled in 277ms
+[01:47:48.248] Server  LOG      ✓ Compiled in 258ms
+[01:47:54.460] Server  LOG      ✓ Compiled in 203ms
+[02:13:21.290] Server  LOG      ✓ Compiled in 417ms
+[02:14:39.907] Server  LOG      ✓ Compiled in 276ms
+[02:14:43.987] Server  LOG      ✓ Compiled in 206ms
+[02:15:48.642] Server  LOG      ✓ Compiled in 190ms
+[02:16:08.024] Server  LOG      ✓ Compiled in 252ms
+[02:16:10.867] Server  LOG      ✓ Compiled in 269ms
+[02:16:11.124] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:543:11
+Parsing ecmascript source code failed
+  541 |           {/* Funding Goal */}
+  542 |           <
+> 543 |           <div>
+      |           ^
+  544 |             <div className="text-[11px] text-[#7E8779]">Funding Goal</div>
+  545 |             <div className="text-[22px] font-semibold text-[#172017]">
+  546 |               ₦{formatNumberWithCommas(details.totalVal.toFixed(2))}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[02:16:19.627] Server  LOG      ✓ Compiled in 8ms
+[02:16:22.000] Server  LOG      ✓ Compiled in 216ms
+[02:16:28.271] Server  LOG      ✓ Compiled in 293ms
+[02:16:35.676] Server  LOG      ✓ Compiled in 306ms
+[02:16:43.480] Server  LOG      ✓ Compiled in 279ms
+[02:20:26.360] Server  LOG      ✓ Compiled in 226ms
+[02:20:32.521] Server  LOG      ✓ Compiled in 224ms
+[02:20:48.429] Server  LOG      ✓ Compiled in 234ms
+[02:20:51.383] Server  LOG      ✓ Compiled in 271ms
+[02:20:53.757] Server  LOG      ✓ Compiled in 362ms
+[02:20:59.181] Server  LOG      ✓ Compiled in 185ms
+[02:21:03.645] Server  LOG      ✓ Compiled in 389ms
+[02:21:13.403] Server  LOG      ✓ Compiled in 283ms
+[02:21:15.900] Server  LOG      ✓ Compiled in 323ms
+[02:21:59.414] Server  LOG      ✓ Compiled in 513ms
+[02:22:14.356] Server  LOG      ✓ Compiled in 282ms
+[02:22:17.166] Server  LOG      ✓ Compiled in 250ms
+[02:22:19.926] Server  LOG      ✓ Compiled in 360ms
+[02:22:48.819] Server  LOG      ✓ Compiled in 599ms
+[02:22:57.132] Server  LOG      ✓ Compiled in 367ms
+[02:23:34.398] Server  LOG      ✓ Compiled in 454ms
+[02:23:56.006] Server  LOG      ✓ Compiled in 291ms
+[02:24:26.460] Server  LOG      ✓ Compiled in 203ms
+[02:24:38.417] Server  LOG      ✓ Compiled in 255ms
+[02:24:50.556] Server  LOG      ✓ Compiled in 181ms
+[02:25:35.807] Server  LOG      ✓ Compiled in 215ms
+[02:25:44.933] Server  LOG      ✓ Compiled in 264ms
+[02:25:48.119] Server  LOG      ✓ Compiled in 225ms
+[02:25:51.537] Server  LOG      ✓ Compiled in 254ms
+[02:26:07.221] Server  LOG      ✓ Compiled in 274ms
+[02:26:16.953] Server  LOG      ✓ Compiled in 262ms
+[02:26:23.341] Server  LOG      ✓ Compiled in 273ms
+[02:26:25.137] Server  LOG      ✓ Compiled in 241ms
+[02:26:40.092] Server  LOG      ✓ Compiled in 288ms
+[02:26:48.972] Server  LOG      ✓ Compiled in 218ms
+[02:26:55.911] Server  LOG      ✓ Compiled in 237ms
+[02:27:06.956] Server  LOG      ✓ Compiled in 224ms
+[02:27:12.208] Server  LOG      ✓ Compiled in 290ms
+[02:27:18.286] Server  LOG      ✓ Compiled in 221ms
+[02:30:17.639] Server  LOG      ✓ Compiled in 451ms
+[02:30:48.394] Server  LOG      ✓ Compiled in 678ms
+[02:30:50.892] Server  LOG      ✓ Compiled in 1035ms
+[02:30:57.520] Server  LOG      ✓ Compiled in 272ms
+[02:31:09.518] Server  LOG      ✓ Compiled in 498ms
+[02:32:58.883] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

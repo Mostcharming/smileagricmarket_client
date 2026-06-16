@@ -1,9 +1,6 @@
 {
   "/(auth)/login/page": "app/(auth)/login/page.js",
   "/(main)/dashboard/page": "app/(main)/dashboard/page.js",
-  "/(main)/profile/page": "app/(main)/profile/page.js",
-  "/(main)/settings/page": "app/(main)/settings/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/banks/route": "app/api/banks/route.js",
-  "/page": "app/page.js"
+  "/(main)/invest/[farmId]/page": "app/(main)/invest/[farmId]/page.js",
+  "/(main)/invest/page": "app/(main)/invest/page.js"
 }

@@ -19,6 +19,7 @@ self.__BUILD_MANIFEST = {
     "/main/admin/users",
     "/main/admin/verification",
     "/main/dashboard",
+    "/main/invest",
     "/main/myFarms",
     "/main/profile",
     "/main/settings"

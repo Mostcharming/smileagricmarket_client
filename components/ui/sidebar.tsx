@@ -6,7 +6,12 @@ import { usePathname } from 'next/navigation';
 import { DashboardIcon, UsersIcon, ChevronIcon, LogoIcon, FarmIcon } from '../icons';
 import { useUserCount, useVerificationCount } from '@/hooks';
 
-const Sidebar = () => {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
   const pathname = usePathname() ?? '';
   const [usersOpen, setUsersOpen] = useState(pathname.includes('/admin/users') || pathname.includes('/admin/verification'));
   const [farmsOpen, setFarmsOpen] = useState(pathname.includes('/admin/milestones') || pathname.includes('/admin/farms'));
@@ -16,16 +21,32 @@ const Sidebar = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col fixed left-0 top-0 z-50">
+    <aside className={`w-full md:w-64 h-screen bg-white border-r border-gray-100 flex flex-col fixed top-0 left-0 z-50 transition-transform duration-300 ease-in-out ${
+      isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'
+    }`}>
       <div className="p-6">
-        <div className="flex items-center gap-2 mb-8">
-          <LogoIcon size={32} />
-          <span className="font-bold text-lg text-gray-900">SmileAgrimarket</span>
+        <div className="flex items-center justify-between gap-2 mb-8">
+          <div className="flex items-center gap-2">
+            <LogoIcon size={32} />
+            <span className="font-bold text-lg text-gray-900">SmileAgrimarket</span>
+          </div>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="md:hidden p-1 text-gray-500 hover:text-gray-900 rounded-md focus:outline-none transition-colors"
+              aria-label="Close sidebar"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
 
         <nav className="space-y-1">
           <Link
             href="/admin/dashboard"
+            onClick={onClose}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
               isActive('/admin/dashboard') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
             }`}
@@ -55,6 +76,7 @@ const Sidebar = () => {
               <div className="mt-1 space-y-1">
                 <Link
                   href="/admin/users"
+                  onClick={onClose}
                   className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
                     isActive('/admin/users') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
                   }`}
@@ -69,6 +91,7 @@ const Sidebar = () => {
                 </Link>
                 <Link
                   href="/admin/verification"
+                  onClick={onClose}
                   className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
                     isActive('/admin/verification') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
                   }`}
@@ -107,6 +130,7 @@ const Sidebar = () => {
               <div className="mt-1 space-y-1">
                 <Link
                   href="/admin/milestones"
+                  onClick={onClose}
                   className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
                     isActive('/admin/milestones') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
                   }`}
@@ -115,6 +139,7 @@ const Sidebar = () => {
                 </Link>
                 <Link
                   href="/admin/farms"
+                  onClick={onClose}
                   className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
                     isActive('/admin/farms') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
                   }`}
