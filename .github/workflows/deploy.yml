@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy to server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy over SSH
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          APP_DIR: ${{ secrets.APP_DIR }}
+        run: |
+          set -euo pipefail
+
+          : "${SSH_HOST:?Set the SSH_HOST secret}"
+          : "${SSH_USER:?Set the SSH_USER secret}"
+          : "${SSH_PRIVATE_KEY:?Set the SSH_PRIVATE_KEY secret}"
+          : "${APP_DIR:?Set the APP_DIR secret}"
+
+          PORT="${SSH_PORT:-22}"
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+          ssh -i ~/.ssh/deploy_key -p "$PORT" "$SSH_USER@$SSH_HOST" \
+            "APP_DIR='$APP_DIR' bash -s" <<'EOF'
+          set -euo pipefail
+
+          cd "$APP_DIR"
+          git fetch origin main
+          git reset --hard origin/main
+          npm ci
+          npm run build
+          pm2 restart all
+          EOF
