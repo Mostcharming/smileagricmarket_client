@@ -14,7 +14,7 @@ interface AdminLayoutProps {
 
 const AdminLayout = ({ children, breadcrumbs = [] }: AdminLayoutProps) => {
   const pathname = usePathname();
-  const isMilestonesPage = pathname === '/admin/milestones';
+  const isFullWidthPage = pathname === '/admin/milestones' || pathname === '/admin/investments/templates';
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -85,7 +85,7 @@ const AdminLayout = ({ children, breadcrumbs = [] }: AdminLayoutProps) => {
           </div>
         </header>
 
-        <main className={isMilestonesPage ? 'p-0' : 'p-4 md:p-8'}>
+        <main className={isFullWidthPage ? 'p-0' : 'p-4 md:p-8'}>
           {children}
         </main>
       </div>

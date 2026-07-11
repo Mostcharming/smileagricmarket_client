@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { DashboardIcon, UsersIcon, ChevronIcon, LogoIcon, FarmIcon } from '../icons';
+import { DashboardIcon, UsersIcon, ChevronIcon, LogoIcon, FarmIcon, InvestmentIcon } from '../icons';
 import { useUserCount, useVerificationCount } from '@/hooks';
 
 interface SidebarProps {
@@ -15,6 +15,7 @@ const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
   const pathname = usePathname() ?? '';
   const [usersOpen, setUsersOpen] = useState(pathname.includes('/admin/users') || pathname.includes('/admin/verification'));
   const [farmsOpen, setFarmsOpen] = useState(pathname.includes('/admin/milestones') || pathname.includes('/admin/farms'));
+  const [investmentsOpen, setInvestmentsOpen] = useState(pathname.includes('/admin/investments'));
   const totalUsers = useUserCount();
   const totalVerification = useVerificationCount();
 
@@ -145,6 +146,42 @@ const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
                   }`}
                 >
                   <span className="text-sm">Farms</span>
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <button
+              onClick={() => setInvestmentsOpen(!investmentsOpen)}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
+                pathname.includes('/admin/investments') ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <InvestmentIcon 
+                  size={20} 
+                  color={pathname.includes('/admin/investments') ? '#FFFFFF' : '#92998E'}
+                />
+                <span className="font-medium text-sm">Investments</span>
+              </div>
+              <ChevronIcon
+                size={16}
+                color={pathname.includes('/admin/investments') ? '#FFFFFF' : '#92998E'}
+                className={`transition-transform ${investmentsOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+
+            {investmentsOpen && (
+              <div className="mt-1 space-y-1">
+                <Link
+                  href="/admin/investments/templates"
+                  onClick={onClose}
+                  className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
+                    isActive('/admin/investments/templates') ? 'bg-gray-50 text-gray-900 font-medium' : 'text-gray-500 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="text-sm">Templates</span>
                 </Link>
               </div>
             )}

@@ -15,6 +15,7 @@ self.__BUILD_MANIFEST = {
     "/auth/signup",
     "/auth/verifyOTP",
     "/main/admin/farms",
+    "/main/admin/investments/templates",
     "/main/admin/milestones",
     "/main/admin/users",
     "/main/admin/verification",

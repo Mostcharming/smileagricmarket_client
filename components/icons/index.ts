@@ -30,3 +30,4 @@ export { ClockIcon } from "./clock";
 export { AlertTriangleIcon } from "./alertTriangle";
 export { WalletIcon } from "./wallet";
 export { LayersIcon } from "./layers";
+export { InvestmentIcon } from "./investment";

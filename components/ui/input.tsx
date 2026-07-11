@@ -28,7 +28,7 @@ const Input = ({
   const isPasswordType = type === 'password' && as === 'input';
   const inputType = isPasswordType && showPassword ? 'text' : type;
   const hasValue = Boolean(value && value.toString().length > 0);
-  const isFloating = focused || hasValue;
+  const isFloating = focused || hasValue || type === 'date';
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

@@ -1,5 +1,6 @@
 export * from './admin.api';
 export * from './adminFarmCategory.api';
+export * from './adminInvestments.api';
 export * from './adminMilestones.api';
 export * from './auth.api';
 export * from './dashboard.api';
