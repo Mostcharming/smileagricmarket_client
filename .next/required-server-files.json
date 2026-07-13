@@ -110,7 +110,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "C:\\Users\\OluwaMayowa\\Downloads\\dev\\smile\\client",
+    "outputFileTracingRoot": "E:\\Dir\\DEV\\smile\\client",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -300,11 +300,11 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "C:\\Users\\OluwaMayowa\\Downloads\\dev\\smile\\client"
+      "root": "E:\\Dir\\DEV\\smile\\client"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "C:\\Users\\OluwaMayowa\\Downloads\\dev\\smile\\client",
+  "appDir": "E:\\Dir\\DEV\\smile\\client",
   "relativeAppDir": "",
   "files": [
     ".next\\routes-manifest.json",

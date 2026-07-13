@@ -1,0 +1,19 @@
+{
+  "devFiles": [],
+  "ampDevFiles": [],
+  "polyfillFiles": [],
+  "lowPriorityFiles": [],
+  "rootMainFiles": [],
+  "pages": {
+    "/main/admin/investments/templates": [
+      "static/chunks/3c69260598da1247.js",
+      "static/chunks/cd69d2d650276d8a.js",
+      "static/chunks/6d4b4de43f151423.js",
+      "static/chunks/0eb7800f345640eb.js",
+      "static/chunks/6dd529c11b8b46f7.js",
+      "static/chunks/0c553c1074e0fa94.js",
+      "static/chunks/turbopack-d6d30c2b2f9b9278.js"
+    ]
+  },
+  "ampFirstPages": []
+}

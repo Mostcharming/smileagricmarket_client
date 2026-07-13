@@ -27,6 +27,14 @@
         "nxtPfarmId": "nxtPfarmId"
       },
       "namedRegex": "^/admin/farms/(?<nxtPfarmId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/invest/[farmId]",
+      "regex": "^/invest/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPfarmId": "nxtPfarmId"
+      },
+      "namedRegex": "^/invest/(?<nxtPfarmId>[^/]+?)(?:/)?$"
     }
   ],
   "staticRoutes": [
@@ -59,6 +67,12 @@
       "regex": "^/admin/farms(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/farms(?:/)?$"
+    },
+    {
+      "page": "/admin/investments/templates",
+      "regex": "^/admin/investments/templates(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/investments/templates(?:/)?$"
     },
     {
       "page": "/admin/milestones",
@@ -163,6 +177,12 @@
       "namedRegex": "^/forgot\\-password(?:/)?$"
     },
     {
+      "page": "/invest",
+      "regex": "^/invest(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/invest(?:/)?$"
+    },
+    {
       "page": "/login",
       "regex": "^/login(?:/)?$",
       "routeKeys": {},
@@ -173,6 +193,12 @@
       "regex": "^/main/admin/farms(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/main/admin/farms(?:/)?$"
+    },
+    {
+      "page": "/main/admin/investments/templates",
+      "regex": "^/main/admin/investments/templates(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/main/admin/investments/templates(?:/)?$"
     },
     {
       "page": "/main/admin/milestones",
@@ -197,6 +223,12 @@
       "regex": "^/main/dashboard(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/main/dashboard(?:/)?$"
+    },
+    {
+      "page": "/main/invest",
+      "regex": "^/main/invest(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/main/invest(?:/)?$"
     },
     {
       "page": "/main/myFarms",
