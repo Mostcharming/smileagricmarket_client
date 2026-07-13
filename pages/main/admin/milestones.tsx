@@ -286,34 +286,46 @@ const MilestonesDashboard = () => {
   const isBusy = isCategoriesLoading || isMilestonesLoading || isMilestonesFetching;
 
   return (
-    <div className="flex flex-col lg:flex-row">
-      <section className="w-full p-5 border-r border-gray-100 bg-appWhite max-w-[220px] h-[calc(100vh-4rem)] overflow-y-auto">
-        <Typography variant='normal' className="text-appBlack font-medium">Farm Categories</Typography>
-
-        <div className="space-y-1 mt-5">
-          {categories.map((category) => {
-        const isActive = category.id === selectedCategoryId;
-
-        return (
-          <button
-            key={category.id}
-            type="button"
-            onClick={() => setActiveCategoryId(category.id)}
-            className={`w-full flex items-center gap-3 rounded-md px-3 py-3 text-left transition-colors cursor-pointer ${
-          isActive ? 'text-appBlack bg-foreground/5' : 'text-foreground hover:bg-white/70'
-            }`}
+    <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-4rem)] lg:overflow-hidden bg-background w-full">
+      {/* Left Sidebar - Farm Categories */}
+      <section className="w-full lg:w-[220px] p-5 border-b lg:border-b-0 lg:border-r border-gray-100 bg-appWhite flex flex-col lg:flex-shrink-0 lg:overflow-y-auto">
+        <div className="flex items-center justify-between lg:block">
+          <Typography variant='normal' className="text-appBlack font-medium">Farm Categories</Typography>
+          <Button
+            variant="light"
+            icon={<AddIcon color="black" size={16} />}
+            className="lg:hidden uppercase text-xs px-3 py-2"
+            onClick={() => setIsCategoryModalOpen(true)}
+            isLoading={createCategoryMutation.isPending}
           >
-            <FarmIcon color='var(--border)' size={24} />
-            <Typography variant='normal'>{category.name}</Typography>
-          </button>
-        );
+            Add
+          </Button>
+        </div>
+
+        <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible whitespace-nowrap gap-2 mt-4 lg:mt-5 scrollbar-hide">
+          {categories.map((category) => {
+            const isActive = category.id === selectedCategoryId;
+
+            return (
+              <button
+                key={category.id}
+                type="button"
+                onClick={() => setActiveCategoryId(category.id)}
+                className={`flex-shrink-0 flex items-center gap-2 lg:gap-3 rounded-md px-3 py-2 lg:py-3 text-left transition-colors cursor-pointer ${
+                  isActive ? 'text-appBlack bg-foreground/5 font-semibold' : 'text-foreground hover:bg-white/70'
+                }`}
+              >
+                <FarmIcon color='var(--border)' size={20} className="w-5 h-5" />
+                <Typography variant='normal' className="text-sm">{category.name}</Typography>
+              </button>
+            );
           })}
         </div>
 
         <Button
           variant="light"
           icon={<AddIcon color="black" size={16} />}
-          className="mt-8 w-full uppercase text-xs"
+          className="hidden lg:flex mt-8 w-full uppercase text-xs"
           onClick={() => setIsCategoryModalOpen(true)}
           isLoading={createCategoryMutation.isPending}
         >
@@ -325,7 +337,7 @@ const MilestonesDashboard = () => {
         )}
       </section>
 
-      <section className="w-full h-fit m-10 overflow-y-auto bg-white border border-border100/10 rounded-sm p-6 lg:p-9">
+      <section className="flex-1 w-auto overflow-y-auto bg-white border border-border100/10 rounded-xl p-4 md:p-6 lg:p-9 shadow-sm m-4 lg:m-10">
         <Typography variant='intro' className="uppercase">Milestones</Typography>
 
         <div className='mt-8'>

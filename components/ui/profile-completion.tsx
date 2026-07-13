@@ -10,6 +10,8 @@ type CompletionItem = {
   tone: string;
   complete?: boolean;
   href?: string;
+  ctaLabel?: string;
+  onClick?: () => void;
 };
 
 type Props = {
@@ -44,6 +46,14 @@ export default function ProfileCompletion({ completion, items }: Props) {
               <Link href={item.href} className={`rounded-md px-3 py-1 cursor-pointer text-[12px] font-semibold ${item.tone}`}>
                 {item.status}
               </Link>
+            ) : item.onClick ? (
+              <button
+                type="button"
+                onClick={item.onClick}
+                className={`rounded-md px-3 py-1 text-[12px] cursor-pointer font-semibold transition hover:opacity-90 ${item.tone}`}
+              >
+                {item.ctaLabel ?? item.status}
+              </button>
             ) : (
               <span className={`rounded-md px-3 py-1 text-[12px] font-semibold ${item.tone}`}>{item.status}</span>
             )}

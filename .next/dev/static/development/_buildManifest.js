@@ -15,10 +15,12 @@ self.__BUILD_MANIFEST = {
     "/auth/signup",
     "/auth/verifyOTP",
     "/main/admin/farms",
+    "/main/admin/investments/templates",
     "/main/admin/milestones",
     "/main/admin/users",
     "/main/admin/verification",
     "/main/dashboard",
+    "/main/invest",
     "/main/myFarms",
     "/main/profile",
     "/main/settings"

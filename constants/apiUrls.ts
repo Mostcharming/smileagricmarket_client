@@ -73,3 +73,14 @@ export const webProfile = {
     setupWallet: () => `/web/profile/wallet/setup`,
     getWallet: () => `/web/profile/wallet/get`,
 };
+
+export const adminInvestments = {
+    createInvestment: () => `/web/admin/investments`,
+    getInvestments: (query: string) => `/web/admin/investments${query}`,
+    getInvestmentById: (investmentId: string) => `/web/admin/investments/${investmentId}`,
+    updateInvestment: (investmentId: string) => `/web/admin/investments/${investmentId}`,
+    deleteInvestment: (investmentId: string) => `/web/admin/investments/${investmentId}`,
+    addMilestone: (investmentId: string) => `/web/admin/investments/${investmentId}/milestones`,
+    updateMilestone: (milestoneId: string) => `/web/admin/investment-milestones/${milestoneId}`,
+    deleteMilestone: (milestoneId: string) => `/web/admin/investment-milestones/${milestoneId}`,
+};

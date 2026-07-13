@@ -218,23 +218,23 @@ const FarmDetailPage = () => {
     if (sourceSelected.length > 0) {
       return sourceSelected
         .map((item, index) => {
-        const it = item as { id?: string; amount?: number | string; Milestone?: { id?: string; name?: string; amount?: number | string; order?: number } };
-        const ms = it.Milestone ?? (it as unknown as { name?: string; amount?: number | string; order?: number });
-        const name = ms?.name || `Milestone ${index + 1}`;
+          const it = item as { id?: string; amount?: number | string; Milestone?: { id?: string; name?: string; amount?: number | string; order?: number } };
+          const ms = it.Milestone ?? (it as unknown as { name?: string; amount?: number | string; order?: number });
+          const name = ms?.name || `Milestone ${index + 1}`;
 
-        const inv = farm.Investment as unknown as { investmentReceived?: string; expectedInvestment?: string; amount?: number };
-        const amountCandidate = parseAmount(it.amount ?? ms?.amount ?? inv?.investmentReceived ?? inv?.expectedInvestment ?? 0) ?? 0;
+          const inv = farm.Investment as unknown as { investmentReceived?: string; expectedInvestment?: string; amount?: number };
+          const amountCandidate = parseAmount(it.amount ?? ms?.amount ?? inv?.investmentReceived ?? inv?.expectedInvestment ?? 0) ?? 0;
 
-        return {
-          id: it.id || `${index}-${name}`,
-          name,
-          order: typeof ms?.order === 'number' ? ms.order : index,
-          amount: amountCandidate,
-        };
+          return {
+            id: it.id || `${index}-${name}`,
+            name,
+            order: typeof ms?.order === 'number' ? ms.order : index,
+            amount: amountCandidate,
+          };
         })
         .sort((left, right) => (left.order ?? 0) - (right.order ?? 0));
     }
-  
+
     // Rely on endpoint data; no default placeholder milestones
     return [];
   }, [farm]);
@@ -279,8 +279,8 @@ const FarmDetailPage = () => {
         onSuccess: () => {
           toast.success('Farm approved successfully');
           // refetch admin farms and user farms lists
-          queryClient.invalidateQueries({ queryKey: ['adminFarms'] }).catch(() => {});
-          queryClient.invalidateQueries({ queryKey: ['farms'] }).catch(() => {});
+          queryClient.invalidateQueries({ queryKey: ['adminFarms'] }).catch(() => { });
+          queryClient.invalidateQueries({ queryKey: ['farms'] }).catch(() => { });
           router.push('/admin/farms');
         },
         onError: (err) => {
@@ -300,8 +300,8 @@ const FarmDetailPage = () => {
         onSuccess: () => {
           toast.success('Farm rejected successfully');
           // refetch admin farms and user farms lists
-          queryClient.invalidateQueries({ queryKey: ['adminFarms'] }).catch(() => {});
-          queryClient.invalidateQueries({ queryKey: ['farms'] }).catch(() => {});
+          queryClient.invalidateQueries({ queryKey: ['adminFarms'] }).catch(() => { });
+          queryClient.invalidateQueries({ queryKey: ['farms'] }).catch(() => { });
           router.push('/admin/farms');
         },
         onError: (err) => {
@@ -406,9 +406,9 @@ const FarmDetailPage = () => {
                   <div className="min-w-0">
                     <div className='flex'>
                       <p className="truncate text-sm font-semibold text-[#414651]">{ownerName}</p>
-                    <span className="ml-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#ECF7E6] text-[#6AAB45]">
-                      <CheckIcon size={8} color="currentColor" />
-                    </span>
+                      <span className="ml-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#ECF7E6] text-[#6AAB45]">
+                        <CheckIcon size={8} color="currentColor" />
+                      </span>
                     </div>
                     <p className="truncate text-xs text-[#535862]">{ownerEmail}</p>
                   </div>

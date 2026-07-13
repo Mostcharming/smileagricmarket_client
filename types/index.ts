@@ -7,3 +7,4 @@ export type * from './farms.types';
 export type * from "./kyc.types";
 export type * from './profile.types';
 export type * from './shared.types';
+export type * from './investments.types';

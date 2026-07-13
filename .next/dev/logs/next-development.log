@@ -1,5 +1,78 @@
-[00:00:06.257] Server  LOG      ✓ Ready in 4.6s
-[00:01:28.354] Server  LOG      ○ Compiling / ...
-[00:01:41.066] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:44.714] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:17.680] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:04.302] Server  LOG      ✓ Ready in 3.2s
+[00:00:28.391] Server  LOG      ○ Compiling /admin/investments/templates ...
+[00:00:33.430] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:36.912] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:43.797] Server  LOG      ✓ Compiled in 169ms
+[00:01:54.119] Server  LOG      ✓ Compiled in 188ms
+[00:02:00.113] Server  LOG      ✓ Compiled in 125ms
+[00:02:38.939] Server  LOG      ✓ Compiled in 167ms
+[00:06:53.824] Server  LOG      ✓ Compiled in 130ms
+[00:07:16.390] Server  LOG      ✓ Compiled in 171ms
+[00:07:21.286] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:42.983] Server  LOG      ✓ Compiled in 214ms
+[00:08:02.713] Server  LOG      ✓ Compiled in 132ms
+[00:09:58.156] Server  LOG      ✓ Compiled in 119ms
+[00:10:07.444] Server  LOG      ✓ Compiled in 107ms
+[00:13:04.427] Server  LOG      ✓ Compiled in 834ms
+[00:13:46.217] Server  LOG      ✓ Compiled in 223ms
+[00:15:25.160] Server  LOG      ✓ Compiled in 112ms
+[00:15:25.300] Browser ERROR   Received `%s` for a non-boolean attribute `%s`.
+
+If you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}. true clas clas true clas
+[00:15:29.826] Server  LOG      ✓ Compiled in 213ms
+[00:15:32.430] Server  LOG      ✓ Compiled in 147ms
+[00:16:08.697] Server  LOG      ✓ Compiled in 113ms
+[00:16:29.304] Server  LOG      ✓ Compiled in 115ms
+[00:16:29.428] Browser ERROR   Received `%s` for a non-boolean attribute `%s`.
+
+If you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}. true va va true va
+[00:16:31.882] Server  LOG      ✓ Compiled in 113ms
+[00:16:35.051] Server  LOG      ✓ Compiled in 103ms
+[00:17:50.648] Server  LOG      ✓ Compiled in 108ms
+[00:17:53.718] Server  LOG      ✓ Compiled in 100ms
+[00:18:02.256] Server  LOG      ✓ Compiled in 103ms
+[00:18:07.194] Server  LOG      ✓ Compiled in 126ms
+[00:18:19.263] Server  LOG      ✓ Compiled in 97ms
+[00:18:21.601] Server  LOG      ✓ Compiled in 134ms
+[00:18:39.234] Server  LOG      ✓ Compiled in 113ms
+[00:18:41.432] Server  LOG      ✓ Compiled in 132ms
+[00:18:44.024] Server  LOG      ✓ Compiled in 155ms
+[00:20:53.847] Server  LOG      ✓ Compiled in 119ms
+[00:21:00.907] Server  LOG      ✓ Compiled in 152ms
+[00:21:15.173] Server  LOG      ✓ Compiled in 132ms
+[00:22:11.466] Server  LOG      ✓ Compiled in 153ms
+[00:26:44.038] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:55:54.907] Server  LOG      ✓ Compiled in 152ms
+[01:04:36.934] Server  LOG      ✓ Compiled in 155ms
+[01:09:53.138] Server  LOG      ✓ Compiled in 180ms
+[01:09:59.898] Server  LOG      ✓ Compiled in 186ms
+[01:14:29.705] Server  LOG      ✓ Compiled in 115ms
+[01:16:24.474] Server  LOG      ✓ Compiled in 107ms
+[01:16:27.195] Server  LOG      ✓ Compiled in 154ms
+[01:38:38.534] Server  LOG      ✓ Compiled in 127ms
+[01:40:09.885] Server  LOG      ✓ Compiled in 265ms
+[01:40:11.015] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:40:32.104] Server  LOG      ✓ Compiled in 186ms
+[01:40:32.801] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:46:26.355] Server  LOG      ✓ Compiled in 145ms
+[01:46:55.084] Server  LOG      ✓ Compiled in 113ms
+[01:50:23.721] Server  LOG      ✓ Compiled in 184ms
+[01:52:15.700] Server  LOG      ✓ Compiled in 115ms
+[01:52:24.890] Server  LOG      ✓ Compiled in 103ms
+[02:01:09.998] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:09:24.910] Server  LOG      ✓ Compiled in 221ms
+[02:09:38.081] Server  LOG      ✓ Compiled in 214ms
+[02:10:44.710] Server  LOG      ✓ Compiled in 165ms
+[02:12:02.322] Server  LOG      ✓ Compiled in 184ms
+[02:12:09.908] Server  LOG      ✓ Compiled in 188ms
+[02:18:16.676] Server  LOG      ✓ Compiled in 585ms
+[02:18:26.184] Server  LOG      ✓ Compiled in 308ms
+[02:18:29.252] Server  LOG      ✓ Compiled in 180ms
+[02:18:34.064] Server  LOG      ✓ Compiled in 289ms
+[02:18:49.211] Server  LOG      ✓ Compiled in 255ms
+[02:26:56.613] Server  LOG      ✓ Compiled in 340ms
+[02:27:04.146] Server  LOG      ✓ Compiled in 193ms
+[03:00:47.638] Server  LOG      ✓ Compiled in 267ms
+[03:00:50.426] Server  LOG      ✓ Compiled in 226ms
+[03:00:54.941] Server  LOG      ✓ Compiled in 255ms
+[03:00:57.628] Server  LOG      ✓ Compiled in 372ms

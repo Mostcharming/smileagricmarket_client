@@ -1,7 +1,7 @@
 {
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(auth)/signup/page": "app/(auth)/signup/page.js",
-  "/(main)/dashboard/page": "app/(main)/dashboard/page.js",
-  "/(main)/profile/page": "app/(main)/profile/page.js",
-  "/page": "app/page.js"
+  "/(auth)/admin/page": "app/(auth)/admin/page.js",
+  "/(main)/admin/dashboard/page": "app/(main)/admin/dashboard/page.js",
+  "/(main)/admin/farms/page": "app/(main)/admin/farms/page.js",
+  "/(main)/admin/investments/templates/page": "app/(main)/admin/investments/templates/page.js",
+  "/(main)/admin/milestones/page": "app/(main)/admin/milestones/page.js"
 }
