@@ -1,0 +1,695 @@
+Created At: 2026-07-15T11:13:56Z
+Completed At: 2026-07-15T11:13:56Z
+File Path: `file:///c:/Users/dell/Documents/code/SmileAgrimarket/pages/main/invest.tsx`
+Total Lines: 687
+Total Bytes: 29370
+Showing lines 1 to 687
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: "use client";
+2: 
+3: import Link from "next/link";
+4: import { useMemo, useState, useEffect } from "react";
+5: import clsx from "clsx";
+6: import { EyeIcon, FilterIcon, SearchIcon } from "@/components/icons";
+7: import { MainHeader, Select } from "@/components/ui";
+8: import { useGetFarms } from "@/mutation/farms.mutation";
+9: import { useGetFarmCategories, useGetDashboard } from "@/mutation/dashboard.mutation";
+10: import { formatNumberWithCommas } from "@/utils";
+11: import { FarmResponse } from "@/types";
+12: 
+13: // Standard options for select filters
+14: const riskOptions = [
+15:   { label: "Risk Level: All", value: "" },
+16:   { label: "Low Risk", value: "LOW RISK" },
+17:   { label: "Medium Risk", value: "MEDIUM RISK" },
+18:   { label: "High Risk", value: "HIGH RISK" },
+19: ];
+20: 
+21: const durationOptions = [
+22:   { label: "Duration: All", value: "" },
+23:   { label: "Under 6 Months", value: "under_6" },
+24:   { label: "6 - 12 Months", value: "6_12" },
+25:   { label: "Over 12 Months", value: "over_12" },
+26: ];
+27: 
+28: const roiOptions = [
+29:   { label: "ROI: All", value: "" },
+30:   { label: "Under 15%", value: "under_15" },
+31:   { label: "15% - 25%", value: "15_25" },
+32:   { label: "Over 25%", value: "over_25" },
+33: ];
+34: 
+35: const fundingStatusOptions = [
+36:   { label: "Status: All", value: "" },
+37:   { label: "Active", value: "active" },
+38:   { label: "Fully Funded", value: "fully_funded" },
+39: ];
+40: 
+41: const FarmFieldArt = () => (
+42:   <div className="absolute inset-0 overflow-hidden">
+43:     <div className="absolute inset-0 bg-[linear-gradient(180deg,#f2d266_0%,#9cc85a_25%,#5b8f34_52%,#2e541f_100%)]" />
+44:     <div className="absolute inset-0 bg-[repeating-linear-gradient(110deg,rgba(18,58,24,0.78)_0_10px,rgba(92,145,54,0.08)_10px_22px,rgba(18,58,24,0.78)_22px_34px)]" />
+45:     <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(255,232,146,0.5)_0%,rgba(255,232,146,0)_28%)]" />
+46:     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,rgba(10,30,13,0.18)_100%)]" />
+47:   </div>
+48: );
+49: 
+50: const FieldImage = ({ farm }: { farm: any }) => {
+51:   const imageUrl = farm.pictures?.[0] || farm.images?.[0];
+52:   if (imageUrl) {
+53:     return (
+54:       // eslint-disable-next-line @next/next/no-img-element
+55:       <img
+56:         src={imageUrl}
+57:         alt={farm.name}
+58:         className="absolute inset-0 h-full w-full object-cover"
+59:       />
+60:     );
+61:   }
+62:   return <FarmFieldArt />;
+63: };
+64: 
+65: const FieldCard = ({ farm }: { farm: any }) => {
+66:   return (
+67:     <Link
+68:       href={farm.href}
+69:       className="block overflow-hidden rounded-[18px] border border-[#DCE7D1] bg-white shadow-[0_2px_10px_rgba(17,24,39,0.04)] transition-transform hover:-translate-y-0.5"
+70:     >
+71:       <article>
+72:         <div className="relative h-[208px]">
+73:           <FieldImage farm={farm} />
+74:           <div className="absolute left-3 bottom-3 rounded-full bg-[#CC7D4B] px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+75:             {farm.roi}% ROI • {farm.duration} MO
+76:           </div>
+77:           <div className="absolute right-3 top-3 rounded-full bg-white opacity-70 px-2.5 py-1 text-[11px] font-semibold text-[#111811] shadow-sm">
+78:             Verified
+79:           </div>
+80:         </div>
+81: 
+82:         <div className="px-4 pb-4 pt-4">
+83:           <div className="flex items-start justify-between gap-3">
+84:             <div className="min-w-0">
+85:               <h3 className="truncate text-[18px] font-bold leading-tight text-[#1C2420]">{farm.name}</h3>
+86:               <p className="mt-1 text-[13px] text-[#6C756B]">
+87:                 <span>{farm.location}</span>
+88:                 <span className="px-1.5">•</span>
+89:                 <span>{farm.crop}</span>
+90:               </p>
+91:             </div>
+92:             <span className="shrink-0 rounded-full bg-[#EDF4E5] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#72815B]">
+93:               {farm.risk}
+94:             </span>
+95:           </div>
+96: 
+97:           <div className="mt-2 flex items-center justify-between gap-3 text-sm text-[#59625B]">
+98:             <div className="flex items-center gap-2">
+99:               <div className="rounded-full flex items-center justify-center bg-[#EFEDE4] text-[#111811] text-[9px] p-1 font-bold">
+100:                 AO
+101:               </div>
+102:               <span>{farm.manager}</span>
+103:             </div>
+104:             <span className="text-[#6E7A66]">★ 94</span>
+105:           </div>
+106: 
+107:           <div className="mt-4 flex items-center justify-between gap-3 text-[13px] text-[#5B655C]">
+108:             <span className="font-bold text-[#2E3830]">
+109:               {farm.invested} <span className="font-normal text-[#8A938B]">of {farm.total}</span>
+110:             </span>
+111:             <span>{farm.investors}</span>
+112:           </div>
+113: 
+114:           <div className="mt-2 h-2 rounded-full bg-[#E6ECDC]">
+115:             <div className="h-2 rounded-full bg-[#55713B]" style={{ width: `${Math.min(farm.progress, 100)}%` }} />
+116:           </div>
+117: 
+118:           <div className="mt-5 flex items-center justify-between gap-3">
+119:             <div>
+120:               <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#929A92]">Min invest</div>
+121:               <div className="mt-0.5 text-[16px] font-semibold text-[#1F2A21]">{farm.minInvest}</div>
+122:             </div>
+123: 
+124:             <div className="inline-flex items-center gap-2 rounded-full bg-[#1F2E16] px-4 py-2 text-sm font-semibold text-white shadow-[0_6px_14px_rgba(31,46,22,0.18)] transition hover:bg-[#2A3D1D]">
+125:               View details
+126:               <span aria-hidden="true">→</span>
+127:             </div>
+128:           </div>
+129: 
+130:           <div className="mt-4 flex items-center justify-between text-[11px] font-medium uppercase tracking-[0.12em] text-[#9AA29A]">
+131:             <div className="flex items-center gap-2"><EyeIcon size={16} />{farm.inspected}</div>
+132:             <span>{farm.funded}</span>
+133:           </div>
+134:         </div>
+135:       </article>
+136:     </Link>
+137:   );
+138: };
+139: 
+140: const FieldRow = ({ farm }: { farm: any }) => {
+141:   return (
+142:     <Link
+143:       href={farm.href}
+144:       className="block overflow-hidden rounded-[18px] border border-[#DCE7D1] bg-white shadow-[0_2px_10px_rgba(17,24,39,0.04)] transition-transform hover:-translate-y-0.5"
+145:     >
+146:       <article className="flex flex-col md:flex-row items-stretch">
+147:         <div className="relative w-full md:w-[240px] h-[160px] md:h-auto min-h-[160px] shrink-0">
+148:           <FieldImage farm={farm} />
+149:           <div className="absolute left-3 bottom-3 rounded-full bg-[#CC7D4B] px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+150:             {farm.roi}% ROI • {farm.duration} MO
+151:           </div>
+152:           <div className="absolute right-3 top-3 rounded-full bg-white opacity-70 px-2.5 py-1 text-[11px] font-semibold text-[#111811] shadow-sm">
+153:             Verified
+154:           </div>
+155:         </div>
+156: 
+157:         <div className="flex-1 p-5 flex flex-col justify-between gap-4">
+158:           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+159:             <div className="min-w-0">
+160:               <h3 className="text-[20px] font-bold leading-tight text-[#1C2420]">{farm.name}</h3>
+161:               <p className="mt-1 text-[13px] text-[#6C756B]">
+162:                 <span>{farm.location}</span>
+163:                 <span className="px-1.5">•</span>
+164:                 <span>{farm.crop}</span>
+165:               </p>
+166:             </div>
+167:             <div>
+168:               <span className="shrink-0 rounded-full bg-[#EDF4E5] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#72815B]">
+169:                 {farm.risk}
+170:               </span>
+171:             </div>
+172:           </div>
+173: 
+174:           <div className="grid gap-4 sm:grid-cols-3 items-center">
+175:             {/* Progress */}
+176:             <div>
+177:               <div className="flex items-center justify-between text-[12px] text-[#5B655C] mb-1">
+178:                 <span className="font-bold text-[#2E3830]">
+179:                   {farm.invested} <span className="font-normal text-[#8A938B]">of {farm.total}</span>
+180:                 </span>
+181:               </div>
+182:               <div className="h-2 w-full rounded-full bg-[#E6ECDC]">
+183:                 <div className="h-2 rounded-full bg-[#55713B]" style={{ width: `${Math.min(farm.progress, 100)}%` }} />
+184:               </div>
+185:               <div className="mt-1 flex justify-between text-[11px] text-[#9AA29A]">
+186:                 <span>{farm.funded}</span>
+187:                 <span>{farm.investors}</span>
+188:               </div>
+189:             </div>
+190: 
+191:             {/* Min Invest */}
+192:             <div className="sm:text-center">
+193:               <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#929A92]">Min invest</div>
+194:               <div className="mt-0.5 text-[16px] font-semibold text-[#1F2A21]">{farm.minInvest}</div>
+195:             </div>
+196: 
+197:             {/* View Button */}
+198:             <div className="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-3">
+199:               <span className="text-[11px] font-medium uppercase tracking-[0.12em] text-[#9AA29A] flex items-center gap-1.5">
+200:                 <EyeIcon size={16} />
+201:                 {farm.inspected}
+202:               </span>
+203:               <div className="inline-flex items-center whitespace-nowrap gap-2 rounded-full bg-[#1F2E16] px-4 py-2 text-sm font-semibold text-white shadow-[0_6px_14px_rgba(31,46,22,0.18)] transition hover:bg-[#2A3D1D]">
+204:                 View details
+205:                 <span aria-hidden="true">→</span>
+206:               </div>
+207:             </div>
+208:           </div>
+209:         </div>
+210:       </article>
+211:     </Link>
+212:   );
+213: };
+214: 
+215: const SkeletonCard = () => (
+216:   <div className="animate-pulse rounded-[18px] border border-[#DCE7D1] bg-white p-4 shadow-[0_2px_10px_rgba(17,24,39,0.02)]">
+217:     <div className="h-[180px] w-full rounded-xl bg-[#E6ECDC]/60" />
+218:     <div className="mt-4 h-5 w-2/3 rounded bg-[#E6ECDC]/60" />
+219:     <div className="mt-2 h-4 w-1/2 rounded bg-[#E6ECDC]/60" />
+220:     <div className="mt-5 h-8 w-full rounded bg-[#E6ECDC]/60" />
+221:     <div className="mt-3 flex justify-between">
+222:       <div className="h-4 w-1/4 rounded bg-[#E6ECDC]/60" />
+223:       <div className="h-4 w-1/4 rounded bg-[#E6ECDC]/60" />
+224:     </div>
+225:   </div>
+226: );
+227: 
+228: // Map API response to deterministic cards
+229: const getDeterministicFarmDetails = (farm: FarmResponse) => {
+230:   const code = farm.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) + farm.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+231: 
+232:   const roi = 14 + (code % 12); // ROI: 14% to 25%
+233:   const duration = 6 + (code % 13); // Duration: 6 to 18 months
+234:   const riskLevels = ["LOW RISK", "MEDIUM RISK", "HIGH RISK"];
+235:   const risk = riskLevels[code % riskLevels.length];
+236:   const inspectedDays = 1 + (code % 5);
+237:   const totalVal = 5000000 + (code % 16) * 1000000; // Total Goal: 5M to 20M
+238:   const progress = farm.stats?.completionPercentage ?? (35 + (code % 61)); // Progress: 35% to 95%
+239:   const investedVal = Math.round((progress / 100) * totalVal);
+240:   const minInvestVal = 10000 + (code % 10) * 10000; // Min Invest: 10K to 100K
+241: 
+242:   return {
+243:     roi,
+244:     duration,
+245:     risk,
+246:     inspectedDays,
+247:     totalVal,
+248:     progress,
+249:     investedVal,
+250:     minInvestVal,
+251:   };
+252: };
+253: 
+254: const InvestPage = () => {
+255:   // Filters and search states
+256:   const [searchInput, setSearchInput] = useState("");
+257:   const [debouncedSearch, setDebouncedSearch] = useState("");
+258:   const [selectedCategory, setSelectedCategory] = useState("");
+259:   const [selectedRisk, setSelectedRisk] = useState("");
+260:   const [selectedDuration, setSelectedDuration] = useState("");
+261:   const [selectedRoi, setSelectedRoi] = useState("");
+262:   const [selectedLocation, setSelectedLocation] = useState("");
+263:   const [selectedFundingStatus, setSelectedFundingStatus] = useState("");
+264:   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+265: 
+266:   // Debounce search query
+267:   useEffect(() => {
+268:     const handler = setTimeout(() => {
+269:       setDebouncedSearch(searchInput);
+270:     }, 500);
+271:     return () => clearTimeout(handler);
+272:   }, [searchInput]);
+273: 
+274:   // Fetch farm categories
+275:   const { data: categoriesResponse } = useGetFarmCategories();
+276:   // Fetch dashboard stats for total raised / listed
+277:   const { data: dashboardResponse } = useGetDashboard();
+278: 
+279:   // Fetch farms list from API
+280:   const { data: farmsResponse, isLoading: isFarmsLoading } = useGetFarms({
+281:     page: 1,
+282:     limit: 100, // retrieve larger list to allow rich filtering
+283:     search: debouncedSearch || undefined,
+284:     category: selectedCategory || undefined,
+285:   });
+286: 
+287:   // dynamic location list derived from loaded farms
+288:   const locationOptions = useMemo(() => {
+289:     const rawFarms = farmsResponse?.data?.farms ?? [];
+290:     const locSet = new Set<string>();
+291:     rawFarms.forEach((f) => {
+292:       if (f.location) {
+293:         const parts = f.location.split(",");
+294:         const locName = parts[0].trim();
+295:         if (locName) locSet.add(locName);
+296:       }
+297:     });
+298:     return [
+299:       { label: "Location: All", value: "" },
+300:       ...Array.from(locSet).map((loc) => ({
+301:         label: loc,
+302:         value: loc,
+303:       })),
+304:     ];
+305:   }, [farmsResponse]);
+306: 
+307:   const categoryOptions = useMemo(() => {
+308:     const rawCategories = categoriesResponse?.data?.categories ?? [];
+309:     return [
+310:       { label: "Category: All", value: "" },
+311:       ...rawCategories.map((c) => ({
+312:         label: c.name || "Unnamed",
+313:         value: c.id || "",
+314:       })),
+315:     ];
+316:   }, [categoriesResponse]);
+317: 
+318:   // Popular category selectors
+319:   const popularCategoriesList = useMemo(() => {
+320:     const rawCategories = categoriesResponse?.data?.categories ?? [];
+321:     if (rawCategories.length > 0) {
+322:       return rawCategories.slice(0, 5);
+323:     }
+324:     return [
+325:       { id: "cassava", name: "Cassava" },
+326:       { id: "poultry", name: "Poultry" },
+327:       { id: "rice", name: "Rice" },
+328:       { id: "cocoa", name: "Cocoa" },
+329:       { id: "tomato", name: "Greenhouse tomato" },
+330:     ];
+331:   }, [categoriesResponse]);
+332: 
+333:   // Handle active filters badge counting
+334:   const activeFiltersCount = useMemo(() => {
+335:     let count = 0;
+336:     if (selectedCategory) count++;
+337:     if (selectedRisk) count++;
+338:     if (selectedDuration) count++;
+339:     if (selectedRoi) count++;
+340:     if (selectedLocation) count++;
+341:     if (selectedFundingStatus) count++;
+342:     return count;
+343:   }, [selectedCategory, selectedRisk, selectedDuration, selectedRoi, selectedLocation, selectedFundingStatus]);
+344: 
+345:   // Reset filters
+346:   const clearAllFilters = () => {
+347:     setSelectedCategory("");
+348:     setSelectedRisk("");
+349:     setSelectedDuration("");
+350:     setSelectedRoi("");
+351:     setSelectedLocation("");
+352:     setSelectedFundingStatus("");
+353:     setSearchInput("");
+354:     setDebouncedSearch("");
+355:   };
+356: 
+357:   // Stats calculation
+358:   const stats = useMemo(() => {
+359:     const summary = dashboardResponse?.data?.summary;
+360:     const formatAmount = (val?: number) => {
+361:       if (!val) return "₦0";
+362:       if (val >= 1000000000) return `₦${(val / 1000000000).toFixed(1)}B`;
+363:       if (val >= 1000000) return `₦${(val / 1000000).toFixed(1)}M`;
+364:       return `₦${val.toLocaleString("en-NG")}`;
+365:     };
+366:     return [
+367:       {
+368:         value: String(summary?.totalFarmsListed ?? 248),
+369:         label: "active opportunities",
+370:       },
+371:       {
+372:         value: formatAmount(summary?.totalInvestmentReceived ?? 1200000000),
+373:         label: "raised this quarter",
+374:       },
+375:     ];
+376:   }, [dashboardResponse]);
+377: 
+378:   // Filter & map raw api farms
+379:   const filteredFarms = useMemo(() => {
+380:     const rawFarms = farmsResponse?.data?.farms ?? [];
+381:     return rawFarms
+382:       .map((farm) => {
+383:         const details = getDeterministicFarmDetails(farm);
+384:         return {
+385:           id: farm.id,
+386:           href: `/invest/${farm.id}`,
+387:           name: farm.name,
+388:           location: farm.location || "Nigeria",
+389:           crop: farm.Category?.name || "Cassava",
+390:           manager: "Smile Agri",
+391:           risk: details.risk,
+392:           invested: `₦${formatNumberWithCommas(details.investedVal)}`,
+393:           total: `₦${formatNumberWithCommas(details.totalVal)}`,
+394:           investors: `${Math.round(details.progress * 1.8)} investors`,
+395:           minInvest: `₦${formatNumberWithCommas(details.minInvestVal)}`,
+396:           inspected: `Inspected ${details.inspectedDays} days ago`,
+397:           funded: `${details.progress}% funded`,
+398:           progress: details.progress,
+399:           // attributes for filters
+400:           roi: details.roi,
+401:           duration: details.duration,
+402:           rawLocation: farm.location,
+403:           rawCategory: farm.Category?.id,
+404:           pictures: (farm as any).pictures || [],
+405:         };
+406:       })
+407:       .filter((farm) => {
+408:         // Category filtering (handled by API but kept here for double safety/client-side fallback)
+409:         if (selectedCategory && farm.rawCategory !== selectedCategory) {
+410:           return false;
+411:         }
+412:         // Risk Level filter
+413:         if (selectedRisk && farm.risk !== selectedRisk) {
+414:           return false;
+415:         }
+416:         // Duration filter
+417:         if (selectedDuration) {
+418:           const d = farm.duration;
+419:           if (selectedDuration === "under_6" && d >= 6) return false;
+420:           if (selectedDuration === "6_12" && (d < 6 || d > 12)) return false;
+421:           if (selectedDuration === "over_12" && d <= 12) return false;
+422:         }
+423:         // ROI filter
+424:         if (selectedRoi) {
+425:           const r = farm.roi;
+426:           if (selectedRoi === "under_15" && r >= 15) return false;
+427:           if (selectedRoi === "15_25" && (r < 15 || r > 25)) return false;
+428:           if (selectedRoi === "over_25" && r <= 25) return false;
+429:         }
+430:         // Location filter
+431:         if (selectedLocation && !farm.rawLocation?.toLowerCase().includes(selectedLocation.toLowerCase())) {
+432:           return false;
+433:         }
+434:         // Funding status filter
+435:         if (selectedFundingStatus) {
+436:           const p = farm.progress;
+437:           if (selectedFundingStatus === "active" && p >= 100) return false;
+438:           if (selectedFundingStatus === "fully_funded" && p < 100) return false;
+439:         }
+440:         return true;
+441:       });
+442:   }, [farmsResponse, selectedCategory, selectedRisk, selectedDuration, selectedRoi, selectedLocation, selectedFundingStatus]);
+443: 
+444:   return (
+445:     <div className="min-h-screen bg-[#EEF8E7]">
+446:       <MainHeader activeTab="invest" />
+447: 
+448:       <main className="mx-auto w-full max-w-7xl px-4 pb-14 pt-6 sm:px-6 lg:px-8">
+449:         <div className="inline-flex items-center gap-2 rounded-full border border-[#DCE7D1] bg-white px-3 py-1 text-[11px] font-medium text-[#657162] shadow-[0_2px_6px_rgba(17,24,39,0.04)]">
+450:           <span className="h-1.5 w-1.5 rounded-full bg-[#1E2E16]" />
+451:           <span>{stats[0].value} active opportunities</span>
+452:           <span>•</span>
+453:           <span>{stats[1].value} raised this quarter</span>
+454:         </div>
+455: 
+456:         <section className="max-w-4xl pb-6 pt-5 sm:pt-7">
+457:           <h1 className="max-w-3xl text-[42px] font-bold leading-[1] tracking-[-0.04em] text-[#1F251E] sm:text-[60px]">
+458:             Invest in verified <br className="hidden sm:block" /> <span className="text-[#3D6A2A]">agricultural</span> opportunities.
+459:           </h1>
+460:           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-[#6F776F] sm:text-[18px]">
+461:             Discover vetted farms, track performance in real time, and earn returns while supporting food production
+462:             across Nigeria.
+463:           </p>
+464: 
+465:           <div className="mt-6 flex max-w-3xl items-stretch rounded-[22px] border border-[#D8E4CD] bg-white p-2 shadow-[0_8px_20px_rgba(17,24,39,0.04)]">
+466:             <div className="flex min-w-0 flex-1 items-center gap-3 px-3">
+467:               <SearchIcon size={20} color="#98A19A" />
+468:               <input
+469:                 type="text"
+470:                 value={searchInput}
+471:                 onChange={(e) => setSearchInput(e.target.value)}
+472:                 onKeyDown={(e) => {
+473:                   if (e.key === "Enter") {
+474:                     setDebouncedSearch(searchInput);
+475:                   }
+476:                 }}
+477:                 placeholder="Search by farm name, crop, farmer, or location..."
+478:                 className="w-full border-0 bg-transparent text-[14px] text-[#334043] outline-none placeholder:text-[#9CA3AF]"
+479:               />
+480:             </div>
+481:             <button
+482:               type="button"
+483:               onClick={() => setDebouncedSearch(searchInput)}
+484:               className="rounded-[16px] bg-[#23491D] cursor-pointer px-6 py-3 text-[14px] font-semibold text-white shadow-[0_6px_14px_rgba(35,73,29,0.22)] hover:bg-[#1A3716] transition-colors"
+485:             >
+486:               Search
+487:             </button>
+488:           </div>
+489: 
+490:           <div className="mt-5 flex flex-wrap items-center gap-2 text-[13px] text-[#7C8578]">
+491:             <span className="mr-1 font-medium">Popular categories:</span>
+492:             {popularCategoriesList.map((cat) => {
+493:               const isCatActive = selectedCategory === cat.id;
+494:               return (
+495:                 <button
+496:                   key={cat.id}
+497:                   type="button"
+498:                   onClick={() => setSelectedCategory(isCatActive ? "" : cat.id)}
+499:                   className={clsx(
+500:                     "rounded-full border px-3 py-1.5 text-[12px] font-medium transition-all cursor-pointer",
+501:                     isCatActive
+502:                       ? "border-[#23491D] bg-[#23491D] text-white shadow-sm"
+503:                       : "border-[#D7E3CC] bg-[#F7FAF4] text-[#52614E] hover:bg-[#E7F0DE]"
+504:                   )}
+505:                 >
+506:                   {cat.name}
+507:                 </button>
+508:               );
+509:             })}
+510:           </div>
+511:         </section>
+512: 
+513:         <section className="flex flex-col gap-4 rounded-lg border border-[#D5E0CB] bg-[#DFE8D6] px-4 py-3 shadow-[0_2px_8px_rgba(17,24,39,0.03)] lg:flex-row lg:items-center lg:justify-between">
+514:           <div className="flex flex-wrap items-center gap-2">
+515:             <button
+516:               type="button"
+517:               onClick={clearAllFilters}
+518:               className="inline-flex items-center gap-2 rounded-lg border border-[#9FAE93] bg-[#D9E3CD] px-3 py-2 text-[13px] font-semibold text-[#263126] hover:bg-[#CDD9C1] transition-colors cursor-pointer"
+519:             >
+520:               <FilterIcon size={16} color="currentColor" />
+521:               {activeFiltersCount > 0 ? "Clear Filters" : "Filters"}
+522:               {activeFiltersCount > 0 && (
+523:                 <span className="rounded-full bg-[#314C28] px-1.5 py-0.5 text-[10px] font-bold text-white">
+524:                   {activeFiltersCount}
+525:                 </span>
+526:               )}
+527:             </button>
+528:           </div>
+529: 
+530:           <div className="flex flex-wrap items-center gap-2 lg:flex-1 lg:justify-center">
+531:             {/* Category Select */}
+532:             <Select
+533:               variant="v2"
+534:               className="!py-1.5 !px-3 h-auto text-[12px] border-[#D6DECD] bg-white text-[#47524B] shadow-[0_2px_5px_rgba(17,24,39,0.03)] rounded-full outline-none min-w-[130px]"
+535:               placeholder="Category: All"
+536:               options={categoryOptions}
+537:               value={selectedCategory}
+538:               onChange={(e) => setSelectedCategory(e.target.value)}
+539:             />
+540: 
+541:             {/* Risk Select */}
+542:             <Select
+543:               variant="v2"
+544:               className="!py-1.5 !px-3 h-auto text-[12px] border-[#D6DECD] bg-white text-[#47524B] shadow-[0_2px_5px_rgba(17,24,39,0.03)] rounded-full outline-none min-w-[130px]"
+545:               placeholder="Risk: All"
+546:               options={riskOptions}
+547:               value={selectedRisk}
+548:               onChange={(e) => setSelectedRisk(e.target.value)}
+549:             />
+550: 
+551:             {/* Duration Select */}
+552:             <Select
+553:               variant="v2"
+554:               className="!py-1.5 !px-3 h-auto text-[12px] border-[#D6DECD] bg-white text-[#47524B] shadow-[0_2px_5px_rgba(17,24,39,0.03)] rounded-full outline-none min-w-[130px]"
+555:               placeholder="Duration: All"
+556:               options={durationOptions}
+557:               value={selectedDuration}
+558:               onChange={(e) => setSelectedDuration(e.target.value)}
+559:             />
+560: 
+561:             {/* ROI Select */}
+562:             <Select
+563:               variant="v2"
+564:               className="!py-1.5 !px-3 h-auto text-[12px] border-[#D6DECD] bg-white text-[#47524B] shadow-[0_2px_5px_rgba(17,24,39,0.03)] rounded-full outline-none min-w-[130px]"
+565:               placeholder="ROI: All"
+566:               options={roiOptions}
+567:               value={selectedRoi}
+568:               onChange={(e) => setSelectedRoi(e.target.value)}
+569:             />
+570: 
+571:             {/* Location Select */}
+572:             <Select
+573:               variant="v2"
+574:               className="!py-1.5 !px-3 h-auto text-[12px] border-[#D6DECD] bg-white text-[#47524B] shadow-[0_2px_5px_rgba(17,24,39,0.03)] rounded-full outline-none min-w-[130px]"
+575:               placeholder="Location: All"
+576:               options={locationOptions}
+577:               value={selectedLocation}
+578:               onChange={(e) => setSelectedLocation(e.target.value)}
+579:             />
+580: 
+581:             {/* Funding Status Select */}
+582:             <Select
+583:               variant="v2"
+584:               className="!py-1.5 !px-3 h-auto text-[12px] border-[#D6DECD] bg-white text-[#47524B] shadow-[0_2px_5px_rgba(17,24,39,0.03)] rounded-full outline-none min-w-[130px]"
+585:               placeholder="Status: All"
+586:               options={fundingStatusOptions}
+587:               value={selectedFundingStatus}
+588:               onChange={(e) => setSelectedFundingStatus(e.target.value)}
+589:             />
+590:           </div>
+591: 
+592:           <div className="flex items-center gap-2 self-start lg:self-auto shrink-0">
+593:             <button
+594:               type="button"
+595:               onClick={() => setViewMode("grid")}
+596:               className={clsx(
+597:                 "flex h-8 w-8 items-center justify-center rounded-full transition-colors cursor-pointer",
+598:                 viewMode === "grid"
+599:                   ? "bg-[#2F5530] text-white"
+600:                   : "bg-white text-[#7B8578] shadow-[0_2px_5px_rgba(17,24,39,0.04)] hover:bg-[#E5EFDC]"
+601:               )}
+602:               aria-label="Grid view"
+603:             >
+604:               <span className="grid grid-cols-2 gap-0.5">
+605:                 <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
+606:                 <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
+607:                 <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
+608:                 <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
+609:               </span>
+610:             </button>
+611:             <button
+612:               type="button"
+613:               onClick={() => setViewMode("list")}
+614:               className={clsx(
+615:                 "flex h-8 w-8 items-center justify-center rounded-full transition-colors cursor-pointer",
+616:                 viewMode === "list"
+617:                   ? "bg-[#2F5530] text-white"
+618:                   : "bg-white text-[#7B8578] shadow-[0_2px_5px_rgba(17,24,39,0.04)] hover:bg-[#E5EFDC]"
+619:               )}
+620:               aria-label="List view"
+621:             >
+622:               <span className="flex flex-col gap-1">
+623:                 <span className="h-1 w-3 rounded-full bg-current" />
+624:                 <span className="h-1 w-3 rounded-full bg-current" />
+625:                 <span className="h-1 w-3 rounded-full bg-current" />
+626:               </span>
+627:             </button>
+628:           </div>
+629:         </section>
+630: 
+631:         <section className="mt-8">
+632:           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+633:             <div>
+634:               <h2 className="text-[22px] font-bold text-[#1F261F]">Farms</h2>
+635:               <p className="mt-1 text-[13px] text-[#7B8379]">
+636:                 {filteredFarms.length} verified {filteredFarms.length === 1 ? "farm" : "farms"} · updated just now
+637:               </p>
+638:             </div>
+639:             <p className="text-[13px] text-[#9AA099]">
+640:               Showing 1-{filteredFarms.length} of {farmsResponse?.data?.pagination?.total ?? filteredFarms.length}
+641:             </p>
+642:           </div>
+643: 
+644:           {isFarmsLoading ? (
+645:             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+646:               {Array.from({ length: 6 }).map((_, i) => (
+647:                 <SkeletonCard key={i} />
+648:               ))}
+649:             </div>
+650:           ) : filteredFarms.length === 0 ? (
+651:             <div className="flex min-h-[300px] flex-col items-center justify-center px-6 py-12 text-center rounded-[18px] border border-[#DCE7D1] bg-white shadow-[0_2px_10px_rgba(17,24,39,0.02)]">
+652:               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#EFEDE4]">
+653:                 <SearchIcon size={24} color="#5B655C" />
+654:               </div>
+655:               <h3 className="text-[18px] font-bold text-[#1C2420]">No opportunities found</h3>
+656:               <p className="mt-2 max-w-sm text-sm text-[#6C756B]">
+657:                 We couldn&apos;t find any active farm opportunities matching your current filters. Try resetting them or adjusting your search.
+658:               </p>
+659:               <button
+660:                 type="button"
+661:                 onClick={clearAllFilters}
+662:                 className="mt-5 rounded-full bg-[#1F2E16] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#2A3D1D] cursor-pointer"
+663:               >
+664:                 Clear all filters
+665:               </button>
+666:             </div>
+667:           ) : viewMode === "grid" ? (
+668:             <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+669:               {filteredFarms.map((farm, index) => (
+670:                 <FieldCard key={`${farm.id}-${index}`} farm={farm} />
+671:               ))}
+672:             </div>
+673:           ) : (
+674:             <div className="flex flex-col gap-4">
+675:               {filteredFarms.map((farm, index) => (
+676:                 <FieldRow key={`${farm.id}-${index}`} farm={farm} />
+677:               ))}
+678:             </div>
+679:           )}
+680:         </section>
+681:       </main>
+682:     </div>
+683:   );
+684: };
+685: 
+686: export default InvestPage;
+687: 
+The above content shows the entire, complete file contents of the requested file.

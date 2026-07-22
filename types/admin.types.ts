@@ -12,6 +12,8 @@ export interface UsersApiResponse {
     kycSubmittedAt?: string;
     kycVerifiedAt?: string;
     createdAt: string;
+    profileImageUrl?: string;
+    nin?: string;
 };
 
 export interface UsersPagination {

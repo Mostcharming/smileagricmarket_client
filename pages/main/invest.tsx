@@ -442,7 +442,7 @@ const InvestPage = () => {
   }, [farmsResponse, selectedCategory, selectedRisk, selectedDuration, selectedRoi, selectedLocation, selectedFundingStatus]);
 
   return (
-    <div className="min-h-screen bg-[#EEF8E7]">
+    <div className="min-h-screen bg-[#F4F7F6]">
       <MainHeader activeTab="invest" />
 
       <main className="mx-auto w-full max-w-7xl px-4 pb-14 pt-6 sm:px-6 lg:px-8">
