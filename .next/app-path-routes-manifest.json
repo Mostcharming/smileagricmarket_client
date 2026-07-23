@@ -19,6 +19,7 @@
   "/(main)/invest/[farmId]/page": "/invest/[farmId]",
   "/(main)/invest/page": "/invest",
   "/(main)/my-farms/page": "/my-farms",
+  "/(main)/my-portfolio/page": "/my-portfolio",
   "/(main)/profile/page": "/profile",
   "/(main)/settings/page": "/settings",
   "/_global-error/page": "/_global-error",

@@ -1,0 +1,9 @@
+__turbopack_load_page_chunks__("/main/admin/investments/templates", [
+  "static/chunks/3c69260598da1247.js",
+  "static/chunks/cd69d2d650276d8a.js",
+  "static/chunks/e144b7fa3b8c9384.js",
+  "static/chunks/7e7213b879932539.js",
+  "static/chunks/00eeef79f9385448.js",
+  "static/chunks/20725b5693f0b083.js",
+  "static/chunks/turbopack-bcf046afa687aae9.js"
+])

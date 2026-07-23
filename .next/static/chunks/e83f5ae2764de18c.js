@@ -1,0 +1,8 @@
+__turbopack_load_page_chunks__("/main/admin/farms", [
+  "static/chunks/8a422abb6f1eb6e0.js",
+  "static/chunks/3c69260598da1247.js",
+  "static/chunks/92516b12ed9db5b8.js",
+  "static/chunks/7e7213b879932539.js",
+  "static/chunks/cd69d2d650276d8a.js",
+  "static/chunks/turbopack-90720cf8c50720ad.js"
+])

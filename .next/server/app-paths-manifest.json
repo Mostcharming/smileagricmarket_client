@@ -19,6 +19,7 @@
   "/(main)/invest/[farmId]/page": "app/(main)/invest/[farmId]/page.js",
   "/(main)/invest/page": "app/(main)/invest/page.js",
   "/(main)/my-farms/page": "app/(main)/my-farms/page.js",
+  "/(main)/my-portfolio/page": "app/(main)/my-portfolio/page.js",
   "/(main)/profile/page": "app/(main)/profile/page.js",
   "/(main)/settings/page": "app/(main)/settings/page.js",
   "/_global-error/page": "app/_global-error/page.js",

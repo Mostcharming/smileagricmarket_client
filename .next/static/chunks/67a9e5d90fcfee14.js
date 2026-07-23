@@ -1,0 +1,9 @@
+__turbopack_load_page_chunks__("/main/admin/milestones", [
+  "static/chunks/f9b38ce6960ae79b.js",
+  "static/chunks/cd69d2d650276d8a.js",
+  "static/chunks/3c69260598da1247.js",
+  "static/chunks/20725b5693f0b083.js",
+  "static/chunks/00eeef79f9385448.js",
+  "static/chunks/7e7213b879932539.js",
+  "static/chunks/turbopack-62b1355b9503f6ab.js"
+])

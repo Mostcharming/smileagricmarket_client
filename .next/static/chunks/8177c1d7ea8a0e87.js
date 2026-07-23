@@ -1,0 +1,9 @@
+__turbopack_load_page_chunks__("/auth/resetPassword", [
+  "static/chunks/1099e2a29e8c8018.js",
+  "static/chunks/3c69260598da1247.js",
+  "static/chunks/229cbc49424def82.js",
+  "static/chunks/e44e072643e34bf1.js",
+  "static/chunks/cd69d2d650276d8a.js",
+  "static/chunks/7e7213b879932539.js",
+  "static/chunks/turbopack-85dbd9d3b62f1a96.js"
+])

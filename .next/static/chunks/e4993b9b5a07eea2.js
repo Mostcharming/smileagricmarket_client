@@ -1,0 +1,8 @@
+__turbopack_load_page_chunks__("/main/invest", [
+  "static/chunks/c08b2d97c33fcc5d.js",
+  "static/chunks/3c69260598da1247.js",
+  "static/chunks/7e7213b879932539.js",
+  "static/chunks/26fcca3fded0d68e.js",
+  "static/chunks/cd69d2d650276d8a.js",
+  "static/chunks/turbopack-1050326840828574.js"
+])

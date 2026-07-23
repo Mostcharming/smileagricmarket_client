@@ -237,6 +237,12 @@
       "namedRegex": "^/main/myFarms(?:/)?$"
     },
     {
+      "page": "/main/portfolio",
+      "regex": "^/main/portfolio(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/main/portfolio(?:/)?$"
+    },
+    {
       "page": "/main/profile",
       "regex": "^/main/profile(?:/)?$",
       "routeKeys": {},
@@ -253,6 +259,12 @@
       "regex": "^/my\\-farms(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/my\\-farms(?:/)?$"
+    },
+    {
+      "page": "/my-portfolio",
+      "regex": "^/my\\-portfolio(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/my\\-portfolio(?:/)?$"
     },
     {
       "page": "/onboarding",

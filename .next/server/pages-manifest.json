@@ -17,6 +17,7 @@
   "/main/dashboard": "pages/main/dashboard.html",
   "/main/invest": "pages/main/invest.html",
   "/main/myFarms": "pages/main/myFarms.html",
+  "/main/portfolio": "pages/main/portfolio.html",
   "/main/profile": "pages/main/profile.html",
   "/main/settings": "pages/main/settings.html",
   "/404": "pages/404.html"
