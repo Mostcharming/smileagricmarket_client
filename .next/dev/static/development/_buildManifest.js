@@ -1,4 +1,7 @@
 self.__BUILD_MANIFEST = {
+  "/_error": [
+    "static/chunks/pages/_error.js"
+  ],
   "__rewrites": {
     "afterFiles": [],
     "beforeFiles": [],
@@ -22,6 +25,7 @@ self.__BUILD_MANIFEST = {
     "/main/dashboard",
     "/main/invest",
     "/main/myFarms",
+    "/main/portfolio",
     "/main/profile",
     "/main/settings"
   ]

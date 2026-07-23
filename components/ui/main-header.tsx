@@ -6,7 +6,7 @@ import { BellIcon, LogoIcon } from "@/components/icons";
 import ProfileMenu from "./profile-menu";
 
 type MainHeaderProps = {
-  activeTab?: "dashboard" | "my-farms" | "invest";
+  activeTab?: "dashboard" | "my-farms" | "invest" | "my-portfolio";
 };
 
 const MainHeader = ({ activeTab }: MainHeaderProps) => {
@@ -37,11 +37,14 @@ const MainHeader = ({ activeTab }: MainHeaderProps) => {
           <Link href="/dashboard" className={tabClassName("dashboard")} aria-current={activeTab === "dashboard" ? "page" : undefined}>
             <div className="flex items-center gap-1">Dashboard</div>
           </Link>
+          <Link href="/invest" className={tabClassName("invest")} aria-current={activeTab === "invest" ? "page" : undefined}>
+            Invest
+          </Link>
           <Link href="/my-farms" className={tabClassName("my-farms")} aria-current={activeTab === "my-farms" ? "page" : undefined}>
             My Farms
           </Link>
-          <Link href="/invest" className={tabClassName("invest")} aria-current={activeTab === "invest" ? "page" : undefined}>
-            Invest
+          <Link href="/my-portfolio" className={tabClassName("my-portfolio")} aria-current={activeTab === "my-portfolio" ? "page" : undefined}>
+            My Portfolio
           </Link>
         </nav>
 
@@ -91,6 +94,14 @@ const MainHeader = ({ activeTab }: MainHeaderProps) => {
               Dashboard
             </Link>
             <Link
+              href="/invest"
+              onClick={() => setIsOpen(false)}
+              className={tabClassName("invest", true)}
+              aria-current={activeTab === "invest" ? "page" : undefined}
+            >
+              Invest
+            </Link>
+            <Link
               href="/my-farms"
               onClick={() => setIsOpen(false)}
               className={tabClassName("my-farms", true)}
@@ -99,12 +110,12 @@ const MainHeader = ({ activeTab }: MainHeaderProps) => {
               My Farms
             </Link>
             <Link
-              href="/invest"
+              href="/my-portfolio"
               onClick={() => setIsOpen(false)}
-              className={tabClassName("invest", true)}
-              aria-current={activeTab === "invest" ? "page" : undefined}
+              className={tabClassName("my-portfolio", true)}
+              aria-current={activeTab === "my-portfolio" ? "page" : undefined}
             >
-              Invest
+              My Portfolio
             </Link>
           </nav>
         </div>

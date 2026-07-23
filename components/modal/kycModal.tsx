@@ -87,7 +87,6 @@ const KycModal = ({
                   : ""
               }
               onChange={(e) => setIdentification(e.target.value as string)}
-              placeholder="Means of Identification"
               label="Means of Identification"
               className="w-full mb-4"
             />

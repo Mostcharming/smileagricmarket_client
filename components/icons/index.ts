@@ -31,3 +31,6 @@ export { AlertTriangleIcon } from "./alertTriangle";
 export { WalletIcon } from "./wallet";
 export { LayersIcon } from "./layers";
 export { InvestmentIcon } from "./investment";
+export { CalendarIcon } from "./calendar";
+export { PercentIcon } from "./percent";
+export { FileTextIcon } from "./fileText";

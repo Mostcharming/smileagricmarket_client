@@ -1,78 +1,1063 @@
-[00:00:04.302] Server  LOG      ✓ Ready in 3.2s
-[00:00:28.391] Server  LOG      ○ Compiling /admin/investments/templates ...
-[00:00:33.430] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:36.912] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:43.797] Server  LOG      ✓ Compiled in 169ms
-[00:01:54.119] Server  LOG      ✓ Compiled in 188ms
-[00:02:00.113] Server  LOG      ✓ Compiled in 125ms
-[00:02:38.939] Server  LOG      ✓ Compiled in 167ms
-[00:06:53.824] Server  LOG      ✓ Compiled in 130ms
-[00:07:16.390] Server  LOG      ✓ Compiled in 171ms
-[00:07:21.286] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:07:42.983] Server  LOG      ✓ Compiled in 214ms
-[00:08:02.713] Server  LOG      ✓ Compiled in 132ms
-[00:09:58.156] Server  LOG      ✓ Compiled in 119ms
-[00:10:07.444] Server  LOG      ✓ Compiled in 107ms
-[00:13:04.427] Server  LOG      ✓ Compiled in 834ms
-[00:13:46.217] Server  LOG      ✓ Compiled in 223ms
-[00:15:25.160] Server  LOG      ✓ Compiled in 112ms
-[00:15:25.300] Browser ERROR   Received `%s` for a non-boolean attribute `%s`.
+[00:00:03.976] Server  LOG      ✓ Ready in 2.8s
+[00:01:37.399] Server  LOG      ○ Compiling /my-portfolio ...
+[00:01:50.735] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:56.642] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:34.451] Server  LOG      ✓ Compiled in 121ms
+[00:05:50.447] Server  LOG      ✓ Compiled in 126ms
+[00:05:50.584] Browser ERROR   ./pages/main/portfolio.tsx:193:68
+Parsing ecmascript source code failed
+  191 |
+  192 |   return (
+> 193 |     <div className="min-h-screen w-full bg-[import Link from "next/link";
+      |                                                                    ^^^^
+  194 | ]">
+  195 |       <MainHeader activeTab="my-portfolio" />
+  196 |
 
-If you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}. true clas clas true clas
-[00:15:29.826] Server  LOG      ✓ Compiled in 213ms
-[00:15:32.430] Server  LOG      ✓ Compiled in 147ms
-[00:16:08.697] Server  LOG      ✓ Compiled in 113ms
-[00:16:29.304] Server  LOG      ✓ Compiled in 115ms
-[00:16:29.428] Browser ERROR   Received `%s` for a non-boolean attribute `%s`.
+Expected '>', got 'link'
 
-If you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}. true va va true va
-[00:16:31.882] Server  LOG      ✓ Compiled in 113ms
-[00:16:35.051] Server  LOG      ✓ Compiled in 103ms
-[00:17:50.648] Server  LOG      ✓ Compiled in 108ms
-[00:17:53.718] Server  LOG      ✓ Compiled in 100ms
-[00:18:02.256] Server  LOG      ✓ Compiled in 103ms
-[00:18:07.194] Server  LOG      ✓ Compiled in 126ms
-[00:18:19.263] Server  LOG      ✓ Compiled in 97ms
-[00:18:21.601] Server  LOG      ✓ Compiled in 134ms
-[00:18:39.234] Server  LOG      ✓ Compiled in 113ms
-[00:18:41.432] Server  LOG      ✓ Compiled in 132ms
-[00:18:44.024] Server  LOG      ✓ Compiled in 155ms
-[00:20:53.847] Server  LOG      ✓ Compiled in 119ms
-[00:21:00.907] Server  LOG      ✓ Compiled in 152ms
-[00:21:15.173] Server  LOG      ✓ Compiled in 132ms
-[00:22:11.466] Server  LOG      ✓ Compiled in 153ms
-[00:26:44.038] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:55:54.907] Server  LOG      ✓ Compiled in 152ms
-[01:04:36.934] Server  LOG      ✓ Compiled in 155ms
-[01:09:53.138] Server  LOG      ✓ Compiled in 180ms
-[01:09:59.898] Server  LOG      ✓ Compiled in 186ms
-[01:14:29.705] Server  LOG      ✓ Compiled in 115ms
-[01:16:24.474] Server  LOG      ✓ Compiled in 107ms
-[01:16:27.195] Server  LOG      ✓ Compiled in 154ms
-[01:38:38.534] Server  LOG      ✓ Compiled in 127ms
-[01:40:09.885] Server  LOG      ✓ Compiled in 265ms
-[01:40:11.015] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:40:32.104] Server  LOG      ✓ Compiled in 186ms
-[01:40:32.801] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:46:26.355] Server  LOG      ✓ Compiled in 145ms
-[01:46:55.084] Server  LOG      ✓ Compiled in 113ms
-[01:50:23.721] Server  LOG      ✓ Compiled in 184ms
-[01:52:15.700] Server  LOG      ✓ Compiled in 115ms
-[01:52:24.890] Server  LOG      ✓ Compiled in 103ms
-[02:01:09.998] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:09:24.910] Server  LOG      ✓ Compiled in 221ms
-[02:09:38.081] Server  LOG      ✓ Compiled in 214ms
-[02:10:44.710] Server  LOG      ✓ Compiled in 165ms
-[02:12:02.322] Server  LOG      ✓ Compiled in 184ms
-[02:12:09.908] Server  LOG      ✓ Compiled in 188ms
-[02:18:16.676] Server  LOG      ✓ Compiled in 585ms
-[02:18:26.184] Server  LOG      ✓ Compiled in 308ms
-[02:18:29.252] Server  LOG      ✓ Compiled in 180ms
-[02:18:34.064] Server  LOG      ✓ Compiled in 289ms
-[02:18:49.211] Server  LOG      ✓ Compiled in 255ms
-[02:26:56.613] Server  LOG      ✓ Compiled in 340ms
-[02:27:04.146] Server  LOG      ✓ Compiled in 193ms
-[03:00:47.638] Server  LOG      ✓ Compiled in 267ms
-[03:00:50.426] Server  LOG      ✓ Compiled in 226ms
-[03:00:54.941] Server  LOG      ✓ Compiled in 255ms
-[03:00:57.628] Server  LOG      ✓ Compiled in 372ms
+Import trace:
+  Server Component:
+    ./pages/main/portfolio.tsx
+    ./app/(main)/my-portfolio/page.tsx
+[00:06:08.075] Server  LOG      ✓ Compiled in 207ms
+[00:06:49.221] Server  LOG      ✓ Compiled in 155ms
+[00:07:02.395] Server  LOG      ✓ Compiled in 110ms
+[00:07:06.336] Server  LOG      ✓ Compiled in 118ms
+[00:07:48.831] Server  LOG      ✓ Compiled in 221ms
+[00:10:01.466] Server  LOG      ✓ Compiled in 137ms
+[00:15:01.868] Server  LOG      ✓ Compiled in 146ms
+[00:55:50.902] Server  LOG      ✓ Compiled in 178ms
+[00:56:10.061] Server  LOG      ✓ Compiled in 369ms
+[00:56:35.525] Server  LOG      ✓ Compiled in 234ms
+[01:02:28.799] Server  LOG      ✓ Compiled in 474ms
+[01:02:30.131] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:02:30.604] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:82:7
+Ecmascript file had an error
+  80 | );
+  81 |
+> 82 | const CalendarIcon = ({
+     |       ^^^^^^^^^^^^
+  83 |   className,
+  84 |   color = "currentColor",
+  85 |   size = 24,
+
+the name `CalendarIcon` is defined multiple times
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:02:30.604] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/invest/f1..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en">
+                          <body
+-                           style={{overflow-x:"hidden",overflow-y:"hidden"}}
+                          >
+                  ...
+
+[01:02:30.778] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:82:7
+Ecmascript file had an error
+  80 | );
+  81 |
+> 82 | const CalendarIcon = ({
+     |       ^^^^^^^^^^^^
+  83 |   className,
+  84 |   color = "currentColor",
+  85 |   size = 24,
+
+the name `CalendarIcon` is defined multiple times
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:02:32.969] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:82:7
+Ecmascript file had an error
+  80 | );
+  81 |
+> 82 | const CalendarIcon = ({
+     |       ^^^^^^^^^^^^
+  83 |   className,
+  84 |   color = "currentColor",
+  85 |   size = 24,
+
+the name `CalendarIcon` is defined multiple times
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:02:39.215] Server  LOG      ✓ Compiled in 227ms
+[01:03:39.245] Server  LOG      ✓ Compiled in 246ms
+[01:03:41.810] Server  LOG      ✓ Compiled in 219ms
+[01:03:42.006] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:1399:17
+Parsing ecmascript source code failed
+  1397 |                 {/* Investment Start & End Dates Section */}
+  1398 |                 <
+> 1399 |                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
+       |                 ^
+  1400 |                   <div className="flex items-center gap-3.5 rounded-[18px] border border-[#E8ECE1] bg-white p-5 shadow-[0_10px_24px_rgba(17,24,39,0.02)]">
+  1401 |                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F4F7F6] text-[#93A08D]">
+  1402 |                       <CalendarIcon className="h-5 w-5" color="#80916E" strokeWidth={2} />
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:03:43.617] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:1399:17
+Parsing ecmascript source code failed
+  1397 |                 {/* Investment Start & End Dates Section */}
+  1398 |                 <div
+> 1399 |                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
+       |                 ^
+  1400 |                   <div className="flex items-center gap-3.5 rounded-[18px] border border-[#E8ECE1] bg-white p-5 shadow-[0_10px_24px_rgba(17,24,39,0.02)]">
+  1401 |                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F4F7F6] text-[#93A08D]">
+  1402 |                       <CalendarIcon className="h-5 w-5" color="#80916E" strokeWidth={2} />
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:03:44.655] Server  LOG      ✓ Compiled in 291ms
+[01:03:49.229] Browser ERROR   Invalid DOM property `%s`. Did you mean `%s`? class className
+[01:03:49.934] Server  LOG      ✓ Compiled in 666ms
+[01:03:51.580] Server  LOG      ✓ Compiled in 364ms
+[01:03:52.999] Server  LOG      ✓ Compiled in 282ms
+[01:04:04.870] Server  LOG      ✓ Compiled in 265ms
+[01:04:15.988] Server  LOG      ✓ Compiled in 186ms
+[01:04:33.932] Server  LOG      ✓ Compiled in 420ms
+[01:04:37.694] Server  LOG      ✓ Compiled in 397ms
+[01:04:42.182] Server  LOG      ✓ Compiled in 236ms
+[01:04:43.313] Server  LOG      ✓ Compiled in 216ms
+[01:04:55.512] Server  LOG      ✓ Compiled in 183ms
+[01:04:56.315] Server  LOG      ✓ Compiled in 268ms
+[01:04:59.085] Server  LOG      ✓ Compiled in 222ms
+[01:05:40.840] Server  LOG      ✓ Compiled in 313ms
+[01:05:43.493] Server  LOG      ✓ Compiled in 233ms
+[01:05:44.482] Browser ERROR   Received `%s` for a non-boolean attribute `%s`.
+
+If you want to write it to the DOM, pass a string instead: %s="%s" or %s={value.toString()}. true cl cl true cl
+[01:05:44.902] Server  LOG      ✓ Compiled in 256ms
+[01:05:47.479] Server  LOG      ✓ Compiled in 277ms
+[01:05:51.410] Server  LOG      ✓ Compiled in 300ms
+[01:05:59.951] Server  LOG      ✓ Compiled in 891ms
+[01:06:20.260] Server  LOG      ✓ Compiled in 277ms
+[01:06:44.945] Server  LOG      ✓ Compiled in 287ms
+[01:06:46.251] Server  LOG      ✓ Compiled in 271ms
+[01:07:02.098] Server  LOG      ✓ Compiled in 242ms
+[01:07:03.192] Server  LOG      ✓ Compiled in 229ms
+[01:07:14.073] Server  LOG      ✓ Compiled in 155ms
+[01:07:41.444] Server  LOG      ✓ Compiled in 472ms
+[01:07:56.989] Server  LOG      ✓ Compiled in 236ms
+[01:08:00.148] Server  LOG      ✓ Compiled in 185ms
+[01:08:59.933] Server  LOG      ✓ Compiled in 167ms
+[01:09:00.555] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:1407:27
+Parsing ecmascript source code failed
+  1405 |                         <div className="mt-1 text-[16px] font-bold text-[#172017]">{details.startDate}</div>
+  1406 |                       </div>
+> 1407 |                     </div>
+       |                           ^
+> 1408 |
+       | ^
+> 1409 |                     <div className="flex items-center gap-3.5 rounded-[18px] border border-[#E8ECE1] bg-white p-5">
+       | ^^^^^^^^^^^^^^^^^^^^^
+  1410 |                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F4F7F6] text-[#93A08D]">
+  1411 |                         <CalendarIcon className="h-5 w-5" color="#80916E" strokeWidth={2} />
+  1412 |                       </span>
+
+Expected '</', got 'jsx text (
+
+                    )'
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:09:02.600] Server  LOG      ✓ Compiled in 546ms
+[01:09:08.824] Server  LOG      ✓ Compiled in 479ms
+[01:09:12.877] Server  LOG      ✓ Compiled in 190ms
+[01:09:14.306] Server  LOG      ✓ Compiled in 224ms
+[01:09:18.444] Server  LOG      ✓ Compiled in 294ms
+[01:09:20.303] Server  LOG      ✓ Compiled in 301ms
+[01:09:21.898] Server  LOG      ✓ Compiled in 482ms
+[01:09:22.815] Server  LOG      ✓ Compiled in 375ms
+[01:09:26.481] Server  LOG      ✓ Compiled in 296ms
+[01:09:40.898] Server  LOG      ✓ Compiled in 241ms
+[01:09:45.669] Server  LOG      ✓ Compiled in 156ms
+[01:09:55.704] Server  LOG      ✓ Compiled in 199ms
+[01:10:08.050] Server  LOG      ✓ Compiled in 176ms
+[01:10:12.106] Server  LOG      ✓ Compiled in 239ms
+[01:10:23.438] Server  LOG      ✓ Compiled in 176ms
+[01:10:38.132] Server  LOG      ✓ Compiled in 199ms
+[01:10:54.297] Server  LOG      ✓ Compiled in 282ms
+[01:10:57.326] Server  LOG      ✓ Compiled in 528ms
+[01:11:28.930] Server  LOG      ✓ Compiled in 343ms
+[01:11:32.628] Server  LOG      ✓ Compiled in 231ms
+[01:11:49.675] Server  LOG      ✓ Compiled in 334ms
+[01:12:14.782] Server  LOG      ✓ Compiled in 159ms
+[01:12:21.207] Server  LOG      ✓ Compiled in 221ms
+[01:12:23.232] Server  LOG      ✓ Compiled in 214ms
+[01:12:35.149] Server  LOG      ✓ Compiled in 159ms
+[01:13:00.100] Server  LOG      ✓ Compiled in 220ms
+[01:13:12.651] Server  LOG      ✓ Compiled in 195ms
+[01:13:24.729] Server  LOG      ✓ Compiled in 184ms
+[01:13:27.236] Server  LOG      ✓ Compiled in 349ms
+[01:13:29.274] Server  LOG      ✓ Compiled in 372ms
+[01:13:52.827] Server  LOG      ✓ Compiled in 238ms
+[01:14:33.198] Server  LOG      ✓ Compiled in 282ms
+[01:14:38.763] Server  LOG      ✓ Compiled in 208ms
+[01:14:41.806] Server  LOG      ✓ Compiled in 421ms
+[01:14:46.101] Server  LOG      ✓ Compiled in 327ms
+[01:20:41.888] Server  LOG      ✓ Compiled in 326ms
+[01:20:53.778] Server  LOG      ✓ Compiled in 205ms
+[01:21:11.163] Server  LOG      ✓ Compiled in 255ms
+[01:21:36.753] Server  LOG      ✓ Compiled in 193ms
+[01:32:53.617] Server  LOG      ✓ Compiled in 296ms
+[01:32:56.538] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:33:03.139] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:132:7
+Ecmascript file had an error
+  130 | );
+  131 |
+> 132 | const FileTextIcon = ({ className = "", color = "currentColor", size = 20 }: { className?: string; color?: string; size?: number }) => (
+      |       ^^^^^^^^^^^^
+  133 |   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+  134 |     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+  135 |     <polyline points="14 2 14 8 20 8" />
+
+the name `FileTextIcon` is defined multiple times
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:33:03.139] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:124:7
+Ecmascript file had an error
+  122 | };
+  123 |
+> 124 | const PercentIcon = ({ className = "", color = "currentColor", size = 20 }: { className?: string; color?: string; size?: number }) => (
+      |       ^^^^^^^^^^^
+  125 |   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} stroke={color} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+  126 |     <line x1="19" y1="5" x2="5" y2="19" />
+  127 |     <circle cx="6.5" cy="6.5" r="2.5" />
+
+the name `PercentIcon` is defined multiple times
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[01:33:13.066] Server  LOG      ✓ Compiled in 300ms
+[01:41:00.956] Server  LOG      ✓ Compiled in 273ms
+[01:59:40.787] Server  LOG      ✓ Compiled in 134ms
+[01:59:44.254] Server  LOG      ✓ Compiled in 156ms
+[01:59:48.259] Server  LOG      ✓ Compiled in 167ms
+[01:59:51.654] Server  LOG      ✓ Compiled in 130ms
+[02:02:03.432] Server  LOG      ✓ Compiled in 140ms
+[02:02:10.796] Server  LOG      ✓ Compiled in 148ms
+[02:04:57.127] Server  LOG      ✓ Compiled in 130ms
+[02:05:19.172] Server  LOG      ✓ Compiled in 123ms
+[02:09:53.572] Server  LOG      ✓ Compiled in 124ms
+[02:09:53.714] Browser ERROR   uncaughtError: ReferenceError: fa is not defined
+[02:09:55.556] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[02:09:55.558] Server  LOG      ✓ Compiled in 177ms
+[02:10:00.538] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:22:18.574] Server  LOG      ✓ Compiled in 216ms
+[02:33:58.524] Server  LOG      ✓ Compiled in 221ms
+[02:34:50.475] Server  LOG      ✓ Compiled in 145ms
+[02:35:48.156] Server  LOG      ✓ Compiled in 174ms
+[02:36:53.855] Server  LOG      ✓ Compiled in 192ms
+[02:37:27.704] Server  LOG      ✓ Compiled in 609ms
+[02:37:58.156] Server  LOG      ✓ Compiled in 148ms
+[02:38:25.865] Server  LOG      ✓ Compiled in 232ms
+[02:46:20.141] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:47:17.680] Server  LOG      ✓ Compiled in 146ms
+[02:47:17.789] Browser ERROR   ./app/(main)/invest/[farmId]/page.tsx:1445:19
+Parsing ecmascript source code failed
+  1443 |                   <span className="px-1.5">/</span>
+  1444 |                   <span className="font-medium text-[#7A846F]">{farm.name}</span>
+> 1445 |                 </>
+       |                   ^
+  1446 |               )}
+  1447 |             </div>
+  1448 |
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component Browser]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/(main)/invest/[farmId]/page.tsx [Client Component SSR]
+    ./app/(main)/invest/[farmId]/page.tsx [Server Component]
+[02:47:30.344] Server  LOG      ✓ Compiled in 218ms
+[02:49:08.209] Server  LOG      ✓ Compiled in 196ms
+[02:58:28.298] Server  LOG      ✓ Compiled in 328ms
+[02:58:50.441] Server  LOG      ✓ Compiled in 265ms
+[02:58:52.287] Server  LOG      ✓ Compiled in 333ms
+[02:58:56.549] Server  LOG      ✓ Compiled in 401ms
+[03:00:03.072] Server  LOG      ✓ Compiled in 425ms
+[03:00:12.539] Server  LOG      ✓ Compiled in 291ms
+[03:00:15.068] Server  LOG      ✓ Compiled in 228ms
+[03:00:19.258] Server  LOG      ✓ Compiled in 332ms
+[03:00:27.140] Server  LOG      ✓ Compiled in 372ms
+[03:03:13.008] Server  LOG      ✓ Compiled in 344ms
+[03:05:10.614] Server  LOG      ✓ Compiled in 563ms
+[03:05:11.486] Browser ERROR   ./pages/main/myFarms.tsx:660:39
+Parsing ecmascript source code failed
+  658 |                                     </div>
+  659 |                                   );
+> 660 |                                 })()}v>
+      |                                       ^
+  661 |
+  662 |                                 {/* FUNDING MILESTONES */}
+  663 |                                 <div>
+
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+
+Import trace:
+  Server Component:
+    ./pages/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[03:06:02.138] Server  LOG      ✓ Compiled in 552ms
+[03:11:05.163] Server  LOG      ✓ Compiled in 287ms
+[03:11:05.283] Browser ERROR   ./pages/main/myFarms.tsx:747:27
+Parsing ecmascript source code failed
+  745 |                               </div>
+  746 |                             )}
+> 747 |                           </div>
+      |                           ^
+  748 |
+  749 |                           {/* CHECKLIST */}
+  750 |                           <div className="space-y-3">
+
+Expected a semicolon
+
+Import trace:
+  Server Component:
+    ./pages/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[03:11:05.283] Browser ERROR   ./pages/main/myFarms.tsx:662:37
+Parsing ecmascript source code failed
+  660 |                                     </div>
+  661 |                                   );
+> 662 |                                 })()}
+      |                                     ^
+  663 |
+  664 |                                 {/* FUNDING MILESTONES */}
+  665 |                                 <div>
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./pages/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[03:11:05.283] Browser ERROR   ./pages/main/myFarms.tsx:747:28
+Parsing ecmascript source code failed
+  745 |                               </div>
+  746 |                             )}
+> 747 |                           </div>
+      |                            ^^^^^
+  748 |
+  749 |                           {/* CHECKLIST */}
+  750 |                           <div className="space-y-3">
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./pages/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[03:11:08.120] Browser ERROR   ./pages/main/myFarms.tsx:747:27
+Parsing ecmascript source code failed
+  745 |                               </div>
+  746 |                             )}
+> 747 |                           </div>
+      |                           ^
+  748 |
+  749 |                           {/* CHECKLIST */}
+  750 |                           <div className="space-y-3">
+
+Expected a semicolon
+
+Import trace:
+  Server Component:
+    ./pages/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[03:11:08.120] Browser ERROR   ./pages/main/myFarms.tsx:662:37
+Parsing ecmascript source code failed
+  660 |                                     </div>
+  661 |                                   );
+> 662 |                                 })()}
+      |                                     ^
+  663 |
+  664 |                                 {/* FUNDING MILESTONES */}
+  665 |                                 <div>
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./pages/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[03:11:08.120] Browser ERROR   ./pages/main/myFarms.tsx:747:28
+Parsing ecmascript source code failed
+  745 |                               </div>
+  746 |                             )}
+> 747 |                           </div>
+      |                            ^^^^^
+  748 |
+  749 |                           {/* CHECKLIST */}
+  750 |                           <div className="space-y-3">
+
+Unterminated regexp literal
+
+Import trace:
+  Server Component:
+    ./pages/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[03:11:10.069] Server  LOG      ✓ Compiled in 236ms
+[03:11:10.173] Browser ERROR   ./pages/main/myFarms.tsx:600:39
+Parsing ecmascript source code failed
+  598 |
+  599 |                                       <div className=""></
+> 600 |                                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      |                                       ^
+  601 |                                         {/* DURATION */}
+  602 |                                         <div className="flex flex-col gap-1.5 rounded-[12px] border border-[#E5E9E0] bg-[#F7FAF5] px-4 py-3">
+  603 |                                           <div className="flex items-center gap-1.5">
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./pages/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[03:12:59.147] Server  LOG      ✓ Compiled in 275ms
+[03:13:00.674] Server  LOG      ✓ Compiled in 275ms
+[03:13:02.848] Server  LOG      ✓ Compiled in 246ms
+[03:13:08.763] Server  LOG      ✓ Compiled in 252ms
+[03:13:09.804] Server  LOG      ✓ Compiled in 212ms
+[03:13:11.560] Server  LOG      ✓ Compiled in 241ms
+[03:14:02.037] Server  LOG      ✓ Compiled in 252ms
+[03:14:13.744] Server  LOG      ✓ Compiled in 225ms
+[03:14:28.221] Server  LOG      ✓ Compiled in 256ms
+[03:14:53.846] Server  LOG      ✓ Compiled in 557ms
+[03:15:21.591] Server  LOG      ✓ Compiled in 261ms
+[03:16:58.703] Server  LOG      ✓ Compiled in 719ms
+[03:17:03.943] Server  LOG      ✓ Compiled in 468ms
+[03:17:09.109] Server  LOG      ✓ Compiled in 385ms
+[03:17:13.747] Server  LOG      ✓ Compiled in 432ms
+[03:17:19.663] Server  LOG      ✓ Compiled in 527ms
+[03:38:03.390] Server  LOG      ✓ Compiled in 323ms
+[03:38:12.084] Server  LOG      ✓ Compiled in 273ms
+[03:38:48.245] Server  LOG      ✓ Compiled in 283ms
+[03:39:05.100] Server  LOG      ✓ Compiled in 220ms
+[03:39:09.160] Server  LOG      ✓ Compiled in 443ms
+[03:39:19.248] Server  LOG      ✓ Compiled in 264ms
+[03:42:11.676] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:42:22.853] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:05:28.765] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:17:01.928] Server  LOG      ✓ Compiled in 376ms
+[04:17:12.885] Server  LOG      ✓ Compiled in 546ms
+[04:22:20.774] Server  LOG      ✓ Compiled in 586ms
+[04:26:36.816] Server  LOG      ✓ Compiled in 1592ms
+[04:26:36.941] Browser ERROR   ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:26:36.941] Browser ERROR   ./pages/main/admin/users.tsx:1:31
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:26:36.942] Browser ERROR   ./pages/main/admin/users.tsx:1:10
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:26:59.021] Browser ERROR   ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:26:59.021] Browser ERROR   ./pages/main/admin/users.tsx:1:31
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:26:59.021] Browser ERROR   ./pages/main/admin/users.tsx:1:10
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:57.088] Server  ERROR    ⨯ ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+
+
+
+./pages/main/admin/users.tsx:1:31
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+
+
+
+./pages/main/admin/users.tsx:1:10
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+
+
+[04:31:57.243] Browser ERROR   ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:57.243] Browser ERROR   ./pages/main/admin/users.tsx:1:31
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:57.243] Browser ERROR   ./pages/main/admin/users.tsx:1:10
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:59.053] Browser ERROR   ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:59.053] Browser ERROR   ./pages/main/admin/users.tsx:1:31
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:59.053] Browser ERROR   ./pages/main/admin/users.tsx:1:10
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:59.242] Browser ERROR   ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:59.242] Browser ERROR   ./pages/main/admin/users.tsx:1:31
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:31:59.242] Browser ERROR   ./pages/main/admin/users.tsx:1:10
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:01.082] Browser ERROR   uncaughtError: Error: ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+
+
+[04:32:01.545] Browser ERROR   ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:01.545] Browser ERROR   ./pages/main/admin/users.tsx:1:31
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:01.545] Browser ERROR   ./pages/main/admin/users.tsx:1:10
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:02.966] Browser ERROR   ./pages/main/admin/users.tsx:1:20
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:02.966] Browser ERROR   ./pages/main/admin/users.tsx:1:31
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:02.966] Browser ERROR   ./pages/main/admin/users.tsx:1:10
+Ecmascript file had an error
+> 1 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  2 | import { toast } from 'sonner';
+  3 | import { useQueryClient } from '@tanstack/react-query';
+  4 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:36.860] Browser ERROR   ./pages/main/admin/users.tsx:3:20
+Ecmascript file had an error
+  1 |
+  2 |
+> 3 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  4 | import { toast } from 'sonner';
+  5 | import { useQueryClient } from '@tanstack/react-query';
+  6 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:36.861] Browser ERROR   ./pages/main/admin/users.tsx:3:31
+Ecmascript file had an error
+  1 |
+  2 |
+> 3 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  4 | import { toast } from 'sonner';
+  5 | import { useQueryClient } from '@tanstack/react-query';
+  6 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:36.861] Browser ERROR   ./pages/main/admin/users.tsx:3:10
+Ecmascript file had an error
+  1 |
+  2 |
+> 3 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  4 | import { toast } from 'sonner';
+  5 | import { useQueryClient } from '@tanstack/react-query';
+  6 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:38.132] Browser ERROR   ./pages/main/admin/users.tsx:3:20
+Ecmascript file had an error
+  1 | ''
+  2 |
+> 3 | import { useState, useEffect, useRef } from 'react';
+    |                    ^^^^^^^^^
+  4 | import { toast } from 'sonner';
+  5 | import { useQueryClient } from '@tanstack/react-query';
+  6 | import { 
+
+You're importing a component that needs `useEffect`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:38.132] Browser ERROR   ./pages/main/admin/users.tsx:3:31
+Ecmascript file had an error
+  1 | ''
+  2 |
+> 3 | import { useState, useEffect, useRef } from 'react';
+    |                               ^^^^^^
+  4 | import { toast } from 'sonner';
+  5 | import { useQueryClient } from '@tanstack/react-query';
+  6 | import { 
+
+You're importing a component that needs `useRef`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:38.132] Browser ERROR   ./pages/main/admin/users.tsx:3:10
+Ecmascript file had an error
+  1 | ''
+  2 |
+> 3 | import { useState, useEffect, useRef } from 'react';
+    |          ^^^^^^^^
+  4 | import { toast } from 'sonner';
+  5 | import { useQueryClient } from '@tanstack/react-query';
+  6 | import { 
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+Import trace:
+  Server Component:
+    ./pages/main/admin/users.tsx
+    ./app/(main)/admin/users/page.tsx
+[04:32:40.337] Server  LOG      ✓ Compiled in 197ms
+[04:32:42.832] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:34:17.487] Server  LOG      ✓ Compiled in 414ms
+[04:34:19.422] Server  LOG      ✓ Compiled in 815ms
+[04:38:07.981] Server  LOG      ✓ Compiled in 341ms
+[04:38:10.320] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

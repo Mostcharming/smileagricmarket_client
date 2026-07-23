@@ -2,7 +2,7 @@
 'use client'
 
 import { useMemo, useRef, useState } from "react";
-import { AddIcon, CheckIcon, CloseIcon, DocsIcon, EqualIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, ShieldIcon, TickIcon, UploadIcon } from "@/components/icons";
+import { AddIcon, CheckIcon, CloseIcon, DocsIcon, EqualIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, ShieldIcon, TickIcon, UploadIcon, ClockIcon, WalletIcon, LayersIcon, ChevronIcon, InfoIcon, CalendarIcon } from "@/components/icons";
 import { Modal } from "@/components/modal";
 import { Button, Input, MainHeader, Select, Table, Typography, FarmStatusBadge } from "@/components/ui";
 import { Column } from "@/components/ui/table";
@@ -64,6 +64,56 @@ const StepItem = ({
 
 const normalizeKycStatus = (status?: string) => status?.trim().toLowerCase().replace(/\s+/g, "_") ?? "";
 
+const getMilestonePercentage = (name: string, index: number, total: number) => {
+  const lower = name.toLowerCase();
+  if (lower.includes("preparation")) return 20;
+  if (lower.includes("planting") || lower.includes("seed") || lower.includes("input")) return 30;
+  if (lower.includes("maintenance") || lower.includes("weeding") || lower.includes("crop")) return 20;
+  if (lower.includes("harvest")) return 20;
+  if (lower.includes("sales") || lower.includes("close-out") || lower.includes("market")) return 10;
+
+  if (total === 5) {
+    const standard = [20, 30, 20, 20, 10];
+    return standard[index] ?? 20;
+  }
+  return Math.round(100 / total);
+};
+
+const getCategoryOverviewDetails = (categoryName: string, milestonesCount: number) => {
+  const code = categoryName.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const durationMonths = categoryName.toLowerCase() === "vegetable" ? 6 : 6 + (code % 7); // 6 to 12 months
+  const minFunding = categoryName.toLowerCase() === "vegetable" ? 2 : 1 + (code % 5);
+  const maxFunding = categoryName.toLowerCase() === "vegetable" ? 10 : minFunding + 3 + (code % 7);
+  
+  // Format dates deterministically or use Aug 6, 2026 / Sep 6, 2026 for vegetable
+  let startDate = "Aug 6, 2026";
+  let endDate = "Sep 6, 2026";
+  
+  if (categoryName.toLowerCase() !== "vegetable") {
+    // Generate deterministic dates
+    const dateSeed = code % 28;
+    const startDay = 1 + (dateSeed % 28);
+    const startMonth = 1 + (dateSeed % 12);
+    const startYear = 2026;
+    const endDay = 1 + ((dateSeed + 15) % 28);
+    const endMonth = 1 + ((dateSeed + 1) % 12);
+    const endYear = startMonth > endMonth ? 2027 : 2026;
+    
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    startDate = `${months[startMonth - 1]} ${startDay}, ${startYear}`;
+    endDate = `${months[endMonth - 1]} ${endDay}, ${endYear}`;
+  }
+
+  return {
+    duration: `${durationMonths} months`,
+    fundingRange: `₦${minFunding}M`,
+    stagesCount: `${milestonesCount || 5} milestones`,
+    cropCategory: categoryName.toLowerCase() === "vegetable" ? "Vegetable" : categoryName,
+    startDate,
+    endDate,
+  };
+};
+
 const isKycVerifiedStatus = (status?: string) => {
   const normalizedStatus = normalizeKycStatus(status);
   return normalizedStatus === "approved" || normalizedStatus === "verified" || normalizedStatus === "active";
@@ -85,6 +135,9 @@ const MyFarms = () => {
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const [documents, setDocuments] = useState<DocItem[]>([]);
   const [previewPhoto, setPreviewPhoto] = useState<PhotoItem | null>(null);
+  const [totalInvestmentAmount, setTotalInvestmentAmount] = useState("");
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [isCardExpanded, setIsCardExpanded] = useState(true);
 
   const photoInputRef = useRef<HTMLInputElement>(null);
   const photoCaptureRef = useRef<HTMLInputElement>(null);
@@ -120,11 +173,21 @@ const MyFarms = () => {
 
     return Array.isArray(milestones)
       ? milestones.map((milestone: MilestoneResponse) => ({
-          id: milestone.id,
-          name: milestone.name || "Unnamed milestone",
-        }))
+        id: milestone.id,
+        name: milestone.name || "Unnamed milestone",
+      }))
       : [];
   }, [milestonesResponse?.data]);
+
+  const selectedCategoryName = useMemo(() => {
+    const categories = farmCategoriesResponse?.data?.categories ?? [];
+    const cat = categories.find((c) => c.id === farmCategory);
+    return cat?.name || "Vegetable";
+  }, [farmCategoriesResponse, farmCategory]);
+
+  const milestonesList = useMemo(() => {
+    return milestonesResponse?.data?.milestones ?? [];
+  }, [milestonesResponse]);
 
   const filteredFarms = useMemo(() => {
     const farms = farmsResponse?.data?.farms ?? [];
@@ -156,6 +219,8 @@ const MyFarms = () => {
     setPhotos([]);
     setDocuments([]);
     setPreviewPhoto(null);
+    setTotalInvestmentAmount("");
+    setIsAgreed(false);
   };
 
   const handleOpenAddFarm = () => {
@@ -243,7 +308,8 @@ const MyFarms = () => {
   const canContinueStepTwo =
     farmCategory.length > 0 &&
     selectedMilestones.length > 0 &&
-    selectedMilestones.every((milestone) => Number(milestone.amount) > 0);
+    Number(totalInvestmentAmount) > 0 &&
+    isAgreed;
   const canSubmit = photos.length > 0 && documents.length > 0;
 
   const handleSubmitFarm = async () => {
@@ -265,13 +331,28 @@ const MyFarms = () => {
       }
 
       if (selectedMilestones.length) {
+        const totalWeight = selectedMilestones.reduce((sum, item) => {
+          const milestone = milestonesList.find((m) => m.id === item.milestoneId);
+          const index = milestonesList.findIndex((m) => m.id === item.milestoneId);
+          const pct = getMilestonePercentage(milestone?.name || "", index >= 0 ? index : 0, milestonesList.length || 5);
+          return sum + pct;
+        }, 0) || 100;
+
+        const milestonesPayload = selectedMilestones.map((item) => {
+          const milestone = milestonesList.find((m) => m.id === item.milestoneId);
+          const index = milestonesList.findIndex((m) => m.id === item.milestoneId);
+          const pct = getMilestonePercentage(milestone?.name || "", index >= 0 ? index : 0, milestonesList.length || 5);
+          const calculatedAmount = Math.round((Number(totalInvestmentAmount) * pct) / totalWeight);
+          return {
+            milestoneId: item.milestoneId,
+            amount: calculatedAmount,
+          };
+        });
+
         await addMilestonesMutation.mutateAsync({
           farmId,
           payload: {
-            milestones: selectedMilestones.map((milestone) => ({
-              milestoneId: milestone.milestoneId,
-              amount: Number(milestone.amount),
-            })),
+            milestones: milestonesPayload,
           },
         });
       }
@@ -340,9 +421,9 @@ const MyFarms = () => {
                 <h1 className="text-[18px] font-medium text-[#1F2937]">My Farms</h1>
                 <span className="rounded-full bg-[#DDEDD6] px-3 py-1 text-xs font-medium text-[#4E8A35]">{farmsCount} Farms</span>
               </div>
-              <Button 
-                variant="primary" 
-                className="rounded-lg text-sm" 
+              <Button
+                variant="primary"
+                className="rounded-lg text-sm"
                 onClick={handleOpenAddFarm}
                 icon={<AddIcon color="#FFFFFF" size={20} />}
               >
@@ -379,9 +460,9 @@ const MyFarms = () => {
                 <p className="mt-2 max-w-[352px] text-sm text-[#5E6771]">
                   You have not added any farm yet. Add a farm to see your farms here.
                 </p>
-                <Button 
-                  variant="primary" 
-                  className="mt-6 w-full max-w-[352px] rounded-lg text-sm" 
+                <Button
+                  variant="primary"
+                  className="mt-6 w-full max-w-[352px] rounded-lg text-sm"
                   onClick={handleOpenAddFarm}
                   icon={<AddIcon color="#FFFFFF" size={20} />}
                 >
@@ -446,10 +527,10 @@ const MyFarms = () => {
                         label="Enter Farm Location or Address"
                       />
 
-                      <Button 
-                        variant="primary" 
-                        disabled={!canContinueStepOne} 
-                        className="mt-1 rounded-md text-sm" 
+                      <Button
+                        variant="primary"
+                        disabled={!canContinueStepOne}
+                        className="mt-1 rounded-md text-sm"
                         onClick={() => setStep(2)}
                       >
                         CONTINUE
@@ -458,13 +539,16 @@ const MyFarms = () => {
                   )}
 
                   {step === 2 && (
-                    <div className="max-w-3xl space-y-4">
-                      <Select
-                        value={farmCategory}
-                        onChange={(event) => setFarmCategory(event.target.value)}
-                        placeholder="Select Farm Category"
-                        options={farmCategories}
-                      />
+                    <div className="max-w-3xl space-y-5">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#8A8F96] uppercase tracking-wider mb-2">Select Farm Category</label>
+                        <Select
+                          value={farmCategory}
+                          onChange={(event) => setFarmCategory(event.target.value)}
+                          placeholder="Select Farm Category"
+                          options={farmCategories}
+                        />
+                      </div>
 
                       {isFarmCategoriesLoading && (
                         <p className="text-sm text-[#6B7280]">Loading farm categories...</p>
@@ -472,71 +556,276 @@ const MyFarms = () => {
 
                       {farmCategory && (
                         <>
-                          <Typography variant="small" className="font-semibold text-[#1F2937]">What do you need funds for? (Select farm milestones that apply)</Typography>
-                          <div className="mt-3 space-y-3">
-                            {milestoneOptions.map((option) => {
-                              if (!option.id) return null;
-                              const selectedMilestone = selectedMilestones.find((item) => item.milestoneId === option.id);
-                              const checked = Boolean(selectedMilestone);
-                              return (
-                                <div
-                                  key={option.id}
-                                  className="grid grid-cols-1 items-stretch gap-3 text-left text-[#1F2937] md:grid-cols-[1fr_320px] md:gap-4"
-                                >
+                          {/* Investment Programme Card */}
+                          <div className="border border-[#EAECE8] rounded-2xl bg-white shadow-xs p-6">
+                            {/* Card Header */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-4">
+                                <div className="hidden md:flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#128A3E] text-white">
+                                  <FarmIcon color="#FFFFFF" size={24} />
+                                </div>
+                                <div className="flex flex-col">
+                                  <Typography variant="subheading" className="text-[#1F2937] font-bold text-lg leading-tight">
+                                    {selectedCategoryName} Investment Programme
+                                  </Typography>
+                                  <p className="text-xs text-[#5E6771] mt-1 leading-normal">
+                                    Review how funding for this crop works before continuing with your farm listing.
+                                  </p>
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setIsCardExpanded(!isCardExpanded)}
+                                className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+                              >
+                                <ChevronIcon
+                                  className={`transform transition-transform ${isCardExpanded ? "" : "rotate-180"}`}
+                                  size={16}
+                                />
+                              </button>
+                            </div>
+                            {/* Card Content (Collapsible) */}
+                            {isCardExpanded && (
+                              <div className="mt-6 border-t border-[#EAECE8] pt-6 space-y-6">
+                                {/* PROGRAMME OVERVIEW */}
+                                {(() => {
+                                  const overviewDetails = getCategoryOverviewDetails(selectedCategoryName, milestonesList.length);
+                                  return (
+                                    <div>
+                                      <div className="text-[10px] font-bold text-[#8A8F96] tracking-wider mb-3">
+                                        PROGRAMME OVERVIEW
+                                      </div>
+
+                                      <div className="md:rounded-[12px] md:border md:border-[#E5E9E0] md:bg-[#FFFFFF] md:p-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                          {/* DURATION */}
+                                          <div className="flex flex-col gap-1.5 rounded-[12px] bg-[#F7FAF5] px-4 py-3">
+                                            <div className="flex items-center gap-1.5">
+                                              <ClockIcon size={14} color="#80916E" />
+                                              <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Duration</span>
+                                            </div>
+                                            <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{overviewDetails.duration}</span>
+                                          </div>
+
+                                          {/* MINIMUM FUNDING RANGE */}
+                                          <div className="flex flex-col gap-1.5 rounded-[12px] bg-[#F7FAF5] px-4 py-3">
+                                            <div className="flex items-center gap-1.5">
+                                              <WalletIcon size={14} color="#80916E" />
+                                              <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Minimum Funding Range</span>
+                                            </div>
+                                            <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{overviewDetails.fundingRange}</span>
+                                          </div>
+
+                                          {/* FUNDING STAGES */}
+                                          <div className="flex flex-col gap-1.5 rounded-[12px] bg-[#F7FAF5] px-4 py-3">
+                                            <div className="flex items-center gap-1.5">
+                                              <LayersIcon size={14} color="#80916E" />
+                                              <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Funding Stages</span>
+                                            </div>
+                                            <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{overviewDetails.stagesCount}</span>
+                                          </div>
+
+                                          {/* CROP CATEGORY */}
+                                          <div className="flex flex-col gap-1.5 rounded-[12px] bg-[#F7FAF5] px-4 py-3">
+                                            <div className="flex items-center gap-1.5">
+                                              <FarmIcon size={14} color="#80916E" />
+                                              <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Crop Category</span>
+                                            </div>
+                                            <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{overviewDetails.cropCategory}</span>
+                                          </div>
+
+                                          {/* INVESTMENT START DATE */}
+                                          <div className="flex flex-col gap-1.5 rounded-[12px] bg-[#F7FAF5] px-4 py-3">
+                                            <div className="flex items-center gap-1.5">
+                                              <CalendarIcon size={14} color="#80916E" />
+                                              <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Investment Start Date</span>
+                                            </div>
+                                            <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{overviewDetails.startDate}</span>
+                                          </div>
+
+                                          {/* INVESTMENT END DATE */}
+                                          <div className="flex flex-col gap-1.5 rounded-[12px] bg-[#F7FAF5] px-4 py-3">
+                                            <div className="flex items-center gap-1.5">
+                                              <CalendarIcon size={14} color="#80916E" />
+                                              <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Investment End Date</span>
+                                            </div>
+                                            <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{overviewDetails.endDate}</span>
+                                          </div>
+                                        </div>
+
+                                        {/* Note Alert Card */}
+                                        <div className="mt-4 rounded-[12px] bg-[#D9F8DC] p-4 text-xs font-semibold leading-relaxed text-[#013611]">
+                                          Note: <strong className="font-bold">Funding goal</strong> for this farm category must be reached on or before the <strong className="font-bold">Investment End Date.</strong> If the funding goal is not reached by this date, <strong className="font-bold">investments will be reimbursed back to the investors and the farm funding will be closed.</strong>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })()}
+
+                                {/* FUNDING MILESTONES */}
+                                <div>
+                                  <div className="text-[10px] font-bold text-[#8A8F96] tracking-wider mb-4">
+                                    FUNDING MILESTONES
+                                  </div>
+                                  <div className="space-y-3">
+                                    {(milestonesList.length > 0
+                                      ? milestonesList
+                                      : [
+                                        { id: "1", name: "Land preparation" },
+                                        { id: "2", name: "Planting & Inputs" },
+                                        { id: "3", name: "Crop maintenance" },
+                                        { id: "4", name: "Harvest" },
+                                        { id: "5", name: "Sales & project close-out" },
+                                      ]
+                                    ).map((m, idx, arr) => {
+                                      const pct = getMilestonePercentage(m.name || "", idx, arr.length);
+                                      const isLast = idx === arr.length - 1;
+                                      const circleBg = isLast ? "bg-[#F59E0B]" : "bg-[#10B981]";
+                                      return (
+                                        <div key={m.id || idx} className="flex items-center gap-4 border border-[#E9EAEB] rounded-2xl p-4 bg-white">
+                                          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${circleBg}`}>
+                                            {pct}%
+                                          </div>
+                                          <div className="flex flex-col">
+                                            <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider">STAGE {idx + 1}</span>
+                                            <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{m.name}</span>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+
+                                {/* HOW FUNDS ARE RELEASED */}
+                                <div>
+                                  <div className="text-[10px] font-bold text-[#8A8F96] tracking-wider mb-3">
+                                    HOW FUNDS ARE RELEASED
+                                  </div>
+                                  <div className="bg-[#E6F4EA] border border-[#CEEAD6] rounded-2xl p-4 flex gap-3 items-start">
+                                    <div className="mt-0.5 shrink-0 text-[#137333]">
+                                      <ShieldIcon size={20} color="currentColor" />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                      <p className="text-xs font-semibold text-[#137333] leading-relaxed">
+                                        Funds are not released all at once. Each milestone is funded only after the previous milestone is completed and verified by Agrimarket.
+                                      </p>
+                                      <p className="text-[10px] text-[#5E6771] mt-1">
+                                        *Evidence is submitted when requesting for funds, not during farm listing.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* IMPORTANT TO KNOW */}
+                                <div className="bg-[#FEF3C7] border border-[#FDE68A] rounded-2xl p-5">
+                                  <div className="flex items-center gap-2 mb-3">
+                                    <div className="text-[#D97706]">
+                                      <InfoIcon size={20} color="currentColor" />
+                                    </div>
+                                    <span className="text-sm font-bold text-[#92400E]">Important to know</span>
+                                  </div>
+                                  <ul className="space-y-2.5 text-xs text-[#92400E] font-medium pl-1">
+                                    <li className="flex items-start gap-2">
+                                      <span className="text-[#D97706] mt-0.5 shrink-0">•</span>
+                                      <span>Funding is released in stages, never all at once.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                      <span className="text-[#D97706] mt-0.5 shrink-0">•</span>
+                                      <span>Each milestone must be verified before the next payment.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                      <span className="text-[#D97706] mt-0.5 shrink-0">•</span>
+                                      <span>Funds follow Agrimarket&apos;s approved investment programme.</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                      <span className="text-[#D97706] mt-0.5 shrink-0">•</span>
+                                      <span>Investment rules cannot be modified by farmers.</span>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* CHECKLIST */}
+                          <div className="space-y-3">
+                            <Typography variant="small" className="font-semibold text-[#1F2937]">
+                              What do you need funds for? (Select farm milestones that apply)
+                            </Typography>
+                            <p className="text-xs text-[#5E6771] -mt-1">
+                              You will be required to provide evidence for each milestone when requesting for payment
+                            </p>
+
+                            <div className="space-y-2.5">
+                              {milestoneOptions.map((option) => {
+                                if (!option.id) return null;
+                                const selectedMilestone = selectedMilestones.find((item) => item.milestoneId === option.id);
+                                const checked = Boolean(selectedMilestone);
+                                return (
                                   <button
+                                    key={option.id}
                                     type="button"
                                     onClick={() => toggleMilestone(option.id)}
-                                    className={`flex min-h-11 items-center gap-3 rounded-md border bg-transparent px-4 py-3 text-left transition-colors ${
-                                      checked
+                                    className={`flex w-full min-h-11 items-center gap-3 rounded-md border bg-transparent px-4 py-3 text-left transition-colors ${checked
                                         ? "border-[#5DA63D] bg-[#F7FBF4]"
                                         : "border-[#B8C3CF]"
-                                    }`}
+                                      }`}
                                   >
                                     <span className={`flex h-5 w-5 items-center justify-center rounded-sm border ${checked ? "border-[#5DA63D] bg-[#5DA63D] text-white" : "border-[#8A93A4] text-transparent"}`}>
                                       ✓
                                     </span>
-                                    <span>{option.name}</span>
+                                    <span className="text-sm font-medium text-[#1F2937]">{option.name}</span>
                                   </button>
-
-                                  <Input
-                                    id={`milestone-amount-${option.id}`}
-                                    label="Enter Amount Needed For this Milestone"
-                                    labelClassName="bg-white"
-                                    containerClassName="w-full"
-                                    className="rounded-md border-[#D5D7DA] py-3 text-sm text-[#374151] placeholder:text-[#9AA0A6] focus:ring-0 focus:border-[#8FB57F]"
-                                    type="text"
-                                    value={selectedMilestone?.amount || ""}
-                                    onChange={(event) => updateMilestoneAmount(option.id, event.target.value)}
-                                    inputMode="numeric"
-                                  />
-                                </div>
-                              );
-                            })}
+                                );
+                              })}
+                            </div>
                           </div>
 
-                          {isMilestonesLoading && (
-                            <p className="text-sm text-[#6B7280]">Loading milestones...</p>
-                          )}
+                          {/* INVESTMENT AMOUNT */}
+                          <div className="space-y-2">
+                            <label className="block text-sm font-semibold text-[#1F2937]">
+                              Funding Goal
+                            </label>
+                            <Input
+                              id="total-investment-amount"
+                              placeholder="Enter Amount Needed For this Farm"
+                              value={totalInvestmentAmount}
+                              onChange={(event) => setTotalInvestmentAmount(event.target.value)}
+                              type="text"
+                              inputMode="numeric"
+                              className="rounded-md border-[#D5D7DA] py-3.5 text-sm text-[#374151] placeholder:text-[#9AA0A6] focus:ring-0 focus:border-[#8FB57F]"
+                            />
+                          </div>
 
-                          {!isMilestonesLoading && milestoneOptions.length === 0 && (
-                            <p className="text-sm text-[#6B7280]">No milestones configured for this category yet.</p>
-                          )}
-
+                          {/* AGREEMENT CHECKBOX */}
+                          <div className="flex items-start gap-3 rounded-lg border-2 border-[#187E36] bg-[#D9F8DC] px-4 py-3.5 text-left transition-colors">
+                            <button
+                              type="button"
+                              onClick={() => setIsAgreed(!isAgreed)}
+                              className={`flex h-5 w-5 mt-0.5 shrink-0 items-center justify-center rounded-sm border ${isAgreed ? "border-[#187E36] bg-[#187E36] text-white" : "border-[#8A93A4] text-transparent"
+                                }`}
+                            >
+                              ✓
+                            </button>
+                            <span className="text-xs font-semibold text-[#1F2937] select-none leading-relaxed">
+                              I understand how this investment programme works and agree to the milestone-based funding process
+                            </span>
+                          </div>
                         </>
                       )}
 
                       <div className="flex items-center gap-2 pt-1">
-                        <Button 
-                          variant="light" 
-                          className="rounded-md bg-[#E0E0E0] text-sm" 
+                        <Button
+                          variant="light"
+                          className="rounded-md bg-[#E0E0E0] text-sm"
                           onClick={() => setStep(1)}
                         >
                           BACK
                         </Button>
-                        <Button 
-                          variant="primary" 
-                          disabled={!canContinueStepTwo} 
-                          className="rounded-md text-sm" 
+                        <Button
+                          variant="primary"
+                          disabled={!canContinueStepTwo}
+                          className="rounded-md text-sm"
                           onClick={() => setStep(3)}
                         >
                           CONTINUE
