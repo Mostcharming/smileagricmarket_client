@@ -8,6 +8,7 @@ import { InfoIcon, PhotoIcon } from "@/components/icons";
 import KycModal from "@/components/modal/kycModal";
 import { MainHeader, Input, ProfileCompletion } from "@/components/ui";
 import { getStoredUser, setStoredUser as setStoredUserInStorage } from "@/utils";
+import { getPreviewImageUrl } from "@/utils/image";
 import type { profileSchema, SelectOptions } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -171,6 +172,7 @@ const ProfilePage = () => {
     const [phoneNumber, setPhoneNumber] = useState(profileSeed?.phoneNumber ?? "090292019201");
     const [about, setAbout] = useState(profileSeed?.bio ?? "");
     const [profileImage, setProfileImage] = useState(profileSeed?.profileImageUrl || profileSeed?.profileImage || "");
+    const [imageError, setImageError] = useState(false);
 
     const handlePhotoSelect = () => {
       fileInputRef.current?.click();
@@ -272,8 +274,13 @@ const ProfilePage = () => {
               className="flex h-[68px] w-[68px] items-center justify-center overflow-hidden cursor-pointer rounded-xl bg-[#DDE6D4] text-[#5A6154] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70"
               aria-label="Upload profile photo"
             >
-              {profileImage ? (
-                <img src={profileImage} alt={profileSeed?.fullName || fullName} className="h-full w-full object-cover" />
+              {profileImage && !imageError ? (
+                <img
+                  src={getPreviewImageUrl(profileImage)}
+                  alt={profileSeed?.fullName || fullName}
+                  className="h-full w-full object-cover"
+                  onError={() => setImageError(true)}
+                />
               ) : (
                 <PhotoIcon />
               )}

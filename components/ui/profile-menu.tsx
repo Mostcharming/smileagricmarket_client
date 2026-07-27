@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { ChevronIcon } from "@/components/icons";
 import { getStoredUser, signOut } from "@/utils";
+import { getPreviewImageUrl } from "@/utils/image";
 import { profileSchema } from "@/types";
 
 type ProfileMenuProps = {
@@ -28,6 +29,7 @@ const getInitialsFromFullName = (fullName?: string) => {
 const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<profileSchema | null>(null);
+  const [imageError, setImageError] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -60,6 +62,10 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
     };
   }, []);
 
+  useEffect(() => {
+    setImageError(false);
+  }, [user?.profileImage]);
+
   const initials = getInitialsFromFullName(user?.fullName);
   const displayName = user?.fullName || "My profile";
   const displayEmail = user?.email || "Account settings";
@@ -77,8 +83,13 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
         aria-expanded={open}
         className="flex items-center gap-2 rounded-full outline-none"
       >
-        {user?.profileImage ? (
-          <img src={user.profileImage} alt={displayName} className="h-10 w-10 rounded-full object-cover" />
+        {user?.profileImage && !imageError ? (
+          <img
+            src={getPreviewImageUrl(user.profileImage)}
+            alt={displayName}
+            className="h-10 w-10 rounded-full object-cover"
+            onError={() => setImageError(true)}
+          />
         ) : (
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D1D5DB] text-base font-medium text-white">
             {initials}
@@ -94,11 +105,12 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
         <div className="absolute right-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_20px_45px_rgba(15,23,42,0.12)]">
           <div className="flex items-center gap-3 border-b border-[#E5E7EB] px-4 py-3">
             <div className="relative shrink-0">
-              {user?.profileImage ? (
+              {user?.profileImage && !imageError ? (
                 <img
-                  src={user.profileImage}
+                  src={getPreviewImageUrl(user.profileImage)}
                   alt={displayName}
                   className="h-12 w-12 rounded-full object-cover"
+                  onError={() => setImageError(true)}
                 />
               ) : (
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#D1D5DB] text-base font-medium text-white">
