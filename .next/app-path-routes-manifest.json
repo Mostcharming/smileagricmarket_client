@@ -24,8 +24,10 @@
   "/(main)/settings/page": "/settings",
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
+  "/agri-landing/page": "/agri-landing",
   "/api/banks/route": "/api/banks",
   "/api/image-proxy/route": "/api/image-proxy",
   "/favicon.ico/route": "/favicon.ico",
+  "/legal/[slug]/page": "/legal/[slug]",
   "/page": "/"
 }

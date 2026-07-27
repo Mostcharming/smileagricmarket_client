@@ -498,6 +498,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/agri-landing/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/agri-landing">> = Specific
+  const handler = {} as typeof import("../../app/agri-landing/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/layout.tsx
 {
   type __IsExpected<Specific extends LayoutConfig<"/">> = Specific

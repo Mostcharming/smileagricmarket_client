@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST="{\n  \"app\": {},\n  \"appUsingSizeAdjust\": false,\n  \"pages\": {},\n  \"pagesUsingSizeAdjust\": false\n}"
+self.__NEXT_FONT_MANIFEST="{\n  \"app\": {\n    \"[project]/app/agri-landing/page\": [\n      \"static/media/017d9bea37084d9b.p.a6d6de71.woff2\",\n      \"static/media/83afe278b6a6bb3c.p.3a6ba036.woff2\",\n      \"static/media/051742360c26797e.p.102b7f24.woff2\"\n    ]\n  },\n  \"appUsingSizeAdjust\": false,\n  \"pages\": {},\n  \"pagesUsingSizeAdjust\": false\n}"

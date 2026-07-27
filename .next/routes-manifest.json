@@ -35,6 +35,14 @@
         "nxtPfarmId": "nxtPfarmId"
       },
       "namedRegex": "^/invest/(?<nxtPfarmId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/legal/[slug]",
+      "regex": "^/legal/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/legal/(?<nxtPslug>[^/]+?)(?:/)?$"
     }
   ],
   "staticRoutes": [
@@ -103,6 +111,12 @@
       "regex": "^/admin/verification(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/verification(?:/)?$"
+    },
+    {
+      "page": "/agri-landing",
+      "regex": "^/agri\\-landing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/agri\\-landing(?:/)?$"
     },
     {
       "page": "/api/banks",

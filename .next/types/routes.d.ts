@@ -4,7 +4,7 @@
 type AppRoutes = "/" | "/admin" | "/admin/dashboard" | "/admin/farms" | "/admin/farms/[farmId]" | "/admin/investments/templates" | "/admin/milestones" | "/admin/profile" | "/admin/settings" | "/admin/users" | "/admin/verification" | "/agri-landing" | "/dashboard" | "/forgot-password" | "/invest" | "/invest/[farmId]" | "/legal/[slug]" | "/login" | "/my-farms" | "/my-portfolio" | "/onboarding" | "/profile" | "/reset-password" | "/settings" | "/signup" | "/verify-otp"
 type AppRouteHandlerRoutes = "/api/banks" | "/api/image-proxy"
 type PageRoutes = "/auth/admin" | "/auth/forgotPassword" | "/auth/login" | "/auth/onboarding" | "/auth/resetPassword" | "/auth/signup" | "/auth/verifyOTP" | "/main/admin/farms" | "/main/admin/investments/templates" | "/main/admin/milestones" | "/main/admin/users" | "/main/admin/verification" | "/main/dashboard" | "/main/invest" | "/main/myFarms" | "/main/portfolio" | "/main/profile" | "/main/settings"
-type LayoutRoutes = "/" | "/admin"
+type LayoutRoutes = "/" | "/admin" | "/agri-landing"
 type RedirectRoutes = never
 type RewriteRoutes = never
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes | AppRouteHandlerRoutes
@@ -65,6 +65,7 @@ export type ParamsOf<Route extends Routes> = ParamMap[Route]
 interface LayoutSlotMap {
   "/": never
   "/admin": never
+  "/agri-landing": never
 }
 
 

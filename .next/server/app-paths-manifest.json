@@ -24,8 +24,10 @@
   "/(main)/settings/page": "app/(main)/settings/page.js",
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/agri-landing/page": "app/agri-landing/page.js",
   "/api/banks/route": "app/api/banks/route.js",
   "/api/image-proxy/route": "app/api/image-proxy/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/legal/[slug]/page": "app/legal/[slug]/page.js",
   "/page": "app/page.js"
 }
