@@ -271,6 +271,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/agri-landing/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/agri-landing">> = Specific
+  const handler = {} as typeof import("../../../app/agri-landing/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/legal/[slug]/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/legal/[slug]">> = Specific
+  const handler = {} as typeof import("../../../app/legal/[slug]/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
@@ -484,6 +502,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends LayoutConfig<"/admin">> = Specific
   const handler = {} as typeof import("../../../app/(main)/admin/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/agri-landing/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/agri-landing">> = Specific
+  const handler = {} as typeof import("../../../app/agri-landing/layout.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

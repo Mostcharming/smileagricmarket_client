@@ -1,13 +1,12 @@
 {
-  "/(auth)/admin/page": "app/(auth)/admin/page.js",
   "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(main)/admin/dashboard/page": "app/(main)/admin/dashboard/page.js",
-  "/(main)/admin/users/page": "app/(main)/admin/users/page.js",
-  "/(main)/admin/verification/page": "app/(main)/admin/verification/page.js",
   "/(main)/dashboard/page": "app/(main)/dashboard/page.js",
-  "/(main)/invest/[farmId]/page": "app/(main)/invest/[farmId]/page.js",
   "/(main)/invest/page": "app/(main)/invest/page.js",
   "/(main)/my-farms/page": "app/(main)/my-farms/page.js",
   "/(main)/my-portfolio/page": "app/(main)/my-portfolio/page.js",
-  "/api/image-proxy/route": "app/api/image-proxy/route.js"
+  "/(main)/profile/page": "app/(main)/profile/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/agri-landing/page": "app/agri-landing/page.js",
+  "/api/image-proxy/route": "app/api/image-proxy/route.js",
+  "/page": "app/page.js"
 }

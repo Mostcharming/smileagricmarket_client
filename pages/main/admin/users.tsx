@@ -15,6 +15,7 @@ import { Column } from '@/components/ui/table';
 import { MoreIcon, CloseIcon, CopyIcon } from '@/components/icons';
 import { Modal } from '@/components/modal';
 import { useGetUsers } from '@/mutation';
+import { getPreviewImageUrl } from '@/utils/image';
 import { UsersApiResponse, SelectOptions } from '@/types';
 
 interface ActionCellProps {
@@ -109,9 +110,12 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
 
         <div className="relative w-32 h-32 mb-8">
           <img
-            src={user.profileImageUrl || "/picture-preview.jpg"}
+            src={getPreviewImageUrl(user.profileImageUrl) || "/picture-preview.jpg"}
             alt={user.fullName}
             className="h-full w-full rounded-full border-4 border-gray-100 object-cover"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/picture-preview.jpg";
+            }}
           />
         </div>
 
