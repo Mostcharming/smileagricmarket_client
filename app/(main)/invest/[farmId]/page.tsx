@@ -8,9 +8,9 @@ import clsx from "clsx";
 import { toast } from "sonner";
 import { MainHeader } from "@/components/ui";
 import { AlertTriangleIcon, CalendarIcon, ClockIcon, FarmIcon, InfoIcon, LayersIcon, LocationIcon, LogoWhiteIcon, TrendingUpIcon, UsersIcon, VerifiedIcon, WalletIcon, InvestmentIcon, PercentIcon, FileTextIcon } from "@/components/icons";
-import { useGetFarmById } from "@/mutation";
+import { useGetWebInvestmentById, useInvest } from "@/mutation/investments.mutation";
+import { useGetPortfolioFarmById } from "@/mutation/portfolio.mutation";
 import { formatNumberWithCommas } from "@/utils";
-import { getPreviewImageUrl } from "@/utils/image";
 
 const Viewer = dynamic(() => import("react-viewer"), { ssr: false });
 
@@ -18,57 +18,6 @@ type FarmMilestone = {
   name: string;
   status: "Completed" | "In progress" | "Not started";
 };
-
-const DUMMY_FARM_PHOTOS = [
-  {
-    src: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80",
-    alt: "Beautiful agricultural farmland with green crops",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=1200&q=80",
-    alt: "Ripe tomatoes growing on vines in a farm greenhouse",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=1200&q=80",
-    alt: "Farmer hands holding rich organic soil with a small green sprout",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?auto=format&fit=crop&w=1200&q=80",
-    alt: "Fresh green lettuce fields under the sun",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=1200&q=80",
-    alt: "Golden wheat field moving gently in the wind",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=1200&q=80",
-    alt: "Professional farmer checking the health of leafy green vegetables",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=1200&q=80",
-    alt: "Rows of organic plants growing inside a modern greenhouse structure",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=1200&q=80",
-    alt: "Sunlight shining through a vibrant corn crop field",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1516253593875-bd7ba052fbc5?auto=format&fit=crop&w=1200&q=80",
-    alt: "Bright red chili peppers ripening on agricultural bushes",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=1200&q=80",
-    alt: "Modern farm tractor working in a vast cultivated field",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
-    alt: "Scenic sunrise view over peaceful rolling farmland hills",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1200&q=80",
-    alt: "Fresh green sprouts growing in small farming pots",
-  },
-];
 
 const FarmFieldArt = () => (
   <div className="absolute inset-0 overflow-hidden">
@@ -79,143 +28,60 @@ const FarmFieldArt = () => (
   </div>
 );
 
-const getDeterministicFarmDetails = (farm: { id: string; name: string; stats?: { completionPercentage?: number } }) => {
-  const code = farm.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) + farm.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
-
-  const roi = 14 + (code % 12); // ROI: 14% to 25%
-  const duration = 6 + (code % 13); // Duration: 6 to 18 months
-  const riskLevels = ["LOW RISK", "MEDIUM RISK", "HIGH RISK"];
-  const risk = riskLevels[code % riskLevels.length];
-  const inspectedDays = 1 + (code % 5);
-  const totalVal = 5000000 + (code % 16) * 1000000; // Total Goal: 5M to 20M
-  const progress = farm.stats?.completionPercentage ?? (35 + (code % 61)); // Progress: 35% to 95%
-  const investedVal = Math.round((progress / 100) * totalVal);
-  const minInvestVal = 10000 + (code % 10) * 10000; // Min Invest: 10K to 100K
-
-  // Deterministic dates
-  const baseYear = 2026;
-  const startMonth = (code % 4) + 6; // July, August, September, October (indices 6, 7, 8, 9)
-  const startDay = 1 + (code % 28);
-  const startDateObj = new Date(baseYear, startMonth, startDay);
-  
-  const endDateObj = new Date(startDateObj);
-  endDateObj.setDate(startDateObj.getDate() + 30 + (code % 25));
-
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const formatDate = (date: Date) => `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-
-  const startDate = (farm as any).startDate ? formatDate(new Date((farm as any).startDate)) : formatDate(startDateObj);
-  const endDate = (farm as any).endDate ? formatDate(new Date((farm as any).endDate)) : formatDate(endDateObj);
-
-  return {
-    roi,
-    duration,
-    risk,
-    inspectedDays,
-    totalVal,
-    progress,
-    investedVal,
-    minInvestVal,
-    startDate,
-    endDate,
-  };
-};
 const formatRisk = (risk: string) => {
-  if (risk === "LOW RISK") return "Low Risk";
-  if (risk === "MEDIUM RISK") return "Medium Risk";
-  if (risk === "HIGH RISK") return "High Risk";
+  const r = (risk || "").toLowerCase();
+  if (r === "low risk" || r === "low") return "Low Risk";
+  if (r === "medium risk" || r === "medium") return "Medium Risk";
+  if (r === "high risk" || r === "high") return "High Risk";
   return risk;
-};
-
-const mockFarmsMap: Record<string, any> = {
-  "inv-1": {
-    name: "Oakhaven Almond Grove",
-    location: "Sacramento Valley, CA",
-    investedAmount: 125000,
-    roi: 12.5,
-    progress: 62,
-    status: "not_started",
-  },
-  "inv-2": {
-    name: "RubyBerry Vertical Farm",
-    location: "Austin, TX",
-    investedAmount: 125000,
-    roi: 12.5,
-    progress: 34,
-    status: "harvest",
-  },
-  "inv-3": {
-    name: "Golden Valley Vineyard",
-    location: "Napa, CA",
-    investedAmount: 125000,
-    roi: 12.5,
-    progress: 84,
-    status: "land_preparation",
-  },
-  "inv-4": {
-    name: "Sierra Highlands Coffee",
-    location: "Boquete, Panama",
-    investedAmount: 125000,
-    roi: 12.5,
-    progress: 12,
-    status: "land_preparation",
-  },
-  "inv-5": {
-    name: "Pine Creek Orchard",
-    location: "Yakima Valley, WA",
-    investedAmount: 95000,
-    roi: 14.0,
-    progress: 100,
-    status: "completed",
-  },
 };
 
 const FarmDetailPage = () => {
   const params = useParams();
   const farmId = params?.farmId as string | undefined;
 
-  const isMockId = useMemo(() => farmId?.startsWith('inv-'), [farmId]);
-  const mockFarmData = useMemo(() => {
-    if (!isMockId) return null;
-    const mockInfo = mockFarmsMap[farmId!] || {
-      name: "Greenfield Cassava Cluster",
-      location: "Orile-Iganmu, Lagos",
-      investedAmount: 1640000,
-      roi: 42.0,
-      progress: 100,
-      status: "completed",
-    };
+  const { data: farmResponse, isLoading: isFarmDetailsLoading } = useGetWebInvestmentById(farmId);
+  const hasInvestedInDb = !!farmResponse?.data?.Investment;
+  const { data: portfolioFarmResponse, isLoading: isPortfolioLoading } = useGetPortfolioFarmById(
+    farmId && hasInvestedInDb ? farmId : undefined
+  );
+
+  const isLoading = isFarmDetailsLoading || (hasInvestedInDb && isPortfolioLoading);
+
+  const farm = useMemo(() => {
+    const baseFarm = farmResponse?.data;
+    const portfolioFarm = portfolioFarmResponse?.data;
+
+    if (!baseFarm) return null;
+
+    if (portfolioFarm) {
+      const template = portfolioFarm.investments?.[0];
+      const transaction = template?.transactions?.[0];
+
+      return {
+        ...baseFarm,
+        name: baseFarm.farmName || portfolioFarm.name,
+        Investment: {
+          amount: portfolioFarm.userInvestment?.amountInvested ?? baseFarm.Investment?.amount,
+          id: transaction?.reference ?? transaction?.id ?? baseFarm.Investment?.id,
+          status: portfolioFarm.portfolioStatus ?? baseFarm.Investment?.status,
+        },
+        milestones: portfolioFarm.milestones || baseFarm.milestones,
+        milestoneStats: portfolioFarm.milestoneStats ? {
+          totalMilestones: portfolioFarm.milestoneStats.total,
+          completedMilestones: portfolioFarm.milestoneStats.completed,
+          inProgressMilestones: portfolioFarm.milestoneStats.pending,
+          notStartedMilestones: 0,
+          completionPercentage: portfolioFarm.milestoneStats.completionPercentage,
+        } : baseFarm.milestoneStats,
+      };
+    }
 
     return {
-      id: farmId || 'inv-5',
-      name: mockInfo.name,
-      description: "A premium cassava farming cluster optimized for high yields and modern processing.",
-      location: mockInfo.location,
-      createdAt: "2026-07-22T00:00:00Z",
-      Investment: {
-        amount: mockInfo.investedAmount,
-        status: "active",
-        id: "TXN-8F29X1A2",
-      },
-      stats: {
-        completionPercentage: mockInfo.progress,
-      },
-      mockRoi: mockInfo.roi,
-      mockTotalVal: 2010000,
-      mockMilestones: [
-        { name: "Land preparation", status: "Completed" },
-        { name: "Seed Purchase", status: "Completed" },
-        { name: "Planting of seeds", status: "Not started" },
-        { name: "Land maintenance", status: "Not started" },
-        { name: "Harvest", status: "Not started" },
-        { name: "Go to Market", status: "Not started" },
-      ],
+      ...baseFarm,
+      name: baseFarm.farmName,
     };
-  }, [farmId, isMockId]);
-
-  const { data: farmResponse, isLoading: apiIsLoading } = useGetFarmById(isMockId ? undefined : farmId);
-  const farm = isMockId ? mockFarmData : farmResponse?.data;
-  const isLoading = isMockId ? false : apiIsLoading;
+  }, [farmResponse, portfolioFarmResponse]);
 
   // Viewer state for gallery lightbox
   const [viewerVisible, setViewerVisible] = useState(false);
@@ -241,16 +107,25 @@ const FarmDetailPage = () => {
 
   const details = useMemo(() => {
     if (!farm) return null;
-    const baseDetails = getDeterministicFarmDetails(farm);
-    if ((farm as any).mockRoi !== undefined) {
-      baseDetails.roi = (farm as any).mockRoi;
-    }
-    if ((farm as any).mockTotalVal !== undefined) {
-      baseDetails.totalVal = (farm as any).mockTotalVal;
-      // Re-calculate investedVal based on progress and totalVal override
-      baseDetails.investedVal = Math.round((baseDetails.progress / 100) * baseDetails.totalVal);
-    }
-    return baseDetails;
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const formatDate = (dateStr?: string) => {
+      if (!dateStr) return "N/A";
+      const date = new Date(dateStr);
+      return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+    };
+
+    return {
+      roi: farm.roi,
+      duration: farm.duration?.value ?? 6,
+      risk: farm.riskLevel || "medium",
+      totalVal: farm.totalExpectedFunding,
+      progress: farm.percentFunded,
+      investedVal: farm.fundingReceived,
+      minInvestVal: farm.minimumInvest,
+      startDate: formatDate(farm.startDate),
+      endDate: formatDate(farm.endDate),
+    };
   }, [farm]);
 
   // Derived current values using default values from farm details if user has not interacted
@@ -259,8 +134,8 @@ const FarmDetailPage = () => {
   }, [investAmount, details]);
 
   const currentDuration = useMemo(() => {
-    return 14;
-  }, []);
+    return details?.duration ?? 6;
+  }, [details]);
 
   // Dynamic calculations for the calculator
   const currentRoi = useMemo(() => {
@@ -289,8 +164,8 @@ const FarmDetailPage = () => {
   }, [currentDuration]);
 
   const durations = useMemo(() => {
-    return [14];
-  }, []);
+    return [details?.duration ?? 6];
+  }, [details]);
 
   const presets = useMemo(() => {
     if (!details) return [50000, 100000, 500000, 1000000];
@@ -300,36 +175,24 @@ const FarmDetailPage = () => {
   }, [details]);
 
   const pictures = useMemo(() => {
-    const rawPictures = (farm as unknown as Record<string, unknown>)?.pictures as { url: string; name?: string }[] | undefined || [];
-    const farmPictures = rawPictures.map((pic) => ({
-      src: getPreviewImageUrl(pic.url ?? ""),
-      alt: pic.name || "Farm photo",
+    const rawImages = farm?.images || [];
+    return rawImages.map((pic) => ({
+      src: pic.fileUrl,
+      alt: pic.fileName || "Farm photo",
     }));
-
-    // Pad to 12 photos with dummy ones if we have fewer
-    if (farmPictures.length < 12) {
-      const needed = 12 - farmPictures.length;
-      return [...farmPictures, ...DUMMY_FARM_PHOTOS.slice(0, needed)];
-    }
-    return farmPictures.slice(0, 12);
   }, [farm]);
 
   const milestones = useMemo((): FarmMilestone[] => {
     if (!farm) return [];
-    if ((farm as any).mockMilestones) {
-      return (farm as any).mockMilestones;
-    }
-    const farmRec = farm as unknown as Record<string, unknown>;
-    const sourceMilestones = (farmRec.milestones || farmRec.SelectedMilestones || []) as Record<string, unknown>[];
+    const sourceMilestones = farm.milestones || [];
     if (sourceMilestones.length > 0) {
-      return sourceMilestones.map((item, index) => {
-        const milestoneObj = item.Milestone as Record<string, unknown> | undefined;
-        const name = (milestoneObj?.name || item.name || `Milestone ${index + 1}`) as string;
-        const status = (milestoneObj?.status || item.status || "Not started") as string;
+      return sourceMilestones.map((item) => {
+        const name = item.name || `Milestone`;
+        const status = (item.status || "not_started") as string;
 
         let normalizedStatus: "Completed" | "In progress" | "Not started" = "Not started";
         const st = status.toLowerCase();
-        if (st === "completed" || st === "complete") {
+        if (st === "completed" || st === "complete" || item.isCompleted) {
           normalizedStatus = "Completed";
         } else if (st === "in progress" || st === "inprogress" || st === "in_progress") {
           normalizedStatus = "In progress";
@@ -342,22 +205,11 @@ const FarmDetailPage = () => {
       });
     }
 
-    // Fallback default timeline
-    return [
-      { name: "Land preparation", status: "Completed" },
-      { name: "Seed Purchase", status: "In progress" },
-      { name: "Planting of seeds", status: "Not started" },
-      { name: "Land maintenance", status: "Not started" },
-      { name: "Harvest", status: "Not started" },
-      { name: "Go to Market", status: "Not started" },
-    ];
+    return [];
   }, [farm]);
 
   const ownerName = useMemo(() => {
-    if (!farm) return "James Ojan";
-    const farmRec = farm as unknown as Record<string, unknown>;
-    const farmUser = (farmRec.user || farmRec.User) as Record<string, unknown> | undefined;
-    return (farmUser?.fullName || farmRec.investorName || "James Ojan") as string;
+    return farm?.farmOwnerName || farm?.farmOwner?.name || "Smile Agri";
   }, [farm]);
 
   const remainingUnits = useMemo(() => {
@@ -377,41 +229,18 @@ const FarmDetailPage = () => {
 
   const farmUpdates = useMemo(() => {
     const completed = milestones.filter(m => m.status === "Completed");
-    const list = completed.map((m, index) => {
-      const imageSrc = pictures[index % pictures.length]?.src || DUMMY_FARM_PHOTOS[index % DUMMY_FARM_PHOTOS.length].src;
+    return completed.map((m, index) => {
+      const imageSrc = pictures[index % pictures.length]?.src || null;
       return {
         id: `update-${index}`,
         author: ownerName,
         title: "Milestone Completed",
         description: `Completed ${m.name.toLowerCase()}`,
-        date: "Nov 17",
+        date: new Date(farm?.updatedAt || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
         image: imageSrc,
       };
     });
-
-    // Fallback if none are completed, to ensure updates are not empty when hasInvested is true
-    if (list.length === 0 && milestones.length >= 2) {
-      list.push(
-        {
-          id: "update-0",
-          author: ownerName,
-          title: "Milestone Completed",
-          description: `Completed ${milestones[0].name.toLowerCase()}`,
-          date: "Nov 17",
-          image: pictures[0]?.src || DUMMY_FARM_PHOTOS[0].src,
-        },
-        {
-          id: "update-1",
-          author: ownerName,
-          title: "Milestone Completed",
-          description: `Completed ${milestones[1].name.toLowerCase()}`,
-          date: "Nov 17",
-          image: pictures[1]?.src || DUMMY_FARM_PHOTOS[1].src,
-        }
-      );
-    }
-    return list;
-  }, [milestones, ownerName, pictures]);
+  }, [milestones, ownerName, pictures, farm]);
 
   const openPreview = (index: number) => {
     if (pictures.length === 0) return;
@@ -431,16 +260,43 @@ const FarmDetailPage = () => {
     setStep('review');
   };
 
+  const { mutate: investMutate, isPending: isInvesting } = useInvest();
+
   const handleProceedPayment = () => {
     if (!ackRisks || !ackTerms || !ackLock) {
       toast.error("Please confirm all acknowledgments to proceed to payment.");
       return;
     }
-    const txn = 'TXN-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-    setTransactionId(txn);
-    setHasSessionInvested(true);
-    setStep('success');
-    toast.success("Payment confirmed successfully!");
+    if (!farmId) {
+      toast.error("Farm ID is missing.");
+      return;
+    }
+
+    const idempotencyKey = 'idemp-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+    investMutate({
+      farmId,
+      payload: {
+        amount: currentAmount,
+        currency: farm?.currency || "NGN",
+        idempotencyKey,
+      }
+    }, {
+      onSuccess: (response) => {
+        if (response.success && response.data) {
+          const payment = response.data.payment;
+          setTransactionId(payment.id || payment.reference);
+          setHasSessionInvested(true);
+          setStep('success');
+          toast.success("Investment recorded successfully!");
+        } else {
+          toast.error(response.message || "Failed to record investment");
+        }
+      },
+      onError: (err: any) => {
+        toast.error(err?.message || "Failed to complete investment");
+      }
+    });
   };
 
   const handleDownloadAgreement = () => {
@@ -1258,9 +1114,10 @@ const FarmDetailPage = () => {
                     <button
                       type="button"
                       onClick={handleProceedPayment}
-                      className="w-full rounded-2xl bg-[#009B4E] hover:bg-[#007C3E] py-4 px-6 text-sm font-bold text-white shadow-[0_6px_20px_rgba(0,155,78,0.15)] transition-all cursor-pointer flex items-center justify-center gap-2 group font-semibold"
+                      disabled={isInvesting}
+                      className="w-full rounded-2xl bg-[#009B4E] hover:bg-[#007C3E] py-4 px-6 text-sm font-bold text-white shadow-[0_6px_20px_rgba(0,155,78,0.15)] transition-all cursor-pointer flex items-center justify-center gap-2 group font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Proceed to Payment
+                      {isInvesting ? "Processing..." : "Proceed to Payment"}
                       <svg
                         width="16"
                         height="16"

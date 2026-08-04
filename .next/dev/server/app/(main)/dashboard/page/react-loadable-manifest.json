@@ -1,1 +1,9 @@
-{}
+{
+  "[project]/node_modules/react-viewer/dist/index.js [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/node_modules/react-viewer/dist/index.js [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_react-viewer_dist_index_d635137d.js",
+      "static/chunks/node_modules_react-viewer_dist_index_f8018fb0.js"
+    ]
+  }
+}

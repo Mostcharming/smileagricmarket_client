@@ -7,3 +7,5 @@ export * from './dashboard.mutation';
 export * from './farms.mutation';
 export * from './kyc.mutation';
 export * from './profile.mutation';
+export * from './marketing.mutation';
+export * from './investments.mutation';

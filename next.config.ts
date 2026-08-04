@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
         hostname: "app.smileagrimarket.com",
         pathname: "/api/v1/upload/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 };

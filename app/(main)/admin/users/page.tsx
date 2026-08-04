@@ -1,4 +1,4 @@
-import UsersDashboard from "@/pages/main/admin/users";
+import UsersDashboard from "@/screens/main/admin/users";
 
 export default function AdminUsersPage() {
   return <UsersDashboard />

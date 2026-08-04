@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 const Viewer = dynamic(() => import('react-viewer'), { ssr: false });
 import { formatNumberWithCommas } from '@/utils';
 import { getPreviewImageUrl } from '@/utils/image';
+import { AdminFarmDetailsResponse } from '@/types';
 
 type DocumentItem = {
   id: string;
@@ -52,34 +53,6 @@ const isImageUrl = (url?: string) => {
   } catch {
     return false;
   }
-};
-
-type FarmDetailView = {
-  user?: {
-    verifiedFarmsCount?: number;
-    totalFundsReceived?: string | number;
-    fullName?: string;
-    email?: string;
-    profileImage?: string;
-  };
-  User?: {
-    verifiedFarmsCount?: number;
-    totalFundsReceived?: string | number;
-    fullName?: string;
-    email?: string;
-    profileImage?: string;
-  };
-  documents?: Array<{
-    id?: string;
-    name?: string;
-    size?: string | number;
-    status?: string;
-    url?: string;
-  }>;
-  pictures?: Array<{ id?: string; url?: string; name?: string }>;
-  milestones?: Array<{ id?: string; name?: string; amount?: number | string }>;
-  investorName?: string;
-  submittedAt?: string;
 };
 
 const parseAmount = (value?: string | number | null) => {
@@ -141,26 +114,15 @@ const FarmDetailPage = () => {
   const [modalInitialStep, setModalInitialStep] = React.useState<'approve' | 'reject'>('approve');
 
   const farm = React.useMemo(
-    () =>
-      (farmData ?? {}) as FarmDetailView & {
-        id?: string;
-        name?: string;
-        location?: string;
-        size?: number;
-        Category?: { name?: string };
-        Investment?: { amount?: number; status?: string };
-        stats?: { completionPercentage?: number };
-        createdAt?: string;
-      },
+    () => (farmData ?? {}) as AdminFarmDetailsResponse,
     [farmData]
   );
 
   const documents: DocumentItem[] = React.useMemo(() => {
-    const sourceDocuments = (farm.documents ?? (farm as unknown as { Documents?: unknown[] }).Documents) ?? [];
+    const sourceDocuments = (farm.documents ?? farm.Documents) ?? [];
 
     if (sourceDocuments.length > 0) {
-      return sourceDocuments.map((document, index) => {
-        const doc = document as { id?: string; fileName?: string; fileUrl?: string; fileSize?: number; url?: string };
+      return sourceDocuments.map((doc, index) => {
         const previewUrl = getPreviewImageUrl(doc.fileUrl || doc.url || '');
 
         return {
@@ -213,16 +175,16 @@ const FarmDetailPage = () => {
   }, [farm.pictures, imageDocuments]);
 
   const milestones = React.useMemo(() => {
-    const sourceSelected = (farm.milestones ?? (farm as unknown as { SelectedMilestones?: unknown[] }).SelectedMilestones) ?? [];
+    const sourceSelected = (farm.milestones ?? farm.SelectedMilestones) ?? [];
 
     if (sourceSelected.length > 0) {
       return sourceSelected
         .map((item, index) => {
-          const it = item as { id?: string; amount?: number | string; Milestone?: { id?: string; name?: string; amount?: number | string; order?: number } };
-          const ms = it.Milestone ?? (it as unknown as { name?: string; amount?: number | string; order?: number });
+          const it = item;
+          const ms = it.Milestone ?? it;
           const name = ms?.name || `Milestone ${index + 1}`;
 
-          const inv = farm.Investment as unknown as { investmentReceived?: string; expectedInvestment?: string; amount?: number };
+          const inv = farm.Investment;
           const amountCandidate = parseAmount(it.amount ?? ms?.amount ?? inv?.investmentReceived ?? inv?.expectedInvestment ?? 0) ?? 0;
 
           return {
@@ -245,12 +207,12 @@ const FarmDetailPage = () => {
   const farmName = farm.name || 'Farm details';
   const farmCategory = farm.Category?.name || 'Vegetable';
   const farmSize = typeof farm.size === 'number' ? `${formatNumberWithCommas(farm.size)} Acres` : '45.5 Acres';
-  const inv = farm.Investment as unknown as { investmentReceived?: string; expectedInvestment?: string; amount?: number };
-  const investmentVal = parseAmount(inv?.investmentReceived ?? inv?.expectedInvestment ?? (farm as unknown as { investmentAmount?: number }).investmentAmount ?? 0);
+  const inv = farm.Investment;
+  const investmentVal = parseAmount(inv?.investmentReceived ?? inv?.expectedInvestment ?? farm.investmentAmount ?? 0);
   const estInvestment = formatCurrency(investmentVal);
   const totalFundingReceived = formatCurrency(farmUser?.totalFundsReceived ?? inv?.investmentReceived ?? 0);
   const verifiedFarmsCount = typeof farmUser?.verifiedFarmsCount === 'number' ? farmUser.verifiedFarmsCount : 0;
-  const verificationStatusNormalized = ((farm as unknown as { verificationStatus?: string }).verificationStatus ?? '').toLowerCase();
+  const verificationStatusNormalized = (farm.verificationStatus ?? '').toLowerCase();
   // Viewer (gallery) state for image previews
   const [viewerVisible, setViewerVisible] = React.useState(false);
   const [viewerImages, setViewerImages] = React.useState<Array<{ src: string; alt?: string }>>([]);
@@ -380,7 +342,7 @@ const FarmDetailPage = () => {
                     Review
                   </Typography>
                   <Typography variant="subheading" className="capitalize block leading-tight text-white">
-                    {(farm as unknown as { verificationStatus?: string }).verificationStatus ?? 'pending'}
+                    {farm.verificationStatus ?? 'pending'}
                   </Typography>
                   <Typography variant="small" className="mt-2 block text-white">
                     {formatRelativeDate(farm.createdAt)}

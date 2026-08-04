@@ -1,7 +1,8 @@
 "use client";
 
 import { ModalProps } from "@/types";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 const Modal = ({
   isOpen,
@@ -12,9 +13,15 @@ const Modal = ({
   maxHeight = "max-h-[70vh]",
   bottomRight = false,
   closeOnOverlayClick = true,
+  className = "",
 }: ModalProps) => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Prevent background scroll when modal is open
   useEffect(() => {
@@ -47,16 +54,16 @@ const Modal = ({
     if (focusableEls.length) focusableEls[0].focus();
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <div
       ref={overlayRef}
-      className={`fixed inset-0 z-50 flex ${
+      className={`fixed inset-0 ${className.includes('z-') ? '' : 'z-[100]'} flex ${
         bottomRight
           ? "items-end justify-end p-0 pb-6 md:p-6"
           : "items-center justify-center"
-      } cursor-pointer bg-appBlack/40 backdrop-blur-sm`}
+      } cursor-pointer bg-appBlack/40 backdrop-blur-sm ${className}`}
       aria-modal="true"
       role="dialog"
       aria-label={ariaLabel || "Modal"}
@@ -71,7 +78,8 @@ const Modal = ({
       >
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

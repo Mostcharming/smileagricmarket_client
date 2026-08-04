@@ -1,4 +1,4 @@
-import VerifyOTP from "@/pages/auth/verifyOTP";
+import VerifyOTP from "@/screens/auth/verifyOTP";
 
 export default function VerifyOTPPage() {
   return <VerifyOTP />

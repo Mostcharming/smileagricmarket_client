@@ -7,3 +7,6 @@ export * from './dashboard.api';
 export * from './farms.api';
 export * from './kyc.api';
 export * from './profile.api';
+export * from './marketing.api';
+export * from './investments.api';
+export * from './portfolio.api';

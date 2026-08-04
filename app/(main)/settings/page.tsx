@@ -1,4 +1,4 @@
-import SettingsPage from "@/pages/main/settings";
+import SettingsPage from "@/screens/main/settings";
 
 export default function WalletAccountSettingsPage() {
   return <SettingsPage />;

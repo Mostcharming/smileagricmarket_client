@@ -3,10 +3,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from 'next/navigation';
-import { ChevronIcon } from "@/components/icons";
+import { ChevronIcon, CloseIcon, LogoutIcon } from "@/components/icons";
 import { getStoredUser, signOut } from "@/utils";
 import { getPreviewImageUrl } from "@/utils/image";
 import { profileSchema } from "@/types";
+import { Modal } from "@/components/modal";
+import { Button, Typography } from "@/components/ui";
 
 type ProfileMenuProps = {
   logoutRedirectPath: string;
@@ -28,6 +30,7 @@ const getInitialsFromFullName = (fullName?: string) => {
 
 const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) => {
   const [open, setOpen] = useState(false);
+  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
   const [user, setUser] = useState<profileSchema | null>(null);
   const [imageError, setImageError] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -146,6 +149,15 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
               <span>Settings</span>
             </button>
 
+            <button
+              type="button"
+              onClick={isAdmin ? undefined : () => { setOpen(false); router.push('/payment'); }}
+              disabled={isAdmin}
+              className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#374151] transition-colors hover:bg-[#F3F4F6] disabled:cursor-default disabled:hover:bg-transparent disabled:opacity-70"
+            >
+              <span>Payment</span>
+            </button>
+
             <div className="my-2 h-px bg-[#F3F4F6]" />
 
             <button
@@ -160,7 +172,10 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
 
             <button
               type="button"
-              onClick={() => signOut(logoutRedirectPath)}
+              onClick={() => {
+                setOpen(false);
+                setIsLogoutConfirmOpen(true);
+              }}
               className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-[#B42318] transition-colors hover:bg-[#FEF3F2]"
             >
               <span>Log out</span>
@@ -168,6 +183,55 @@ const ProfileMenu = ({ logoutRedirectPath, className = "" }: ProfileMenuProps) =
           </div>
         </div>
       )}
+
+      <Modal
+        isOpen={isLogoutConfirmOpen}
+        onClose={() => setIsLogoutConfirmOpen(false)}
+        ariaLabel="Confirm logout modal"
+        maxWidth="max-w-md"
+      >
+        <div className="relative p-6 flex flex-col items-center">
+          <button
+            onClick={() => setIsLogoutConfirmOpen(false)}
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
+          >
+            <CloseIcon size={24} />
+          </button>
+
+          <div className="w-full flex flex-col text-center pt-4">
+            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <LogoutIcon className="text-red-600" size={24} />
+              </div>
+            </div>
+
+            <Typography variant="subheading" className="mb-2">Log Out</Typography>
+            <Typography className="text-gray-500 mb-8 px-4">
+              Are you sure you want to log out of your account?
+            </Typography>
+
+            <div className="flex w-full gap-4">
+              <button
+                type="button"
+                className="flex-1 py-3 text-gray-900 font-semibold uppercase hover:bg-gray-50 rounded-lg transition-colors focus:outline-none"
+                onClick={() => setIsLogoutConfirmOpen(false)}
+              >
+                Cancel
+              </button>
+              <Button
+                variant="primary"
+                className="flex-1 bg-red-600 hover:bg-red-700 border-none uppercase text-white font-semibold py-3"
+                onClick={() => {
+                  setIsLogoutConfirmOpen(false);
+                  signOut(logoutRedirectPath);
+                }}
+              >
+                Yes, Log Out
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

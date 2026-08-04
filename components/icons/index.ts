@@ -1,5 +1,6 @@
 export { AddIcon } from './add';
 export { ArrowLeftIcon } from "./arrowLeft";
+export { ArrowDownIcon } from "./arrowDown";
 export { BellIcon } from "./bell";
 export { CheckIcon } from "./check";
 export { ChevronIcon } from "./chevron";
@@ -33,4 +34,5 @@ export { LayersIcon } from "./layers";
 export { InvestmentIcon } from "./investment";
 export { CalendarIcon } from "./calendar";
 export { PercentIcon } from "./percent";
+export { DownloadIcon } from "./download";
 export { FileTextIcon } from "./fileText";

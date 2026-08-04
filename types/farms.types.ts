@@ -72,9 +72,59 @@ export interface FarmResponse {
 	location?: string;
 	size?: number;
 	Category?: Category;
-	Investment?: Investment;
+	Investment?: Investment & {
+		investmentReceived?: string;
+		expectedInvestment?: string;
+	};
 	stats?: Statistics;
 	createdAt: string;
+
+	// Backend API returned fields to remove frontend type casts
+	verificationStatus?: string;
+	verificationNote?: string;
+	investmentAmount?: number;
+	pictures?: Array<{ id: string; url: string; name?: string }>;
+	documents?: Array<{ id: string; name: string; url: string; size?: number | string; status?: string; fileUrl?: string; fileName?: string; fileSize?: number }>;
+	Documents?: Array<{ id: string; name: string; url: string; size?: number | string; status?: string; fileUrl?: string; fileName?: string; fileSize?: number }>;
+	milestones?: Array<{
+		id: string;
+		amount?: number | string;
+		Milestone?: {
+			id: string;
+			name: string;
+			amount?: number | string;
+			order?: number;
+		};
+		name?: string;
+		order?: number;
+	}>;
+	SelectedMilestones?: Array<{
+		id: string;
+		amount?: number | string;
+		Milestone?: {
+			id: string;
+			name: string;
+			amount?: number | string;
+			order?: number;
+		};
+		name?: string;
+		order?: number;
+	}>;
+	user?: {
+		verifiedFarmsCount?: number;
+		totalFundsReceived?: string | number;
+		fullName?: string;
+		email?: string;
+		profileImage?: string;
+	};
+	User?: {
+		verifiedFarmsCount?: number;
+		totalFundsReceived?: string | number;
+		fullName?: string;
+		email?: string;
+		profileImage?: string;
+	};
+	investorName?: string;
 }
 
 export interface FarmsDirectory {

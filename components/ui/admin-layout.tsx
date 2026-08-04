@@ -32,7 +32,7 @@ const AdminLayout = ({ children, breadcrumbs = [] }: AdminLayoutProps) => {
 
       {/* Main Content Area */}
       <div className="ml-0 md:ml-64 flex flex-col min-h-screen transition-all duration-300">
-        <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-8 sticky top-0 z-40">
+        <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-8 fixed top-0 right-0 left-0 md:left-64 z-40">
           <div className="flex items-center gap-3 text-sm">
             {/* Hamburger Button for Mobile */}
             <button
@@ -85,7 +85,7 @@ const AdminLayout = ({ children, breadcrumbs = [] }: AdminLayoutProps) => {
           </div>
         </header>
 
-        <main className={isFullWidthPage ? 'p-0' : 'p-4 md:p-8'}>
+        <main className={isFullWidthPage ? 'pt-16 p-0' : 'pt-20! p-4 md:p-8'}>
           {children}
         </main>
       </div>

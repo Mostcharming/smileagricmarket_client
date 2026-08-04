@@ -1,4 +1,4 @@
-import MyFarms from "@/pages/main/myFarms";
+import MyFarms from "@/screens/main/myFarms";
 
 export default function MyFarmsPage() {
   return <MyFarms />;

@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/agri-button";
 import { cn } from "@/lib/utils";
+import { useCreateBetaSignup } from "@/mutation";
 
 type Role = "investor" | "operator";
 
@@ -17,6 +18,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function WaitlistForm() {
   const reduceMotion = useReducedMotion();
+  const { mutate, isPending } = useCreateBetaSignup();
   const [role, setRole] = useState<Role>("investor");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -24,13 +26,29 @@ export function WaitlistForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isPending) return;
     if (!EMAIL_RE.test(email.trim())) {
       setError("Enter a valid email address so we can reach you.");
       return;
     }
     setError(null);
-    // Front-end only: a real integration would POST to the waitlist service here.
-    setSubmitted(true);
+
+    const emailParts = email.trim().split("@");
+    const username = emailParts[0] || "";
+    const firstPart = username.split(".")[0] || "";
+    const firstName = firstPart.charAt(0).toUpperCase() + firstPart.slice(1);
+
+    mutate(
+      { email: email.trim(), firstName },
+      {
+        onSuccess: () => {
+          setSubmitted(true);
+        },
+        onError: (err: any) => {
+          setError(err?.message || "Failed to join private beta. Please try again.");
+        },
+      }
+    );
   }
 
   if (submitted) {
@@ -74,6 +92,7 @@ export function WaitlistForm() {
                 type="button"
                 role="radio"
                 aria-checked={active}
+                disabled={isPending}
                 onClick={() => setRole(key)}
                 className={cn(
                   "rounded-lg px-3 py-2.5 text-sm font-medium transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf-600",
@@ -101,6 +120,7 @@ export function WaitlistForm() {
             autoComplete="email"
             placeholder="you@email.com"
             value={email}
+            disabled={isPending}
             onChange={(e) => {
               setEmail(e.target.value);
               if (error) setError(null);
@@ -112,7 +132,7 @@ export function WaitlistForm() {
               error ? "border-destructive" : "border-input",
             )}
           />
-          <Button variant="cta" size="xl" type="submit" className="shrink-0">
+          <Button variant="cta" size="xl" type="submit" className="shrink-0" disabled={isPending}>
             Join private beta
             <ArrowRight data-icon="inline-end" className="size-4" />
           </Button>
