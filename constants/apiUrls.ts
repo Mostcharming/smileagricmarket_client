@@ -46,6 +46,7 @@ export const adminMilestones = {
 export const webFarmCategories = {
     getCategories: () => `/web/farm-categories`,
     getMilestoneByCategory: (categoryId: string) => `/web/farm-categories/${categoryId}/milestones`,
+    getInvestmentTemplate: (categoryId: string) => `/web/farm-categories/${categoryId}/investment-template`,
 };
 
 export const webDashboard = {
@@ -83,4 +84,26 @@ export const adminInvestments = {
     addMilestone: (investmentId: string) => `/web/admin/investments/${investmentId}/milestones`,
     updateMilestone: (milestoneId: string) => `/web/admin/investment-milestones/${milestoneId}`,
     deleteMilestone: (milestoneId: string) => `/web/admin/investment-milestones/${milestoneId}`,
+};
+
+export const marketingAdminUrl = {
+    login: () => `/web/marketing-admin/login`,
+    getBetaSignups: (query: string) => `/web/marketing-admin/beta-signups${query}`,
+    downloadBetaSignups: (query: string) => `/web/marketing-admin/beta-signups/download${query}`,
+};
+
+export const webMarketingUrl = {
+    betaSignup: () => `/web/beta-signups`,
+};
+
+export const webInvestments = {
+    getInvestments: (query: string) => `/web/investments${query}`,
+    getInvestmentById: (farmId: string) => `/web/investments/${farmId}`,
+    invest: (farmId: string) => `/web/investments/${farmId}/invest`,
+};
+
+export const webPortfolio = {
+    getPortfolio: () => `/web/portfolio`,
+    getPortfolioFarms: (query: string) => `/web/portfolio/farms${query}`,
+    getPortfolioFarmById: (farmId: string) => `/web/portfolio/farms/${farmId}`,
 };

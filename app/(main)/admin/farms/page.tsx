@@ -1,4 +1,4 @@
-import FarmsDashboard from '@/pages/main/admin/farms';
+import FarmsDashboard from '@/screens/main/admin/farms';
 
 export default function AdminFarmsPage() {
   return <FarmsDashboard />;

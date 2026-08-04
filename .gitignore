@@ -23,6 +23,32 @@
 .DS_Store
 *.pem
 
+# OS files
+Thumbs.db
+ehthumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+.history/
+
+# caches
+.cache/
+.parcel-cache/
+.turbo/
+.next/cache/
+
+# build outputs
+/dist
+/build
+
+# tooling
+.eslintcache
+
+# serverless / functions
+.serverless/
+
+
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -26,7 +26,8 @@ export const buildQueryString = (filters: Record<string, any>): string => {
 
     Object.entries(filters).forEach(([key, value]) => appendParam(key, value));
 
-    return `?${params.toString()}`;
+    const queryString = params.toString();
+    return queryString ? `?${queryString}` : "";
 };
 
 export const formatNumberWithCommas = (value: string | number): string => {

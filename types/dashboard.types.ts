@@ -7,6 +7,8 @@ export interface FarmCategoryResponse {
     milestones?: MilestoneResponse[];
     createdAt?: string;
     updatedAt?: string;
+    investmentTemplate?: any;
+    investmentTemplates?: any[];
 }
 
 export interface FarmCategoriesDirectory {

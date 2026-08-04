@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/marketing/layout,_N_T_/marketing/beta-email/layout,_N_T_/marketing/beta-email/page,_N_T_/marketing/beta-email"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/marketing/beta-email/__PAGE__",
+    "/marketing/beta-email",
+    "/marketing",
+    "/_index",
+    "/_head"
+  ]
+}

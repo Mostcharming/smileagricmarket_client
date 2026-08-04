@@ -1,4 +1,4 @@
-import ProfilePage from "@/pages/main/profile";
+import ProfilePage from "@/screens/main/profile";
 
 export default function AdminProfilePage() {
   return <ProfilePage />;

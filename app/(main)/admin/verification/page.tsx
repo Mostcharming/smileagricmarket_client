@@ -1,4 +1,4 @@
-import VerificationDashboard from "@/pages/main/admin/verification";
+import VerificationDashboard from "@/screens/main/admin/verification";
 
 export default function VerificationPage() {
   return <VerificationDashboard />

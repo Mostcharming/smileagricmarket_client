@@ -29,5 +29,8 @@
   "/api/image-proxy/route": "app/api/image-proxy/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/legal/[slug]/page": "app/legal/[slug]/page.js",
+  "/marketing/beta-email/page": "app/marketing/beta-email/page.js",
+  "/marketing/dashboard/page": "app/marketing/dashboard/page.js",
+  "/marketing/page": "app/marketing/page.js",
   "/page": "app/page.js"
 }

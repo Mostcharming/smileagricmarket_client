@@ -3,7 +3,7 @@
 import React from 'react';
 
 export interface Column<T> {
-  header: string;
+  header: string | React.ReactNode;
   key: keyof T | string;
   render?: (item: T) => React.ReactNode;
 }

@@ -56,6 +56,7 @@ export interface ModalProps {
   maxHeight?: string;
   bottomRight?: boolean;
   closeOnOverlayClick?: boolean;
+  className?: string;
 }
 
 export interface KycModalProps {

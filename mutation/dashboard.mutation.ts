@@ -3,6 +3,7 @@ import {
 	getDashboardStats,
 	getFarmCategories,
 	getWebMilestonesByCategory,
+	getWebInvestmentTemplate,
 } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -17,6 +18,14 @@ export const useGetWebMilestonesByCategory = (categoryId?: string) => {
 	return useQuery({
 		queryKey: ["webMilestones", categoryId],
 		queryFn: () => getWebMilestonesByCategory(categoryId!),
+		enabled: !!categoryId,
+	});
+};
+
+export const useGetWebInvestmentTemplate = (categoryId?: string) => {
+	return useQuery({
+		queryKey: ["webInvestmentTemplate", categoryId],
+		queryFn: () => getWebInvestmentTemplate(categoryId!),
 		enabled: !!categoryId,
 	});
 };

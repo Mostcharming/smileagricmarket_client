@@ -9,9 +9,10 @@ R.c("server/chunks/ssr/app_b9b1292a._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_global-error_ece394eb.js")
 R.c("server/chunks/ssr/_94e522a6._.js")
 R.c("server/chunks/ssr/app_loading_tsx_b05711b0._.js")
+R.c("server/chunks/ssr/components_icons_index_ts_1b5692f0._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_client_components_9774470f._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_forbidden_45780354.js")
 R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_unauthorized_15817684.js")
 R.c("server/chunks/ssr/_next-internal_server_app_(main)_invest_[farmId]_page_actions_f3b3a50f.js")
-R.m(32986)
-module.exports=R.m(32986).exports
+R.m(16866)
+module.exports=R.m(16866).exports

@@ -29,5 +29,8 @@
   "/api/image-proxy/route": "/api/image-proxy",
   "/favicon.ico/route": "/favicon.ico",
   "/legal/[slug]/page": "/legal/[slug]",
+  "/marketing/beta-email/page": "/marketing/beta-email",
+  "/marketing/dashboard/page": "/marketing/dashboard",
+  "/marketing/page": "/marketing",
   "/page": "/"
 }

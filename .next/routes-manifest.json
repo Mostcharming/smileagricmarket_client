@@ -53,6 +53,12 @@
       "namedRegex": "^/(?:/)?$"
     },
     {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
       "page": "/_not-found",
       "regex": "^/_not\\-found(?:/)?$",
       "routeKeys": {},
@@ -131,48 +137,6 @@
       "namedRegex": "^/api/image\\-proxy(?:/)?$"
     },
     {
-      "page": "/auth/admin",
-      "regex": "^/auth/admin(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/admin(?:/)?$"
-    },
-    {
-      "page": "/auth/forgotPassword",
-      "regex": "^/auth/forgotPassword(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/forgotPassword(?:/)?$"
-    },
-    {
-      "page": "/auth/login",
-      "regex": "^/auth/login(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/login(?:/)?$"
-    },
-    {
-      "page": "/auth/onboarding",
-      "regex": "^/auth/onboarding(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/onboarding(?:/)?$"
-    },
-    {
-      "page": "/auth/resetPassword",
-      "regex": "^/auth/resetPassword(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/resetPassword(?:/)?$"
-    },
-    {
-      "page": "/auth/signup",
-      "regex": "^/auth/signup(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/signup(?:/)?$"
-    },
-    {
-      "page": "/auth/verifyOTP",
-      "regex": "^/auth/verifyOTP(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/verifyOTP(?:/)?$"
-    },
-    {
       "page": "/dashboard",
       "regex": "^/dashboard(?:/)?$",
       "routeKeys": {},
@@ -203,70 +167,22 @@
       "namedRegex": "^/login(?:/)?$"
     },
     {
-      "page": "/main/admin/farms",
-      "regex": "^/main/admin/farms(?:/)?$",
+      "page": "/marketing",
+      "regex": "^/marketing(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/main/admin/farms(?:/)?$"
+      "namedRegex": "^/marketing(?:/)?$"
     },
     {
-      "page": "/main/admin/investments/templates",
-      "regex": "^/main/admin/investments/templates(?:/)?$",
+      "page": "/marketing/beta-email",
+      "regex": "^/marketing/beta\\-email(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/main/admin/investments/templates(?:/)?$"
+      "namedRegex": "^/marketing/beta\\-email(?:/)?$"
     },
     {
-      "page": "/main/admin/milestones",
-      "regex": "^/main/admin/milestones(?:/)?$",
+      "page": "/marketing/dashboard",
+      "regex": "^/marketing/dashboard(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/main/admin/milestones(?:/)?$"
-    },
-    {
-      "page": "/main/admin/users",
-      "regex": "^/main/admin/users(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/main/admin/users(?:/)?$"
-    },
-    {
-      "page": "/main/admin/verification",
-      "regex": "^/main/admin/verification(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/main/admin/verification(?:/)?$"
-    },
-    {
-      "page": "/main/dashboard",
-      "regex": "^/main/dashboard(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/main/dashboard(?:/)?$"
-    },
-    {
-      "page": "/main/invest",
-      "regex": "^/main/invest(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/main/invest(?:/)?$"
-    },
-    {
-      "page": "/main/myFarms",
-      "regex": "^/main/myFarms(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/main/myFarms(?:/)?$"
-    },
-    {
-      "page": "/main/portfolio",
-      "regex": "^/main/portfolio(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/main/portfolio(?:/)?$"
-    },
-    {
-      "page": "/main/profile",
-      "regex": "^/main/profile(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/main/profile(?:/)?$"
-    },
-    {
-      "page": "/main/settings",
-      "regex": "^/main/settings(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/main/settings(?:/)?$"
+      "namedRegex": "^/marketing/dashboard(?:/)?$"
     },
     {
       "page": "/my-farms",

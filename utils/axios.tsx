@@ -20,7 +20,14 @@ const handleUnauthorizedRedirect = (error: unknown) => {
 
     const currentPath = window.location.pathname;
     const isAdminRoute = currentPath.startsWith("/admin/") || currentPath === "/admin";
-    const redirectPath = isAdminRoute ? "/admin" : "/login";
+    const isMarketingRoute = currentPath.startsWith("/marketing/") || currentPath === "/marketing";
+
+    let redirectPath = "/login";
+    if (isAdminRoute) {
+        redirectPath = "/admin";
+    } else if (isMarketingRoute) {
+        redirectPath = "/marketing";
+    }
 
     clearAuthSession();
 

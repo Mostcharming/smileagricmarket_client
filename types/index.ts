@@ -8,3 +8,5 @@ export type * from "./kyc.types";
 export type * from './profile.types';
 export type * from './shared.types';
 export type * from './investments.types';
+export * from './marketing.types';
+export type * from './portfolio.types';

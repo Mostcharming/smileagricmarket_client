@@ -5,10 +5,11 @@ const cookieName = "smileAgrimarketCookie";
 const userStorageKey = "smileAgrimarketUser";
 
 export const setCookie = async (data: string) => {
+    const isSecure = typeof window !== "undefined" && window.location.protocol === "https:";
     Cookies.set(cookieName, data, {
-        sameSite: "None",
+        sameSite: isSecure ? "None" : "Lax",
         expires: 7,
-        secure: true,
+        secure: isSecure,
     });
 };
 
@@ -49,9 +50,27 @@ export const removeStoredUser = () => {
     localStorage.removeItem(userStorageKey);
 };
 
+export const setStoredRole = (role: string) => {
+    const isSecure = typeof window !== "undefined" && window.location.protocol === "https:";
+    Cookies.set("smileAgrimarketRole", role, {
+        sameSite: isSecure ? "None" : "Lax",
+        expires: 7,
+        secure: isSecure,
+    });
+};
+
+export const getStoredRole = () => {
+    return Cookies.get("smileAgrimarketRole");
+};
+
+export const removeStoredRole = () => {
+    Cookies.remove("smileAgrimarketRole");
+};
+
 export const clearAuthSession = () => {
     removeCookie();
     removeStoredUser();
+    removeStoredRole();
 };
 
 export const signOut = (redirectPath: string) => {

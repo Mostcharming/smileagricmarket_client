@@ -26,6 +26,15 @@ export const getWebMilestonesByCategory = async (
 	return response;
 };
 
+export const getWebInvestmentTemplate = async (
+	categoryId: string
+): Promise<ApiResponse<any>> => {
+	const response = await get<any>(
+		webFarmCategories.getInvestmentTemplate(categoryId)
+	);
+	return response;
+};
+
 export const getDashboard = async (): Promise<ApiResponse<DashboardResponse>> => {
 	const response = await get<DashboardResponse>(webDashboard.getDashboard());
 	return response;
