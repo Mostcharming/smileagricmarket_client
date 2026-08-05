@@ -1,33 +1,227 @@
-[00:00:01.795] Server  LOG      ✓ Ready in 1348ms
-[00:00:05.111] Server  LOG      ○ Compiling /admin ...
-[00:00:08.227] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:20.041] Server  LOG      ✓ Compiled in 251ms
-[00:03:33.472] Server  LOG      ✓ Compiled in 196ms
-[00:03:55.970] Server  LOG      ✓ Compiled in 207ms
-[00:10:34.918] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
-[00:14:12.160] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:16:13.297] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:16:32.171] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
-[02:08:04.434] Server  LOG      ✓ Compiled in 1285ms
-[02:08:18.502] Server  LOG      ✓ Compiled in 574ms
-[02:10:39.881] Server  LOG      ✓ Compiled in 1050ms
-[02:13:29.413] Server  LOG      ✓ Compiled in 473ms
-[02:17:17.415] Server  LOG      ✓ Compiled in 1736ms
-[02:28:42.255] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:30:05.116] Server  LOG      ✓ Compiled in 911ms
-[02:30:21.953] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:32:06.530] Server  LOG      ✓ Compiled in 1139ms
-[02:32:06.779] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:32:19.695] Server  LOG      ✓ Compiled in 652ms
-[02:32:19.861] Browser ERROR   ./screens/main/myFarms.tsx:581:39
+[00:00:07.243] Server  LOG      ✓ Ready in 5.7s
+[00:12:50.534] Server  LOG      ○ Compiling /admin ...
+[00:13:18.779] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:01.701] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:26.432] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:20:05.732] Server  LOG      ✓ Compiled in 973ms
+[01:22:54.336] Server  LOG      ✓ Compiled in 332ms
+[01:25:23.466] Server  LOG      ✓ Compiled in 273ms
+[01:25:47.346] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:27:40.187] Server  LOG      ✓ Compiled in 363ms
+[01:27:48.444] Server  LOG      ✓ Compiled in 297ms
+[01:28:04.190] Server  LOG      ✓ Compiled in 499ms
+[01:28:23.308] Server  LOG      ✓ Compiled in 291ms
+[01:28:23.470] Browser ERROR   ./screens/main/myFarms.tsx:1187:1
 Parsing ecmascript source code failed
-  579 |                     onClick={() => setActiveProjectId(p.id)}
-  580 |                     className={`w-full text-left bg-white border rounded-2xl p-5 shadow-xs transition-all hover:shadow-md cursor-pointer block ${
-> 581 |                       isActive ? "" : "border-[#E9EAEB]`}
-      |                                       ^^^^^^^^^^^^^^^^^^^
-  582 |                   >
-  583 |                     <div className="flex justify-between items-start gap-2">
-  584 |                       <div>
+  1185 |       </>
+  1186 |     );
+> 1187 | };
+       | ^
+  1188 |
+  1189 | interface CreateProjectFlowProps {
+  1190 |   farm: any;
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:28:39.316] Browser ERROR   ./screens/main/myFarms.tsx:1187:1
+Parsing ecmascript source code failed
+  1185 |       </>
+  1186 |     );
+> 1187 | };
+       | ^
+  1188 |
+  1189 | interface CreateProjectFlowProps {
+  1190 |   farm: any;
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:28:51.304] Server  LOG      ✓ Compiled in 336ms
+[01:29:14.809] Server  LOG      ✓ Compiled in 1077ms
+[01:29:15.728] Browser ERROR   ./screens/main/myFarms.tsx:879:5
+Parsing ecmascript source code failed
+  877 |       </div>
+  878 |     </div>
+> 879 |     {viewerVisible && (
+      |     ^
+  880 |       <Viewer
+  881 |         visible={viewerVisible}
+  882 |         onClose={() => setViewerVisible(false)}
+
+Expected ',', got '{'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:29:15.862] Browser ERROR   ./screens/main/myFarms.tsx:879:5
+Parsing ecmascript source code failed
+  877 |       </div>
+  878 |     </div>
+> 879 |     {viewerVisible && (
+      |     ^
+  880 |       <Viewer
+  881 |         visible={viewerVisible}
+  882 |         onClose={() => setViewerVisible(false)}
+
+Expected ',', got '{'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:29:17.185] Browser ERROR   ./screens/main/myFarms.tsx:879:5
+Parsing ecmascript source code failed
+  877 |       </div>
+  878 |     </div>
+> 879 |     {viewerVisible && (
+      |     ^
+  880 |       <Viewer
+  881 |         visible={viewerVisible}
+  882 |         onClose={() => setViewerVisible(false)}
+
+Expected ',', got '{'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:29:17.410] Browser ERROR   ./screens/main/myFarms.tsx:879:5
+Parsing ecmascript source code failed
+  877 |       </div>
+  878 |     </div>
+> 879 |     {viewerVisible && (
+      |     ^
+  880 |       <Viewer
+  881 |         visible={viewerVisible}
+  882 |         onClose={() => setViewerVisible(false)}
+
+Expected ',', got '{'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:29:18.895] Browser ERROR   ./screens/main/myFarms.tsx:879:5
+Parsing ecmascript source code failed
+  877 |       </div>
+  878 |     </div>
+> 879 |     {viewerVisible && (
+      |     ^
+  880 |       <Viewer
+  881 |         visible={viewerVisible}
+  882 |         onClose={() => setViewerVisible(false)}
+
+Expected ',', got '{'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:29:31.795] Browser ERROR   ./screens/main/myFarms.tsx:879:5
+Parsing ecmascript source code failed
+  877 |       </div>
+  878 |     </div>
+> 879 |     {viewerVisible && (
+      |     ^
+  880 |       <Viewer
+  881 |         visible={viewerVisible}
+  882 |         onClose={() => setViewerVisible(false)}
+
+Expected ',', got '{'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:29:39.471] Browser ERROR   ./screens/main/myFarms.tsx:879:5
+Parsing ecmascript source code failed
+  877 |       </div>
+  878 |     </div>
+> 879 |     {viewerVisible && (
+      |     ^
+  880 |       <Viewer
+  881 |         visible={viewerVisible}
+  882 |         onClose={() => setViewerVisible(false)}
+
+Expected ',', got '{'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:29:54.755] Browser ERROR   ./screens/main/myFarms.tsx:879:5
+Parsing ecmascript source code failed
+  877 |       </div>
+  878 |     </div>
+> 879 |     {viewerVisible && (
+      |     ^
+  880 |       <Viewer
+  881 |         visible={viewerVisible}
+  882 |         onClose={() => setViewerVisible(false)}
+
+Expected ',', got '{'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:30:03.003] Server  LOG      ✓ Compiled in 810ms
+[01:30:16.310] Server  LOG      ✓ Compiled in 759ms
+[01:31:44.141] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:34:48.396] Server  LOG      ✓ Compiled in 260ms
+[01:35:45.183] Server  LOG      ✓ Compiled in 692ms
+[01:35:54.443] Server  LOG      ✓ Compiled in 585ms
+[01:36:05.055] Server  LOG      ✓ Compiled in 471ms
+[01:36:13.276] Server  LOG      ✓ Compiled in 546ms
+[01:36:26.732] Server  LOG      ✓ Compiled in 462ms
+[01:38:14.128] Server  LOG      ✓ Compiled in 348ms
+[01:41:33.393] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:44:39.691] Server  LOG      ✓ Compiled in 667ms
+[01:44:54.623] Server  LOG      ✓ Compiled in 483ms
+[01:45:25.151] Server  LOG      ✓ Compiled in 445ms
+[01:45:31.307] Server  LOG      ✓ Compiled in 457ms
+[01:45:53.690] Server  LOG      ✓ Compiled in 728ms
+[01:46:36.493] Server  LOG      ✓ Compiled in 470ms
+[01:46:47.814] Server  LOG      ✓ Compiled in 407ms
+[01:46:52.799] Server  LOG      ✓ Compiled in 782ms
+[01:47:05.058] Server  LOG      ✓ Compiled in 461ms
+[01:47:27.066] Server  LOG      ✓ Compiled in 426ms
+[01:48:05.339] Server  LOG      ✓ Compiled in 908ms
+[01:48:05.342] Browser ERROR   ./screens/main/myFarms.tsx:711:39
+Parsing ecmascript source code failed
+  709 |                     <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-[#4E8A35]">
+  710 |                       <TrendingUpIcon size={14} />
+> 711 |                       <span>{p.roi || }</span>
+      |                                       ^
+  712 |                     </div>
+  713 |                   </button>
+  714 |                 );
+
+Expected '</', got '}'
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[01:48:05.967] Server  LOG      ✓ Compiled in 658ms
+[01:48:09.926] Server  LOG      ✓ Compiled in 399ms
+[01:48:10.039] Browser ERROR   ./screens/main/myFarms.tsx:711:40
+Parsing ecmascript source code failed
+  709 |                     <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-[#4E8A35]">
+  710 |                       <TrendingUpIcon size={14} />
+> 711 |                       <span>{p.roi || 0'}</span>
+      |                                        ^^^^^^^^^
+  712 |                     </div>
+  713 |                   </button>
+  714 |                 );
 
 Unterminated string constant
 
@@ -35,70 +229,41 @@ Import trace:
   Server Component:
     ./screens/main/myFarms.tsx
     ./app/(main)/my-farms/page.tsx
-[02:32:24.413] Server  LOG      ✓ Compiled in 1676ms
-[02:32:25.932] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:32:27.799] Server  LOG      ✓ Compiled in 726ms
-[02:32:28.015] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:32:36.720] Server  LOG      ✓ Compiled in 844ms
-[02:32:37.074] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:33:08.347] Server  LOG      ✓ Compiled in 758ms
-[02:33:08.642] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:33:08.642] Browser ERROR   Invalid DOM property `%s`. Did you mean `%s`? class className
-[02:33:12.108] Server  LOG      ✓ Compiled in 1153ms
-[02:33:12.431] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:33:31.954] Server  LOG      ✓ Compiled in 737ms
-[02:33:32.406] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:33:49.594] Server  LOG      ✓ Compiled in 443ms
-[02:33:49.945] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:33:54.819] Server  LOG      ✓ Compiled in 499ms
-[02:33:55.210] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:34:16.545] Server  LOG      ✓ Compiled in 797ms
-[02:34:16.894] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:34:20.283] Server  LOG      ✓ Compiled in 790ms
-[02:34:20.664] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:34:54.921] Server  LOG      ✓ Compiled in 703ms
-[02:34:55.421] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:35:03.897] Server  LOG      ✓ Compiled in 695ms
-[02:35:04.219] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:41:33.967] Server  LOG      ✓ Compiled in 448ms
-[02:41:34.319] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:41:35.852] Server  LOG      ✓ Compiled in 604ms
-[02:41:36.260] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:41:52.798] Server  LOG      ✓ Compiled in 485ms
-[02:41:53.093] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:41:58.438] Server  LOG      ✓ Compiled in 538ms
-[02:41:58.749] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:42:01.080] Server  LOG      ✓ Compiled in 543ms
-[02:42:01.431] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:42:03.250] Server  LOG      ✓ Compiled in 993ms
-[02:42:03.578] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:46:26.957] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:46:32.702] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:47:08.489] Server  LOG      ✓ Compiled in 661ms
-[02:47:08.714] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:50:40.879] Server  LOG      ✓ Compiled in 1069ms
-[02:50:42.721] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:50:50.453] Server  LOG      ✓ Compiled in 1057ms
-[02:50:52.130] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:50:59.224] Server  LOG      ✓ Compiled in 1001ms
-[02:51:00.990] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:51:07.833] Server  LOG      ✓ Compiled in 1146ms
-[02:51:09.432] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:51:19.449] Server  LOG      ✓ Compiled in 1345ms
-[02:51:22.015] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:51:53.736] Server  LOG      ✓ Compiled in 965ms
-[02:51:54.068] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:52:28.847] Server  LOG      ✓ Compiled in 505ms
-[02:52:29.182] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:52:33.008] Server  LOG      ✓ Compiled in 979ms
-[02:52:33.456] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:52:34.358] Server  LOG      ✓ Compiled in 798ms
-[02:52:34.557] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:56:41.656] Server  LOG      ✓ Compiled in 1343ms
-[02:56:42.027] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 26cfc575-94be-419b-8a8e-316cb94a8831
-[02:59:00.497] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:01:07.025] Server  LOG      ✓ Compiled in 995ms
-[03:01:21.642] Server  LOG      ✓ Compiled in 852ms
-[03:01:36.948] Server  LOG      ✓ Compiled in 1665ms
-[03:03:45.611] Server  LOG      ✓ Compiled in 1282ms
-[03:05:52.299] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:48:11.975] Server  LOG      ✓ Compiled in 627ms
+[01:48:20.195] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:48:41.486] Server  LOG      ✓ Compiled in 496ms
+[01:48:44.255] Server  LOG      ✓ Compiled in 368ms
+[01:52:46.728] Server  LOG      ✓ Compiled in 1443ms
+[01:59:51.680] Server  LOG      ✓ Compiled in 454ms
+[02:10:43.849] Server  LOG      ✓ Compiled in 543ms
+[02:34:13.986] Server  LOG      ✓ Compiled in 579ms
+[02:35:51.832] Server  LOG      ✓ Compiled in 477ms
+[02:35:56.098] Server  LOG      ✓ Compiled in 834ms
+[02:35:56.200] Browser ERROR   ./screens/main/myFarms.tsx:508:20
+Parsing ecmascript source code failed
+  506 |             <div className="text-[#4E8A35] bg-[#E2F3DA] h-9 w-9 flex items-center justify-center rounded-full shrink-0">
+  507 |               <WalletIcon size={18} />
+> 508 |             </div>"}
+      |                    ^
+  509 |             </span>
+  510 |           </div>
+  511 |           <div className="mt-4">
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./screens/main/myFarms.tsx
+    ./app/(main)/my-farms/page.tsx
+[02:35:58.673] Server  LOG      ✓ Compiled in 600ms
+[02:36:26.205] Server  LOG      ✓ Compiled in 676ms
+[02:36:42.149] Server  LOG      ✓ Compiled in 1023ms
+[02:37:15.131] Server  LOG      ✓ Compiled in 1194ms
+[02:37:22.845] Server  LOG      ✓ Compiled in 691ms
+[02:38:03.285] Server  LOG      ✓ Compiled in 468ms
+[02:39:29.572] Server  LOG      ✓ Compiled in 574ms
+[02:40:04.324] Server  LOG      ✓ Compiled in 645ms
+[02:43:56.674] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:46:34.896] Server  LOG      ✓ Compiled in 651ms
+[02:46:46.764] Server  LOG      ✓ Compiled in 400ms
+[02:49:58.764] Server  LOG      ✓ Compiled in 258ms

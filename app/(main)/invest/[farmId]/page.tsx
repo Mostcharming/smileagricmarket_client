@@ -11,6 +11,7 @@ import { AlertTriangleIcon, CalendarIcon, ClockIcon, FarmIcon, InfoIcon, LayersI
 import { useGetWebInvestmentById, useInvest } from "@/mutation/investments.mutation";
 import { useGetPortfolioFarmById } from "@/mutation/portfolio.mutation";
 import { formatNumberWithCommas } from "@/utils";
+import { getPreviewImageUrl } from "@/utils/image";
 
 const Viewer = dynamic(() => import("react-viewer"), { ssr: false });
 
@@ -175,9 +176,9 @@ const FarmDetailPage = () => {
   }, [details]);
 
   const pictures = useMemo(() => {
-    const rawImages = farm?.images || [];
-    return rawImages.map((pic) => ({
-      src: pic.fileUrl,
+    const rawImages = (farm as any)?.photos || (farm as any)?.images || [];
+    return rawImages.map((pic: any) => ({
+      src: getPreviewImageUrl(pic.fileUrl || pic.url),
       alt: pic.fileName || "Farm photo",
     }));
   }, [farm]);
@@ -1382,7 +1383,7 @@ const FarmDetailPage = () => {
                           />
                           <div className="absolute inset-0 bg-[#1E3517]/75 flex flex-col items-center justify-center text-white transition-colors duration-300 group-hover:bg-[#1E3517]/80">
                             <span className="text-[24px] font-bold">
-                              +{pictures.length - 2} Photos
+                              +{pictures.length - 2} Photo{pictures.length - 2 !== 1 ? 's' : ''}
                             </span>
                             <span className="text-[12px] opacity-90 font-medium mt-0.5">
                               Click to View Gallery
