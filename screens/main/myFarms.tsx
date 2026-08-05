@@ -5,6 +5,10 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { getPreviewImageUrl } from "@/utils/image";
+
+const Viewer = dynamic(() => import("react-viewer"), { ssr: false });
 import { createPortal } from "react-dom";
 import { AddIcon, CheckIcon, CloseIcon, DocsIcon, EqualIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, ShieldIcon, TickIcon, UploadIcon, ClockIcon, WalletIcon, LayersIcon, ChevronIcon, InfoIcon, CalendarIcon, LocationIcon, TrendingUpIcon, PercentIcon, DownloadIcon } from "@/components/icons";
 import { Modal } from "@/components/modal";
@@ -186,45 +190,72 @@ const FarmDetailsView = ({
   customProjects,
   setCustomProjects,
   onCreateProject,
+  activeTemplate,
 }: {
   farm: any;
   onBack: () => void;
   customProjects: Record<string, any[]>;
   setCustomProjects: React.Dispatch<React.SetStateAction<Record<string, any[]>>>;
   onCreateProject: () => void;
+  activeTemplate?: any;
 }) => {
+  const [viewerVisible, setViewerVisible] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const openPreview = (index: number) => {
+    if (pictures.length === 0) return;
+    setActiveIndex(index);
+    setViewerVisible(true);
+  };
+
   const stats = useMemo(() => {
     const cycles = farm.stats?.completedMilestones || farm.SelectedMilestones?.filter((m: any) => m.isCompleted).length || 0;
     const currentCycle = (farm.Investment && farm.Investment.status !== 'Completed') ? 1 : 0;
-    const funding = farm.Investment?.amount || 0;
+    const funding = Number(farm.Investment?.amountRaised ?? farm.Investment?.raised ?? farm.Investment?.investmentReceived ?? 0);
     const completion = farm.stats?.completionPercentage || 0;
 
     return {
       cycles,
       cyclesTag: null,
       currentCycle,
-      funding: formatCurrency(funding),
+      funding: formatCurrencyWithDecimals(funding),
       fundingTag: null,
-      completion: `${parseFloat(String(completion)).toFixed(1)}%`,
+      completion: completion % 1 === 0 ? `${Math.round(completion)}%` : `${parseFloat(String(completion)).toFixed(1)}%`,
       completionTag: null
     };
   }, [farm]);
 
   const pictures = useMemo(() => {
-    const directPictures = farm.pictures || [];
-    if (Array.isArray(directPictures) && directPictures.length > 0) {
+    let directPictures: any[] = [];
+    if (Array.isArray(farm.photos) && farm.photos.length > 0) {
+      directPictures = farm.photos;
+    } else if (Array.isArray(farm.pictures) && farm.pictures.length > 0) {
+      directPictures = farm.pictures;
+    } else if (Array.isArray(farm.Documents) && farm.Documents.length > 0) {
+      directPictures = farm.Documents.filter((d: any) => d.documentType === 'picture');
+    }
+
+    if (directPictures.length > 0) {
       return directPictures.map((p: any) => {
         if (!p) return "";
-        if (typeof p === 'string') return p;
-        return p.url || p.src || p.preview || p.path || p.fileUrl || "";
+        if (typeof p === 'string') return getPreviewImageUrl(p);
+        return getPreviewImageUrl(p.url || p.src || p.preview || p.path || p.fileUrl || "");
       }).filter(Boolean);
     }
     return [];
-  }, [farm.pictures]);
+  }, [farm.photos, farm.pictures, farm.Documents]);
 
   const docs = useMemo(() => {
-    const directDocs = farm.documents || [];
-    if (Array.isArray(directDocs) && directDocs.length > 0) {
+    let directDocs: any[] = [];
+    if (Array.isArray(farm.farmDocuments) && farm.farmDocuments.length > 0) {
+      directDocs = farm.farmDocuments;
+    } else if (Array.isArray(farm.documents) && farm.documents.length > 0) {
+      directDocs = farm.documents;
+    } else if (Array.isArray(farm.Documents) && farm.Documents.length > 0) {
+      directDocs = farm.Documents.filter((d: any) => d.documentType === 'document');
+    }
+
+    if (directDocs.length > 0) {
       return directDocs.map((d: any) => {
         if (!d) return { name: 'document.pdf', size: '', url: '' };
         if (typeof d === 'string') {
@@ -232,17 +263,34 @@ const FarmDetailsView = ({
           return { name, size: '', url: d };
         }
         const name = d.name || d.fileName || (d.url && d.url.split('/').pop()) || 'document.pdf';
-        const size = d.size || d.fileSize || '';
+        
+        let size = '';
+        const rawSize = d.size || d.fileSize;
+        if (rawSize) {
+          if (typeof rawSize === 'number') {
+            if (rawSize >= 1024 * 1024) {
+              size = `${(rawSize / (1024 * 1024)).toFixed(1)} MB`;
+            } else {
+              size = `${(rawSize / 1024).toFixed(1)} KB`;
+            }
+          } else {
+            size = String(rawSize);
+          }
+        }
+
         const url = d.url || d.fileUrl || d.path || d.preview || '';
         return { name, size, url };
       }).filter(Boolean);
     }
     return [];
-  }, [farm.documents]);
+  }, [farm.farmDocuments, farm.documents, farm.Documents]);
 
   const farmProjects = useMemo(() => {
     const addedProjects = customProjects[farm.id] || [];
     const apiProjects: any[] = [];
+    const roiFromTemplate = activeTemplate?.fundingRules?.roi ?? activeTemplate?.roi ?? 0;
+    const roiText = roiFromTemplate ? `${roiFromTemplate}% return` : "0% return";
+    const dynamicDates = getDynamicProjectDates(farm);
 
     // Prefer explicit Investment object from API
     if (farm.Investment) {
@@ -264,11 +312,11 @@ const FarmDetailsView = ({
         name: inv.name || inv.title || `Investment Project`,
         categoryName: farm.Category?.name || inv.categoryName || "",
         status: inv.status || "Funding Started",
-        dates: (inv.startDate || inv.endDate) ? `${formatDate(inv.startDate) || ""} - ${formatDate(inv.endDate) || ""}` : "",
+        dates: dynamicDates,
         raised: inv.amountRaised ?? inv.raised ?? 0,
         goal: inv.amount ?? inv.goal ?? 0,
         investors: inv.investorsCount ?? inv.investors ?? 0,
-        roi: inv.roi ? `${inv.roi}${String(inv.roi).includes('%') ? '' : '% return'}` : (inv.roiText || ''),
+        roi: inv.roi ? `${inv.roi}${String(inv.roi).includes('%') ? '' : '% return'}` : (inv.roiText || roiText),
         milestones: invMilestones,
         totalAllocation: totalAllocation
       });
@@ -290,96 +338,18 @@ const FarmDetailsView = ({
         name: farm.Investment?.name || `Investment Project 1 - ${farm.Category?.name || ''}`,
         categoryName: farm.Category?.name || "",
         status: farm.Investment?.status || "Funding Started",
-        dates: "",
+        dates: dynamicDates,
         raised: farm.Investment?.amountRaised ?? 0,
         goal: farm.Investment?.amount ?? 0,
         investors: farm.Investment?.investorsCount ?? 0,
-        roi: farm.Investment?.roi ? `${farm.Investment.roi}% return` : '',
+        roi: farm.Investment?.roi ? `${farm.Investment.roi}% return` : roiText,
         milestones,
         totalAllocation: totalAllocation
       });
     }
 
     return [...addedProjects, ...apiProjects];
-  }, [farm, customProjects]);
-
-  // If there are no projects at all, show a simplified view: only photos and documents
-  if (!farmProjects || farmProjects.length === 0) {
-    return (
-      <div className="w-full">
-        <div className="flex items-center gap-2 text-xs font-semibold text-[#8A9587] uppercase mb-4">
-          <button
-            type="button"
-            onClick={onBack}
-            className="hover:text-[#4E8A35] transition-colors cursor-pointer"
-          >
-            My Farms
-          </button>
-          <span>/</span>
-          <span className="text-[#1F2937] normal-case">{farm.name}</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 mt-12 pt-8">
-          <div className="bg-white border border-[#E9EAEB] rounded-2xl py-6 px-4 shadow-xs h-fit">
-            <h2 className="text-lg font-bold text-[#1F2937] mb-4">Photos</h2>
-            <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4">
-              <div className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE] h-[280px] md:h-80 w-full">
-                {pictures.length > 0 ? (
-                  <img
-                    src={pictures[0]}
-                    alt="Main farm landscape"
-                    className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-sm text-[#7A8077]">No photos available</div>
-                )}
-              </div>
-
-              <div className="grid grid-rows-2 gap-4 h-[280px] md:h-80">
-                <div className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE]">
-                  {pictures[1] ? (
-                    <img src={pictures[1]} alt="Farm" className="h-44 w-full object-cover md:h-full" />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-sm text-[#7A8077]">No photo</div>
-                  )}
-                </div>
-
-                <div className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE] relative group">
-                  {pictures[2] ? (
-                    <img src={pictures[2]} alt="Farm" className="h-44 w-full object-cover md:h-full" />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-sm text-[#7A8077]">No photo</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white border border-[#E9EAEB] rounded-2xl py-6 px-4 shadow-xs h-fit">
-            <h2 className="text-lg font-bold text-[#1F2937] mb-4">Documents</h2>
-            <div className="flex flex-col gap-4">
-              {docs.length > 0 ? docs.map((doc: { name: string; size: string }, idx: number) => (
-                <div key={idx} className="flex items-center justify-between border-b border-[#F3F4F6] last:border-b-0 pb-4 last:pb-0">
-                  <div className="flex items-center gap-3">
-                    <div className="flex p-2 aspect-square items-center justify-center rounded-full bg-[#F1F9ED]">
-                      <DocsIcon />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-sm text-[#1F2937] truncate max-w-[220px]">{doc.name}</div>
-                      <div className="text-xs text-[#7A8077]">{doc.size}</div>
-                    </div>
-                  </div>
-                  <a href="#" className="text-sm text-[#4E8A35]">Download</a>
-                </div>
-              )) : (
-                <div className="text-sm text-[#7A8077]">No documents available</div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  }, [farm, customProjects, activeTemplate]);
 
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
 
@@ -441,6 +411,23 @@ const FarmDetailsView = ({
     return total;
   }, [activeProject]);
 
+  const releasedAmount = useMemo(() => {
+    if (!activeProject) return 0;
+    return activeProject.milestones
+      .filter((m: any) => m.status === "Completed")
+      .reduce((sum: number, m: any) => sum + (Number(m.amount) || 0), 0);
+  }, [activeProject]);
+
+  const remainingAmount = useMemo(() => {
+    if (!activeProject) return 0;
+    return Math.max(0, activeProject.goal - releasedAmount);
+  }, [activeProject, releasedAmount]);
+
+  const releasedPercentage = useMemo(() => {
+    if (!activeProject || activeProject.goal === 0) return 0;
+    return Math.round((releasedAmount / activeProject.goal) * 100);
+  }, [activeProject, releasedAmount]);
+
   return (
     <div className="w-full">
       <div className="flex items-center gap-2 text-xs font-semibold text-[#8A9587] uppercase mb-4">
@@ -486,24 +473,25 @@ const FarmDetailsView = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div className="bg-white border border-[#E9EAEB] rounded-2xl p-5 shadow-xs flex flex-col justify-between relative min-h-[120px]">
           <div className="flex items-center justify-between">
-            <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg">
+            <div className="text-[#4E8A35] bg-[#E2F3DA] h-9 w-9 flex items-center justify-center rounded-full shrink-0">
               <FarmIcon size={18} />
             </div>
             {stats.cyclesTag && (
-              <span className="text-xs font-semibold text-[#4E8A35] flex items-center gap-0.5">
-                ↗ {stats.cyclesTag}
+              <span className="text-xs font-semibold text-[#8A9587] flex items-center gap-0.5">
+                <ArrowUpRightIcon size={14} className="text-[#4E8A35] shrink-0" />
+                {stats.cyclesTag}
               </span>
             )}
           </div>
           <div className="mt-4">
             <span className="text-2xl font-bold text-[#1F2937]">{stats.cycles}</span>
-            <p className="text-xs font-medium text-[#5E6771] mt-1">Cycles completed</p>
+            <p className="text-xs font-medium text-[#5E6771] mt-1">Projects completed</p>
           </div>
         </div>
 
         <div className="bg-white border border-[#E9EAEB] rounded-2xl p-5 shadow-xs flex flex-col justify-between relative min-h-[120px]">
           <div className="flex items-center justify-between">
-            <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg">
+            <div className="text-[#4E8A35] bg-[#E2F3DA] h-9 w-9 flex items-center justify-center rounded-full shrink-0">
               <TrendingUpIcon size={18} />
             </div>
           </div>
@@ -515,12 +503,13 @@ const FarmDetailsView = ({
 
         <div className="bg-white border border-[#E9EAEB] rounded-2xl p-5 shadow-xs flex flex-col justify-between relative min-h-[120px]">
           <div className="flex items-center justify-between">
-            <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg">
+            <div className="text-[#4E8A35] bg-[#E2F3DA] h-9 w-9 flex items-center justify-center rounded-full shrink-0">
               <WalletIcon size={18} />
             </div>
             {stats.fundingTag && (
-              <span className="text-xs font-semibold text-[#4E8A35] flex items-center gap-0.5">
-                ↗ {stats.fundingTag}
+              <span className="text-xs font-semibold text-[#8A9587] flex items-center gap-0.5">
+                <ArrowUpRightIcon size={14} className="text-[#4E8A35] shrink-0" />
+                {stats.fundingTag}
               </span>
             )}
           </div>
@@ -532,12 +521,13 @@ const FarmDetailsView = ({
 
         <div className="bg-white border border-[#E9EAEB] rounded-2xl p-5 shadow-xs flex flex-col justify-between relative min-h-[120px]">
           <div className="flex items-center justify-between">
-            <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg">
+            <div className="text-[#4E8A35] bg-[#E2F3DA] h-9 w-9 flex items-center justify-center rounded-full shrink-0">
               <PercentIcon size={18} />
             </div>
             {stats.completionTag && (
-              <span className="text-xs font-semibold text-[#4E8A35] flex items-center gap-0.5">
-                ↗ {stats.completionTag}
+              <span className="text-xs font-semibold text-[#8A9587] flex items-center gap-0.5">
+                <ArrowUpRightIcon size={14} className="text-[#4E8A35] shrink-0" />
+                {stats.completionTag}
               </span>
             )}
           </div>
@@ -548,22 +538,40 @@ const FarmDetailsView = ({
         </div>
       </div>
 
+      {(!farmProjects || farmProjects.length === 0) && (
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 mb-8">
+          <div className="bg-white border border-[#E9EAEB] rounded-2xl p-6 shadow-xs flex items-center gap-4 h-fit">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E2F3DA] text-[#4E8A35] shrink-0">
+              <FarmIcon size={18} />
+            </div>
+            <span className="text-lg font-bold text-[#1F2937]">No Active Investment Project</span>
+          </div>
+
+          <div className="bg-white border border-[#E9EAEB] rounded-2xl p-6 shadow-xs flex flex-col min-h-[92px]">
+            <h3 className="text-lg font-bold text-[#1F2937]">Investment History</h3>
+            <div className="flex flex-1 text-sm text-[#7A8077] py-4">
+              No investment projects created yet
+            </div>
+          </div>
+        </div>
+      )}
+
       {farmProjects.length > 0 && activeProject && (
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 mb-8">
           <div className="bg-white border border-[#E9EAEB] rounded-2xl p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-[#F3F4F6] pb-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E2F3DA] text-[#4E8A35]">
-                    <FarmIcon size={14} />
-                  </div>
-                  <h3 className="text-base font-bold text-[#1F2937]">{activeProject.name}</h3>
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E2F3DA] text-[#4E8A35] shrink-0">
+                  <FarmIcon size={18} />
                 </div>
-                <span className="text-xs font-medium text-[#5E6771] block mt-1 ml-8">{activeProject.dates}</span>
+                <div>
+                  <h3 className="text-base font-bold text-[#1F2937]">{activeProject.name}</h3>
+                  <span className="text-xs font-medium text-[#5E6771] block mt-0.5">{activeProject.dates || ""}</span>
+                </div>
               </div>
               <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
                 activeProject.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
-                activeProject.status === "Funding Started" ? "bg-[#FFFBEB] text-[#D97706]" :
+                activeProject.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
                 "bg-[#EFF6FF] text-[#1D4ED8]"
               }`}>
                 {activeProject.status}
@@ -572,19 +580,22 @@ const FarmDetailsView = ({
 
             <div className="mt-6">
               <div className="flex justify-between items-center text-sm font-semibold text-[#1F2937] mb-2">
-                <span>{formatCurrency(activeProject.raised)} <span className="text-xs font-medium text-[#5E6771]">of {formatCurrency(activeProject.goal)}</span></span>
+                <span>{formatCurrencyWithDecimals(activeProject.raised)} <span className="text-xs font-medium text-[#5E6771]">of {formatCurrency(activeProject.goal)}</span></span>
                 <span className="text-xs font-medium text-[#5E6771]">{activeProject.investors} investors</span>
               </div>
               <div className="h-2 rounded-full bg-[#EAECE8] overflow-hidden">
                 <div
                   className="h-full rounded-full bg-[#4E8A35] transition-all duration-500"
-                  style={{ width: `${Math.min(100, (activeProject.raised / activeProject.goal) * 100)}%` }}
+                  style={{ 
+                    width: `${Math.min(100, activeProject.goal > 0 ? (activeProject.raised / activeProject.goal) * 100 : 0)}%`,
+                    minWidth: '8px'
+                  }}
                 />
               </div>
             </div>
 
             {activeProject.status === "Funding Started" && (
-              <div className="mt-6 bg-[#FEF3C7] border border-[#FDE68A] rounded-2xl p-4 text-xs font-semibold text-[#B45309] leading-relaxed">
+              <div className="mt-6 bg-[#FFF5F3] border border-[#FFE2DC] rounded-2xl p-4 text-xs font-semibold text-[#DF2C0C] leading-relaxed">
                 Funding has started for this investment, but the funding goal has not been reached. You can only request for funding only after funding goal has been reached
               </div>
             )}
@@ -603,7 +614,7 @@ const FarmDetailsView = ({
               <h4 className="text-base font-bold text-[#1F2937]">Farm Milestone Timeline</h4>
               <p className="text-xs text-[#5E6771] mt-0.5">Activities needed to be done on the farm to complete investment cycle</p>
 
-              <div className="mt-6 flex flex-col sm:flex-row items-center gap-6 border border-[#E9EAEB] rounded-2xl p-5 bg-[#FAFAFA]">
+              <div className="mt-6 flex items-center gap-8 border border-[#CEEAD6]/50 bg-[#E6F4EA]/20 rounded-2xl p-5">
                 <div className="relative flex items-center justify-center shrink-0">
                   <svg className="w-24 h-24 transform -rotate-90">
                     <circle cx="48" cy="48" r="38" stroke="#EAECE8" strokeWidth="8" fill="transparent" />
@@ -615,72 +626,82 @@ const FarmDetailsView = ({
                       strokeWidth="8"
                       fill="transparent"
                       strokeDasharray={238}
-                      strokeDashoffset={238 - (238 * activeAllocationPct) / 100}
+                      strokeDashoffset={238 - (238 * releasedPercentage) / 100}
                       strokeLinecap="round"
                       className="transition-all duration-500"
                     />
                   </svg>
                   <div className="absolute flex flex-col items-center justify-center text-center">
-                    <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider">Active</span>
-                    <span className="text-base font-bold text-[#1F2937] leading-none mt-0.5">{activeAllocationPct}%</span>
+                    <span className="text-base font-bold text-[#1F2937] leading-none">{releasedPercentage}%</span>
+                    <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider mt-0.5">Released</span>
                   </div>
                 </div>
-                <div>
-                  <div className="flex items-center gap-1.5 text-sm font-semibold text-[#1F2937]">
-                    <svg className="w-5 h-5 text-[#4E8A35]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Total Allocation</span>
+                <div className="flex flex-col gap-3">
+                  <div>
+                    <span className="text-base font-bold text-[#1F2937] block leading-none">{formatCurrencyWithDecimals(remainingAmount)}</span>
+                    <span className="text-[11px] font-medium text-[#8A9587] mt-1 block">Remaining</span>
                   </div>
-                  <p className="text-xs text-[#5E6771] mt-1 leading-normal">Milestone allocation is balanced.</p>
+                  <div>
+                    <span className="text-base font-bold text-[#1F2937] block leading-none">{formatCurrencyWithDecimals(releasedAmount)}</span>
+                    <span className="text-[11px] font-medium text-[#8A9587] mt-1 block">Released</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-8 relative pl-6 border-l-2 border-[#EAECE8] space-y-6 ml-3">
-                {activeProject.milestones.map((m: any) => {
-                  const isCompleted = m.status === "Completed";
-                  const isRequested = m.status === "Requested";
-                  const isActionable = m.status === "Request for Funding";
-                  return (
-                    <div key={m.id} className="relative">
-                      <span className={`absolute -left-[33px] top-7.5 flex h-4 w-4 items-center justify-center rounded-full border-2 bg-white ${
-                        isCompleted ? "border-[#4E8A35] bg-[#E2F3DA]" : "border-[#B8C3CF]"
-                      }`}>
-                        {isCompleted && (
-                          <span className="h-1.5 w-1.5 rounded-full bg-[#4E8A35]" />
-                        )}
-                      </span>
+              <div className="mt-8 relative ml-3">
+                <div className="absolute left-[7px] top-3 bottom-6 w-[1.5px] bg-[#EAECE8]" />
+                <div className="space-y-6">
+                  {activeProject.milestones.map((m: any, idx: number) => {
+                    const isCompleted = m.status === "Completed";
+                    const isRequested = m.status === "Requested";
+                    const isActionable = m.status === "Request for Funding";
+                    
+                    const isNameMilestoneFormat = m.name.toLowerCase().includes("milestone");
+                    const milestoneLabel = isNameMilestoneFormat ? m.name : `MILESTONE ${idx + 1} - ${m.pct}%`;
+                    const milestoneDesc = isNameMilestoneFormat ? "" : m.name;
+                    
+                    return (
+                      <div key={m.id || idx} className="relative flex items-center justify-between pl-8 min-h-[56px]">
+                        <span className={`absolute left-[7px] -translate-x-1/2 flex h-3.5 w-3.5 items-center justify-center rounded-full border-4 border-white z-10 ${
+                          isCompleted ? "bg-[#4E8A35]" : "bg-[#64B03F]"
+                        }`} />
 
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[#E9EAEB] rounded-2xl p-4 bg-white hover:shadow-xs transition-shadow">
-                        <div>
-                          <span className="text-sm font-semibold text-[#1F2937]">{m.name}</span>
-                          <span className="text-xs text-[#5E6771] block mt-1">{m.pct}% – {formatCurrency(m.amount)}</span>
-                        </div>
-                        <div>
-                          {isCompleted && (
-                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#047857] bg-[#ECFDF5] px-2.5 py-1.5 rounded-lg border border-[#A7F3D0]">
-                              Completed ✓
-                            </span>
-                          )}
-                          {isRequested && (
-                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#D97706] bg-[#FFFBEB] px-2.5 py-1.5 rounded-lg border border-[#FDE68A]">
-                              Requested
-                            </span>
-                          )}
-                          {isActionable && (
-                            <button
-                              type="button"
-                              onClick={() => handleRequestFunding(activeProject.id, m.id)}
-                              className="border border-[#D5D7DA] bg-white hover:bg-[#F4FAF0] text-[#4E8A35] hover:text-[#3D6E29] text-xs font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer"
-                            >
-                              Request for Funding
-                            </button>
-                          )}
+                        <div className="flex-1 flex flex-row items-center justify-between py-2">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-wider">{milestoneLabel}</span>
+                            {milestoneDesc && (
+                              <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{milestoneDesc}</span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-4 sm:gap-6 shrink-0 ml-4">
+                            <span className="text-sm font-bold text-[#1F2937]">{formatCurrencyWithDecimals(m.amount)}</span>
+                            <div>
+                              {isCompleted && (
+                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#047857] bg-[#ECFDF5] px-3 py-2 rounded-lg border border-[#A7F3D0]">
+                                  Completed ✓
+                                </span>
+                              )}
+                              {isRequested && (
+                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#D97706] bg-[#FFFBEB] px-3 py-2 rounded-lg border border-[#FDE68A]">
+                                  Requested
+                                </span>
+                              )}
+                              {isActionable && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleRequestFunding(activeProject.id, m.id)}
+                                  className="bg-[#F4FAF0] hover:bg-[#EAF3E6] text-[#4E8A35] text-xs font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                                >
+                                  Request for Funding
+                                </button>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
@@ -694,16 +715,16 @@ const FarmDetailsView = ({
                     key={p.id}
                     type="button"
                     onClick={() => setActiveProjectId(p.id)}
-                    className={`w-full text-left bg-white border rounded-2xl p-5 transition-all hover:shadow-md cursor-pointer block border-[#E9EAEB]`}
+                    className="w-full text-left bg-white border border-[#E9EAEB] rounded-2xl p-5 transition-all cursor-pointer block"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div>
-                        <span className="text-xs font-medium text-[#5E6771] block">{p.dates}</span>
-                        <span className="text-sm font-bold text-[#1F2937] block mt-1">{p.name}</span>
+                        <span className="text-sm font-bold text-[#1F2937] block leading-tight">{p.name}</span>
+                        <span className="text-xs font-medium text-[#5E6771] block mt-1">{p.dates || ""}</span>
                       </div>
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider shrink-0 ${
                         p.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
-                        p.status === "Funding Started" ? "bg-[#FFFBEB] text-[#D97706]" :
+                        p.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
                         "bg-[#EFF6FF] text-[#1D4ED8]"
                       }`}>
                         {p.status}
@@ -712,20 +733,23 @@ const FarmDetailsView = ({
 
                     <div className="mt-4">
                       <div className="flex justify-between text-[11px] font-medium text-[#5E6771] mb-1">
-                        <span>{formatCurrency(p.raised)} <span className="opacity-70">of {formatCurrency(p.goal)}</span></span>
+                        <span>{formatCurrencyWithDecimals(p.raised)} <span className="opacity-70">of {formatCurrency(p.goal)}</span></span>
                         <span>{p.investors} investors</span>
                       </div>
                       <div className="h-1.5 rounded-full bg-[#EAECE8] overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-[#4E8A35]"
-                          style={{ width: `${Math.min(100, (p.raised / p.goal) * 100)}%` }}
+                          className="h-full rounded-full bg-[#64B03F]"
+                          style={{ 
+                            width: `${Math.min(100, p.goal > 0 ? (p.raised / p.goal) * 100 : 0)}%`,
+                            minWidth: '8px'
+                          }}
                         />
                       </div>
                     </div>
 
                     <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-[#4E8A35]">
                       <TrendingUpIcon size={14} />
-                      <span>{p.roi}</span>
+                      <span>{p.roi ? (p.roi.includes('return') ? p.roi : `${p.roi} return`) : '0% return'}</span>
                     </div>
                   </button>
                 );
@@ -739,7 +763,10 @@ const FarmDetailsView = ({
         <div className="bg-white border border-[#E9EAEB] rounded-2xl py-6 px-4 shadow-xs h-fit">
           <h2 className="text-lg font-bold text-[#1F2937] mb-4">Photos</h2>
           <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4">
-            <div className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE] h-[280px] md:h-80 w-full">
+            <div
+              className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE] h-[280px] md:h-80 w-full cursor-pointer"
+              onClick={() => openPreview(0)}
+            >
               {pictures.length > 0 ? (
                 <img
                   src={pictures[0]}
@@ -752,7 +779,10 @@ const FarmDetailsView = ({
             </div>
 
             <div className="grid grid-rows-2 gap-4 h-[280px] md:h-80">
-              <div className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE]">
+              <div
+                className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE] cursor-pointer"
+                onClick={() => openPreview(1)}
+              >
                 {pictures.length > 1 ? (
                   <img
                     src={pictures[1]}
@@ -764,7 +794,10 @@ const FarmDetailsView = ({
                 )}
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE] relative group">
+              <div
+                className="overflow-hidden rounded-2xl border border-[#E9EAEB] bg-[#F4F7EE] relative group cursor-pointer"
+                onClick={() => openPreview(2)}
+              >
                 {pictures.length > 2 ? (
                   <>
                     <img
@@ -774,7 +807,7 @@ const FarmDetailsView = ({
                     />
                     <div className="absolute inset-0 bg-[#1E3517]/75 flex flex-col items-center justify-center text-white transition-colors duration-300 group-hover:bg-[#1E3517]/80 cursor-pointer">
                       <span className="text-[20px] font-bold">
-                        +12 Photos
+                        +{pictures.length - 2} Photo{pictures.length - 2 !== 1 ? 's' : ''}
                       </span>
                       <span className="text-[10px] opacity-90 font-medium mt-0.5">
                         Click to View Gallery
@@ -805,9 +838,19 @@ const FarmDetailsView = ({
                 </div>
                 <div className="flex items-center justify-center">
                   {doc.url ? (
-                    <a href={doc.url} target="_blank" rel="noreferrer" className="text-sm text-[#4E8A35]">Download</a>
+                    <a
+                      href={doc.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center h-5 w-5 rounded-full bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0] hover:bg-[#D1FADF] transition-colors cursor-pointer"
+                      title="Download Document"
+                    >
+                      <CheckIcon size={10} color="currentColor" />
+                    </a>
                   ) : (
-                    <span className="text-sm text-[#7A8077]">No file link</span>
+                    <div className="flex items-center justify-center h-5 w-5 rounded-full bg-gray-50 text-gray-400 border border-gray-200">
+                      <CheckIcon size={10} color="currentColor" />
+                    </div>
                   )}
                 </div>
               </div>
@@ -819,6 +862,16 @@ const FarmDetailsView = ({
           </div>
         </div>
       </div>
+      {viewerVisible && (
+        <Viewer
+          visible={viewerVisible}
+          onClose={() => setViewerVisible(false)}
+          images={pictures.map((src) => ({ src, alt: "Farm Photo" }))}
+          activeIndex={activeIndex}
+          zIndex={99999}
+          noNavbar={pictures.length <= 1}
+        />
+      )}
     </div>
   );
 };
@@ -1368,6 +1421,17 @@ const formatCurrency = (val: string | number) => {
   }).format(num).replace('NGN', '₦');
 };
 
+const formatCurrencyWithDecimals = (val: string | number) => {
+  const num = typeof val === 'number' ? val : parseFloat(val);
+  if (isNaN(num)) return '₦0.00';
+  return new Intl.NumberFormat('en-NG', {
+    style: 'currency',
+    currency: 'NGN',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(num).replace('NGN', '₦').replace(/\s+/g, '');
+};
+
 const formatDuration = (monthsStr: string | number) => {
   const months = typeof monthsStr === 'number' ? monthsStr : parseInt(monthsStr);
   if (isNaN(months)) return '';
@@ -1389,6 +1453,25 @@ const formatDate = (dateStr?: string) => {
     return dateStr;
   }
 };
+
+const getDynamicProjectDates = (farm: any) => {
+  if (farm.Investment?.startDate || farm.Investment?.endDate) {
+    const start = farm.Investment.startDate ? formatDate(farm.Investment.startDate) : "";
+    const end = farm.Investment.endDate ? formatDate(farm.Investment.endDate) : "";
+    if (start && end) return `${start} - ${end}`;
+    if (start) return start;
+    if (end) return end;
+  }
+  
+  return "";
+};
+
+const ArrowUpRightIcon = ({ size = 12, className = "" }: { size?: number; className?: string }) => (
+  <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="7" y1="17" x2="17" y2="7"></line>
+    <polyline points="7 7 17 7 17 17"></polyline>
+  </svg>
+);
 
 const getMilestonePercentage = (name: string, index: number, total: number) => {
   const lower = name.toLowerCase();
@@ -1524,7 +1607,9 @@ const MyFarms = () => {
     search,
   });
   const { data: kycStatusResponse, isLoading: isKycStatusLoading } = useGetKycStatus();
-  const activeCategoryId = isCreatingProject ? projectCategory : farmCategory;
+  const activeCategoryId = isCreatingProject
+    ? projectCategory
+    : (selectedFarmForDetails ? (selectedFarmForDetails.farmCategoryId || selectedFarmForDetails.Category?.id || selectedFarmForDetails.category) : farmCategory);
 
   const { data: farmCategoriesResponse, isLoading: isFarmCategoriesLoading } = useGetFarmCategories();
   const { data: milestonesResponse } = useGetWebMilestonesByCategory(activeCategoryId || undefined);
@@ -1969,6 +2054,7 @@ const MyFarms = () => {
               setIsCreatingProject(true);
               setProjectStep(1);
             }}
+            activeTemplate={activeTemplate}
           />
         ) : !showAddFarm ? (
           <section className="overflow-hidden rounded-xl shadow-xs border border-[#EAECE8] bg-white">

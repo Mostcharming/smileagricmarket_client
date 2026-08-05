@@ -86,6 +86,8 @@ export interface FarmResponse {
 	pictures?: Array<{ id: string; url: string; name?: string }>;
 	documents?: Array<{ id: string; name: string; url: string; size?: number | string; status?: string; fileUrl?: string; fileName?: string; fileSize?: number }>;
 	Documents?: Array<{ id: string; name: string; url: string; size?: number | string; status?: string; fileUrl?: string; fileName?: string; fileSize?: number }>;
+	photos?: Array<{ id: string; documentType?: string; fileName?: string; fileUrl?: string; fileSize?: number; mimeType?: string; createdAt?: string }>;
+	farmDocuments?: Array<{ id: string; documentType?: string; fileName?: string; fileUrl?: string; fileSize?: number; mimeType?: string; createdAt?: string }>;
 	milestones?: Array<{
 		id: string;
 		amount?: number | string;

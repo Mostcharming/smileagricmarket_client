@@ -20,15 +20,7 @@ export const getPreviewImageUrl = (url?: string): string => {
     const parsedUrl = new URL(url);
 
     if (parsedUrl.hostname === "app.smileagrimarket.com" && parsedUrl.pathname.startsWith("/api/v1/upload/")) {
-      if (process.env.NODE_ENV !== "production") {
-        return `/api/image-proxy?url=${encodeURIComponent(parsedUrl.toString())}`;
-      }
-
-      if (parsedUrl.protocol === "http:") {
-        parsedUrl.protocol = "https:";
-      }
-
-      return parsedUrl.toString();
+      return `/api/image-proxy?url=${encodeURIComponent(parsedUrl.toString())}`;
     }
 
     return url;

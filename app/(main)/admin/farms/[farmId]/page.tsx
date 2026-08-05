@@ -119,7 +119,7 @@ const FarmDetailPage = () => {
   );
 
   const documents: DocumentItem[] = React.useMemo(() => {
-    const sourceDocuments = (farm.documents ?? farm.Documents) ?? [];
+    const sourceDocuments = (farm.farmDocuments ?? farm.documents ?? farm.Documents ?? []) as any[];
 
     if (sourceDocuments.length > 0) {
       return sourceDocuments.map((doc, index) => {
@@ -128,7 +128,11 @@ const FarmDetailPage = () => {
         return {
           id: doc.id || `${index}-${doc.fileName || 'document'}`,
           name: doc.fileName || `Doc ${index + 1}.pdf`,
-          size: typeof doc.fileSize === 'number' ? `${(doc.fileSize / 1024 / 1024).toFixed(1)}MB` : '2.3MB',
+          size: typeof doc.fileSize === 'number'
+            ? (doc.fileSize >= 1024 * 1024
+              ? `${(doc.fileSize / 1024 / 1024).toFixed(1)}MB`
+              : `${(doc.fileSize / 1024).toFixed(1)}KB`)
+            : '2.3MB',
           status: getDocumentStatus(undefined),
           preview: previewUrl,
         } as DocumentItem;
@@ -155,24 +159,24 @@ const FarmDetailPage = () => {
   const galleryImages = React.useMemo<GalleryItem[]>(() => {
     const documentImages = imageDocuments.map((document) => ({ src: document.src, alt: document.name }));
 
-    const pictureImages = (farm.pictures ?? [])
-      .map((picture) => ({ src: getPreviewImageUrl(picture.url ?? ''), alt: picture.name }))
+    const pictureImages = ((farm.photos ?? farm.pictures ?? []) as any[])
+      .map((picture) => ({ src: getPreviewImageUrl(picture.fileUrl ?? picture.url ?? ''), alt: (picture.fileName ?? picture.name) }))
       .filter((picture) => isImageUrl(picture.src));
 
     return [...documentImages, ...pictureImages];
-  }, [farm, imageDocuments]);
+  }, [farm.photos, farm.pictures, imageDocuments]);
 
   const farmPictures = React.useMemo(() => {
-    const directPictures = (farm.pictures ?? [])
+    const directPictures = ((farm.photos ?? farm.pictures ?? []) as any[])
       .map((picture, index) => ({
         id: picture.id || `picture-${index}`,
-        name: picture.name || `Picture ${index + 1}`,
-        src: getPreviewImageUrl(picture.url ?? ''),
+        name: (picture.fileName ?? picture.name) || `Picture ${index + 1}`,
+        src: getPreviewImageUrl(picture.fileUrl ?? picture.url ?? ''),
       }))
       .filter((picture) => isImageUrl(picture.src));
 
     return [...directPictures, ...imageDocuments];
-  }, [farm.pictures, imageDocuments]);
+  }, [farm.photos, farm.pictures, imageDocuments]);
 
   const milestones = React.useMemo(() => {
     const sourceSelected = (farm.milestones ?? farm.SelectedMilestones) ?? [];
