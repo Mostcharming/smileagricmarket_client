@@ -42,7 +42,7 @@ const isImageUrl = (url?: string) => {
   try {
     const parsedUrl = new URL(url, 'https://app.smileagrimarket.com');
 
-    if (parsedUrl.pathname.startsWith('/api/image-proxy')) {
+    if (parsedUrl.pathname.startsWith('/image-proxy')) {
       const innerUrl = parsedUrl.searchParams.get('url');
       if (innerUrl) {
         return isImageUrl(decodeURIComponent(innerUrl));
