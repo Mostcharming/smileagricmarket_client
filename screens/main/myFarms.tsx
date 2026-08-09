@@ -2349,7 +2349,7 @@ const MyFarms = () => {
         {previewPhoto && (
           <div className="bg-white p-4">
             <div className="mb-3 flex items-center justify-between gap-3">
-              <div>
+              <div className="flex flex-col">
                 <Typography variant="subheading" className="text-[#0B1307] text-lg!">
                   Full Preview
                 </Typography>
