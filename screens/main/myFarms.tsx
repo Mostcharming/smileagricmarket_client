@@ -16,7 +16,7 @@ import { Button, Input, MainHeader, Select, Table, Typography } from "@/componen
 import { Column } from "@/components/ui/table";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { useGetFarmCategories, useGetWebMilestonesByCategory, useGetWebInvestmentTemplate } from "@/mutation/dashboard.mutation";
-import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById } from "@/mutation/farms.mutation";
+import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById, useCreateInvestmentProject } from "@/mutation/farms.mutation";
 import { useGetKycStatus } from "@/mutation";
 import { MilestoneResponse, SelectOptions } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -71,25 +71,41 @@ const StepItem = ({
 );
 
 const getInvestmentDetails = (farm: any) => {
-  const isVerified = farm.verificationStatus === "Verified" || farm.status === "Approved" || farm.status === "Verified" || farm.verificationStatus === "Approved" || farm.isActive;
-  
-  const cycles = farm.stats?.completedMilestones || farm.SelectedMilestones?.filter((m: any) => m.isCompleted).length || 0;
+  const statusStr = String(farm.verificationStatus || farm.status || "").toLowerCase().trim();
+  const isVerified = statusStr === "verified" || statusStr === "approved";
+
+  const invs = Array.isArray(farm.investmentProjects)
+    ? farm.investmentProjects
+    : Array.isArray(farm.Investment)
+      ? farm.Investment
+      : farm.investmentProject
+        ? [farm.investmentProject]
+        : farm.Investment
+          ? [farm.Investment]
+          : [];
+
+  const cycles = invs.length;
+  const inv = invs[0];
+
+  const completedMilestones = farm.stats?.completedMilestones || inv?.milestones?.filter((m: any) => m.isCompleted).length || farm.SelectedMilestones?.filter((m: any) => m.isCompleted).length || 0;
   const verificationStatus = isVerified ? "Verified" : "Pending";
-  
-  const rawStatus = farm.Investment?.status || farm.status;
+
+  const rawStatus = inv?.investmentStatus || inv?.status || farm.status;
   let investmentStatus = "Not Started";
-  if (rawStatus === "Active" || rawStatus === "active") {
+  const normalizedRawStatus = String(rawStatus || "").toLowerCase().trim();
+  if (normalizedRawStatus === "active") {
     investmentStatus = "Active";
-  } else if (rawStatus === "Funding Started" || rawStatus === "funding_started" || rawStatus === "Funding") {
+  } else if (normalizedRawStatus === "funding started" || normalizedRawStatus === "funding_started" || normalizedRawStatus === "funding" || normalizedRawStatus === "pending") {
     investmentStatus = "Funding Started";
-  } else if (rawStatus === "Completed" || rawStatus === "completed") {
+  } else if (normalizedRawStatus === "completed") {
     investmentStatus = "Completed";
   } else if (farm.stats?.completionPercentage > 0 && farm.stats?.completionPercentage < 100) {
     investmentStatus = "Active";
   }
-  
+
   return {
     cycles,
+    completedMilestones,
     verificationStatus,
     investmentStatus,
   };
@@ -209,9 +225,10 @@ const FarmDetailsView = ({
   };
 
   const stats = useMemo(() => {
+    const inv = farm.investmentProject || farm.Investment;
     const cycles = farm.stats?.completedMilestones || farm.SelectedMilestones?.filter((m: any) => m.isCompleted).length || 0;
-    const currentCycle = (farm.Investment && farm.Investment.status !== 'Completed') ? 1 : 0;
-    const funding = Number(farm.Investment?.amountRaised ?? farm.Investment?.raised ?? farm.Investment?.investmentReceived ?? 0);
+    const currentCycle = (inv && inv.status !== 'Completed' && inv.investmentStatus !== 'completed') ? 1 : 0;
+    const funding = Number(inv?.amountRaised ?? inv?.raised ?? inv?.investmentReceived ?? 0);
     const completion = farm.stats?.completionPercentage || 0;
 
     return {
@@ -263,7 +280,7 @@ const FarmDetailsView = ({
           return { name, size: '', url: d };
         }
         const name = d.name || d.fileName || (d.url && d.url.split('/').pop()) || 'document.pdf';
-        
+
         let size = '';
         const rawSize = d.size || d.fileSize;
         if (rawSize) {
@@ -290,40 +307,69 @@ const FarmDetailsView = ({
     const apiProjects: any[] = [];
     const roiFromTemplate = activeTemplate?.fundingRules?.roi ?? activeTemplate?.roi ?? 0;
     const roiText = roiFromTemplate ? `${roiFromTemplate}% return` : "0% return";
-    const dynamicDates = getDynamicProjectDates(farm);
 
-    // Prefer explicit Investment object from API
-    if (farm.Investment) {
-      const inv = farm.Investment;
-      const invMilestones = Array.isArray(inv.milestones)
-        ? inv.milestones.map((m: any) => ({
-            id: m.id,
-            name: m.name || m.title || "",
-            pct: m.releasePercentage ?? m.allocation ?? m.pct ?? 0,
-            amount: m.amount ?? 0,
-            status: m.status ?? (m.isCompleted ? "Completed" : "Request for Funding")
-          }))
-        : [];
+    const invs = Array.isArray(farm.investmentProjects)
+      ? farm.investmentProjects
+      : Array.isArray(farm.Investment)
+        ? farm.Investment
+        : farm.investmentProject
+          ? [farm.investmentProject]
+          : farm.Investment
+            ? [farm.Investment]
+            : [];
 
-      const totalAllocation = invMilestones.reduce((acc: number, mm: any) => acc + (Number(mm.pct) || 0), 0);
+    if (invs.length > 0) {
+      invs.forEach((inv: any) => {
+        const projectGoalAmount = Number(inv.fundingGoalAmount ?? inv.expectedInvestment ?? inv.amount ?? inv.goal ?? 0);
+        const projectRaisedAmount = Number(inv.investmentReceived ?? inv.amountRaised ?? inv.raised ?? 0);
+        const dynamicDates = getDynamicProjectDates(inv);
 
-      apiProjects.push({
-        id: inv.id,
-        name: inv.name || inv.title || `Investment Project`,
-        categoryName: farm.Category?.name || inv.categoryName || "",
-        status: inv.status || "Funding Started",
-        dates: dynamicDates,
-        raised: inv.amountRaised ?? inv.raised ?? 0,
-        goal: inv.amount ?? inv.goal ?? 0,
-        investors: inv.investorsCount ?? inv.investors ?? 0,
-        roi: inv.roi ? `${inv.roi}${String(inv.roi).includes('%') ? '' : '% return'}` : (inv.roiText || roiText),
-        milestones: invMilestones,
-        totalAllocation: totalAllocation
+        const invMilestones = Array.isArray(inv.milestones)
+          ? inv.milestones.map((m: any) => {
+              const pct = m.fundReleasePercentage ?? m.releasePercentage ?? m.allocation ?? m.pct ?? 0;
+              const calculatedAmount = m.amount || Math.round((projectGoalAmount * pct) / 100);
+              return {
+                id: m.id,
+                name: m.name || m.title || "",
+                pct,
+                amount: calculatedAmount,
+                status: m.status ?? (m.isCompleted ? "Completed" : "Request for Funding")
+              };
+            })
+          : [];
+
+        const totalAllocation = invMilestones.reduce((acc: number, mm: any) => acc + (Number(mm.pct) || 0), 0);
+
+        const rawStatusStr = String(inv.investmentStatus || inv.status || "").toLowerCase().trim();
+        let mappedStatus = "Funding Started";
+        if (rawStatusStr === "active") {
+          mappedStatus = "Active";
+        } else if (rawStatusStr === "completed") {
+          mappedStatus = "Completed";
+        }
+
+        const rawRoi = inv.roi || inv.investmentTemplate?.roiPercentage;
+        const formattedRoi = rawRoi ? `${parseFloat(String(rawRoi)).toFixed(1)}% return` : roiText;
+
+        apiProjects.push({
+          id: inv.id,
+          name: inv.name || inv.title || inv.investmentTemplate?.name || `Investment Project`,
+          categoryName: inv.farmCategory?.name || farm.Category?.name || inv.categoryName || "",
+          status: mappedStatus,
+          dates: dynamicDates,
+          raised: projectRaisedAmount,
+          goal: projectGoalAmount,
+          investors: inv.investorsCount ?? inv.investors ?? 0,
+          roi: formattedRoi,
+          milestones: invMilestones,
+          totalAllocation: totalAllocation
+        });
       });
     }
 
     // If API exposes SelectedMilestones but no Investment object, map them directly
     else if (Array.isArray(farm.SelectedMilestones) && farm.SelectedMilestones.length > 0) {
+      const dynamicDates = getDynamicProjectDates(farm);
       const milestones = farm.SelectedMilestones.map((m: any) => ({
         id: m.id,
         name: m.name || m.title || "",
@@ -360,7 +406,7 @@ const FarmDetailsView = ({
 
   const handleRequestFunding = (projectId: string, milestoneId: string) => {
     const isCustom = projectId.startsWith("custom-p-");
-    
+
     toast.success("Funding request submitted successfully!");
 
     if (isCustom) {
@@ -446,12 +492,39 @@ const FarmDetailsView = ({
         <div>
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-[32px] font-bold text-[#1F2937] leading-tight">{farm.name}</h1>
-            <span className="inline-flex items-center rounded-full bg-[#ECFDF5] px-2.5 py-1 text-xs font-semibold text-[#047857] gap-1 shrink-0">
-              <svg className="w-3.5 h-3.5 text-[#047857]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Verified
-            </span>
+            {(() => {
+              const status = String(farm.verificationStatus || farm.status || "").toLowerCase().trim();
+              if (status === "verified" || status === "approved") {
+                return (
+                  <span className="inline-flex items-center rounded-full bg-[#ECFDF5] px-2.5 py-1 text-xs font-semibold text-[#047857] gap-1 shrink-0">
+                    <svg className="w-3.5 h-3.5 text-[#047857]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Verified
+                  </span>
+                );
+              }
+              if (status === "rejected") {
+                return (
+                  <span className="inline-flex items-center rounded-full bg-[#FEF2F2] px-2.5 py-1 text-xs font-semibold text-[#DC2626] gap-1 shrink-0">
+                    <svg className="w-3.5 h-3.5 text-[#DC2626]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <circle cx="12" cy="12" r="9" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                    </svg>
+                    Rejected
+                  </span>
+                );
+              }
+              return (
+                <span className="inline-flex items-center rounded-full bg-[#F3F4F6] px-2.5 py-1 text-xs font-semibold text-[#4B5563] gap-1 shrink-0">
+                  <svg className="w-3.5 h-3.5 text-[#4B5563]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <circle cx="12" cy="12" r="9" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3" />
+                  </svg>
+                  Pending Verification
+                </span>
+              );
+            })()}
           </div>
           <div className="flex items-center gap-2 text-[#5E6771] mt-2 text-sm">
             <LocationIcon size={16} />
@@ -569,11 +642,10 @@ const FarmDetailsView = ({
                   <span className="text-xs font-medium text-[#5E6771] block mt-0.5">{activeProject.dates || ""}</span>
                 </div>
               </div>
-              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
-                activeProject.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
-                activeProject.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
-                "bg-[#EFF6FF] text-[#1D4ED8]"
-              }`}>
+              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${activeProject.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
+                  activeProject.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
+                    "bg-[#EFF6FF] text-[#1D4ED8]"
+                }`}>
                 {activeProject.status}
               </span>
             </div>
@@ -586,7 +658,7 @@ const FarmDetailsView = ({
               <div className="h-2 rounded-full bg-[#EAECE8] overflow-hidden">
                 <div
                   className="h-full rounded-full bg-[#4E8A35] transition-all duration-500"
-                  style={{ 
+                  style={{
                     width: `${Math.min(100, activeProject.goal > 0 ? (activeProject.raised / activeProject.goal) * 100 : 0)}%`,
                     minWidth: '8px'
                   }}
@@ -655,16 +727,15 @@ const FarmDetailsView = ({
                     const isCompleted = m.status === "Completed";
                     const isRequested = m.status === "Requested";
                     const isActionable = m.status === "Request for Funding";
-                    
+
                     const isNameMilestoneFormat = m.name.toLowerCase().includes("milestone");
                     const milestoneLabel = isNameMilestoneFormat ? m.name : `MILESTONE ${idx + 1} - ${m.pct}%`;
                     const milestoneDesc = isNameMilestoneFormat ? "" : m.name;
-                    
+
                     return (
                       <div key={m.id || idx} className="relative flex items-center justify-between pl-8 min-h-[56px]">
-                        <span className={`absolute left-[7px] -translate-x-1/2 flex h-3.5 w-3.5 items-center justify-center rounded-full border-4 border-white z-10 ${
-                          isCompleted ? "bg-[#4E8A35]" : "bg-[#64B03F]"
-                        }`} />
+                        <span className={`absolute left-[7px] -translate-x-1/2 flex h-3.5 w-3.5 items-center justify-center rounded-full border-4 border-white z-10 ${isCompleted ? "bg-[#4E8A35]" : "bg-[#64B03F]"
+                          }`} />
 
                         <div className="flex-1 flex flex-row items-center justify-between py-2">
                           <div className="flex flex-col">
@@ -722,11 +793,10 @@ const FarmDetailsView = ({
                         <span className="text-sm font-bold text-[#1F2937] block leading-tight">{p.name}</span>
                         <span className="text-xs font-medium text-[#5E6771] block mt-1">{p.dates || ""}</span>
                       </div>
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider shrink-0 ${
-                        p.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
-                        p.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
-                        "bg-[#EFF6FF] text-[#1D4ED8]"
-                      }`}>
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider shrink-0 ${p.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
+                          p.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
+                            "bg-[#EFF6FF] text-[#1D4ED8]"
+                        }`}>
                         {p.status}
                       </span>
                     </div>
@@ -739,7 +809,7 @@ const FarmDetailsView = ({
                       <div className="h-1.5 rounded-full bg-[#EAECE8] overflow-hidden">
                         <div
                           className="h-full rounded-full bg-[#64B03F]"
-                          style={{ 
+                          style={{
                             width: `${Math.min(100, p.goal > 0 ? (p.raised / p.goal) * 100 : 0)}%`,
                             minWidth: '8px'
                           }}
@@ -879,12 +949,10 @@ const FarmDetailsView = ({
 interface CreateProjectFlowProps {
   farm: any;
   onBackToFarm: () => void;
-  projectStep: 1 | 2 | 3 | 'success';
-  setProjectStep: (step: 1 | 2 | 3 | 'success') => void;
+  projectStep: 1 | 2 | 'success';
+  setProjectStep: (step: 1 | 2 | 'success') => void;
   projectCategory: string;
   setProjectCategory: (category: string) => void;
-  projectMilestones: SelectedMilestone[];
-  setProjectMilestones: React.Dispatch<React.SetStateAction<SelectedMilestone[]>>;
   projectGoal: string;
   setProjectGoal: (goal: string) => void;
   projectAgreed: boolean;
@@ -892,7 +960,6 @@ interface CreateProjectFlowProps {
   farmCategories: SelectOptions[];
   isFarmCategoriesLoading: boolean;
   milestonesList: any[];
-  milestoneOptions: any[];
   activeTemplate: any;
   selectedCategoryName: string;
   isSubmitting: boolean;
@@ -906,8 +973,6 @@ const CreateProjectFlow = ({
   setProjectStep,
   projectCategory,
   setProjectCategory,
-  projectMilestones,
-  setProjectMilestones,
   projectGoal,
   setProjectGoal,
   projectAgreed,
@@ -915,7 +980,6 @@ const CreateProjectFlow = ({
   farmCategories,
   isFarmCategoriesLoading,
   milestonesList,
-  milestoneOptions,
   activeTemplate,
   selectedCategoryName,
   isSubmitting,
@@ -923,18 +987,8 @@ const CreateProjectFlow = ({
 }: CreateProjectFlowProps) => {
   const [isCardExpanded, setIsCardExpanded] = useState(true);
 
-  const toggleProjectMilestone = (milestoneId: string) => {
-    setProjectMilestones((prev) => {
-      const exists = prev.some((item) => item.milestoneId === milestoneId);
-      if (exists) {
-        return prev.filter((item) => item.milestoneId !== milestoneId);
-      }
-      return [...prev, { milestoneId, amount: "" }];
-    });
-  };
-
-  const numericStep = typeof projectStep === 'number' ? projectStep : 4;
-  const projectProgressWidth = numericStep === 1 ? "33%" : numericStep === 2 ? "66%" : "100%";
+  const numericStep = typeof projectStep === 'number' ? projectStep : 3;
+  const projectProgressWidth = numericStep === 1 ? "50%" : "100%";
 
   const overviewDetails = getCategoryOverviewDetails(selectedCategoryName, milestonesList.length, activeTemplate);
 
@@ -945,107 +999,132 @@ const CreateProjectFlow = ({
 
   if (projectStep === 'success') {
     return (
-      <div className="flex items-center justify-center py-10">
-        <div className="w-full max-w-[620px] rounded-3xl bg-white border border-[#E9EAEB] shadow-[0_12px_36px_rgba(0,0,0,0.05)] overflow-hidden">
-          <div className="flex flex-col items-center justify-center pt-10 pb-6 text-center px-6">
-            <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#ECFDF3]">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#D1FADF]">
-                <div className="text-[#039855]">
-                  <CheckIcon size={28} color="currentColor" />
-                </div>
-              </div>
-            </div>
-            <span className="rounded-full bg-[#ECFDF5] px-3 py-1 text-xs font-semibold text-[#047857] flex items-center gap-1">
-              <svg className="w-3.5 h-3.5 text-[#047857]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <div className="max-w-[784px] mx-auto py-8 sm:py-12 md:px-4">
+        <div className="bg-white border border-[#E9EFE7] rounded-[32px] py-12 px-6 sm:p-12 shadow-[0_15px_40px_rgba(0,0,0,0.03)] text-center relative overflow-hidden">
+          {/* Dark Green Checkmark Badge */}
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#386223] text-white mb-5 shadow-sm">
+            <svg className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+
+          {/* Status Badge */}
+          <div className="mb-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0989261A] border border-[#09892633] px-3.5 py-1 text-[11px] font-semibold text-[#098926]">
+              <svg className="h-3.5 w-3.5 text-[#098926]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
               </svg>
               Project Confirmed
             </span>
-            <h2 className="text-[22px] font-bold text-[#1F2937] mt-4">Investment Project Creation Successful</h2>
-            <p className="mt-2 text-sm text-[#5E6771] max-w-[480px]">
-              Your investment project for <strong className="font-semibold text-gray-900">{farm.name}</strong> has been created successfully and is now open to investors.
-            </p>
           </div>
 
-          <div className="px-8 pb-8 pt-4 border-t border-[#F3F4F6] bg-[#FAFAFA]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white border border-[#E9EAEB] rounded-2xl p-4 shadow-xs flex items-center gap-3">
-                <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg shrink-0">
-                  <FarmIcon size={18} />
+          <h1 className="text-xl sm:text-2xl font-bold text-[#192218] leading-tight mb-2.5 tracking-tight">
+            Investment Project Creation Successful
+          </h1>
+          <p className="text-xs sm:text-sm text-[#737E71] font-mono max-w-md mx-auto mb-7 tracking-tight">
+            Your investment project for <span className="font-semibold text-[#192218]">{farm.name}</span> has been created successfully and is now open to investors.
+          </p>
+
+          {/* Info Outer Box */}
+          <div className="bg-[#F9F9F9] border border-[#DBE6D5] rounded-[22px] p-3 text-left mb-7">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Farm Name Card */}
+              <div className="bg-white border border-[#E2E8DF] rounded-xl p-3.5 sm:p-4 shadow-[0_2px_4px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#8C9788] uppercase tracking-wider mb-1.5">
+                  <svg className="h-3.5 w-3.5 text-[#8C9788]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+                  </svg>
+                  <span>FARM NAME</span>
                 </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider block">Farm Name</span>
-                  <span className="text-sm font-semibold text-[#1F2937] block mt-0.5">{farm.name}</span>
-                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#192218] truncate">
+                  {farm.name}
+                </span>
               </div>
 
-              <div className="bg-white border border-[#E9EAEB] rounded-2xl p-4 shadow-xs flex items-center gap-3">
-                <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg shrink-0">
-                  <TrendingUpIcon size={18} />
+              {/* Funding Goal Card */}
+              <div className="bg-white border border-[#E2E8DF] rounded-xl p-3.5 sm:p-4 shadow-[0_2px_4px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#8C9788] uppercase tracking-wider mb-1.5">
+                  <svg className="h-3.5 w-3.5 text-[#8C9788]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 005.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                  </svg>
+                  <span>FUNDING GOAL</span>
                 </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider block">Funding Goal</span>
-                  <span className="text-sm font-semibold text-[#1F2937] block mt-0.5">{formatCurrency(projectGoal)}</span>
-                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#192218]">
+                  {formatCurrency(projectGoal)}
+                </span>
               </div>
 
-              <div className="bg-white border border-[#E9EAEB] rounded-2xl p-4 shadow-xs flex items-center gap-3">
-                <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg shrink-0">
-                  <PercentIcon size={18} />
+              {/* ROI Card */}
+              <div className="bg-white border border-[#E2E8DF] rounded-xl p-3.5 sm:p-4 shadow-[0_2px_4px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#8C9788] uppercase tracking-wider mb-1.5">
+                  <svg className="h-3.5 w-3.5 text-[#8C9788]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 14.25l6-6m-5.5.5a1 1 0 11-2 0 1 1 0 012 0zm6 5a1 1 0 11-2 0 1 1 0 012 0z" />
+                  </svg>
+                  <span>ROI</span>
                 </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider block">ROI</span>
-                  <span className="text-sm font-semibold text-[#1F2937] block mt-0.5">{parseFloat(String(roi)).toFixed(1)}%</span>
-                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#192218]">
+                  {parseFloat(String(roi)).toFixed(1)}%
+                </span>
               </div>
 
-              <div className="bg-white border border-[#E9EAEB] rounded-2xl p-4 shadow-xs flex items-center gap-3">
-                <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg shrink-0">
-                  <ClockIcon size={18} />
+              {/* Duration Card */}
+              <div className="bg-white border border-[#E2E8DF] rounded-xl p-3.5 sm:p-4 shadow-[0_2px_4px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#8C9788] uppercase tracking-wider mb-1.5">
+                  <svg className="h-3.5 w-3.5 text-[#8C9788]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>DURATION</span>
                 </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider block">Duration</span>
-                  <span className="text-sm font-semibold text-[#1F2937] block mt-0.5">{durationLabel}</span>
-                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#192218]">
+                  {durationLabel}
+                </span>
               </div>
 
-              <div className="bg-white border border-[#E9EAEB] rounded-2xl p-4 shadow-xs flex items-center gap-3">
-                <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg shrink-0">
-                  <CalendarIcon size={18} />
+              {/* Start Date Card */}
+              <div className="bg-white border border-[#E2E8DF] rounded-xl p-3.5 sm:p-4 shadow-[0_2px_4px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#8C9788] uppercase tracking-wider mb-1.5">
+                  <svg className="h-3.5 w-3.5 text-[#8C9788]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+                  </svg>
+                  <span>INVESTMENT START DATE</span>
                 </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider block">Investment Start Date</span>
-                  <span className="text-sm font-semibold text-[#1F2937] block mt-0.5">{startDateLabel}</span>
-                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#192218]">
+                  {startDateLabel}
+                </span>
               </div>
 
-              <div className="bg-white border border-[#E9EAEB] rounded-2xl p-4 shadow-xs flex items-center gap-3">
-                <div className="text-[#80916E] bg-[#F7FAF5] p-2 rounded-lg shrink-0">
-                  <CalendarIcon size={18} />
+              {/* End Date Card */}
+              <div className="bg-white border border-[#E2E8DF] rounded-xl p-3.5 sm:p-4 shadow-[0_2px_4px_rgba(0,0,0,0.01)] flex flex-col justify-between">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#8C9788] uppercase tracking-wider mb-1.5">
+                  <svg className="h-3.5 w-3.5 text-[#8C9788]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+                  </svg>
+                  <span>INVESTMENT END DATE</span>
                 </div>
-                <div>
-                  <span className="text-[10px] font-bold text-[#8A8F96] uppercase tracking-wider block">Investment End Date</span>
-                  <span className="text-sm font-semibold text-[#1F2937] block mt-0.5">{endDateLabel}</span>
-                </div>
+                <span className="text-xs sm:text-sm font-bold text-[#192218]">
+                  {endDateLabel}
+                </span>
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
-              <button
-                type="button"
-                onClick={onBackToFarm}
-                className="w-full sm:flex-1 inline-flex items-center justify-center rounded-lg bg-[#4E8A35] hover:bg-[#3D6E29] px-6 py-3.5 text-sm font-semibold text-white transition-colors cursor-pointer shadow-sm"
-              >
-                GO BACK TO FARM
-              </button>
-              <button
-                type="button"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-[#D5D7DA] bg-white hover:bg-gray-50 px-6 py-3.5 text-sm font-semibold text-[#374151] transition-colors cursor-pointer"
-              >
+          {/* Action Buttons */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+            <button
+              type="button"
+              onClick={onBackToFarm}
+              className="rounded-lg bg-[#50962E] hover:bg-[#438225] text-white py-3 px-4 text-xs font-bold shadow-sm transition-all cursor-pointer text-center tracking-wider uppercase flex items-center justify-center"
+            >
+              GO BACK TO FARM
+            </button>
+            <button
+              type="button"
+              onClick={() => toast.success("Agreement download started!")}
+              className="rounded-lg bg-[#F2F2F7] border border-[#D1D1D6] text-[#333E31] py-3 px-4 text-xs font-bold transition-all cursor-pointer text-center tracking-wider uppercase flex items-center justify-center gap-2"
+            >
                 <DownloadIcon size={18} />
                 <span>DOWNLOAD AGREEMENT</span>
-              </button>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -1079,8 +1158,6 @@ const CreateProjectFlow = ({
             <div className="flex items-center justify-between gap-3 md:flex-col md:items-start md:gap-0 md:space-y-0.5">
               <StepItem title="Category" done={numericStep >= 2 || projectCategory !== ""} className="flex-1 md:flex-none" />
               <p className="ml-2 hidden text-[#9CC98A] md:block">:</p>
-              <StepItem title="Milestones" done={numericStep >= 3} className="flex-1 md:flex-none" />
-              <p className="ml-2 hidden text-[#9CC98A] md:block">:</p>
               <StepItem title="Goal" done={false} className="flex-1 md:flex-none" />
             </div>
           </aside>
@@ -1090,8 +1167,7 @@ const CreateProjectFlow = ({
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-medium text-[#1F2937]">
                   {projectStep === 1 && "Farm Category"}
-                  {projectStep === 2 && "Farm Milestones"}
-                  {projectStep === 3 && "Funding Goal"}
+                  {projectStep === 2 && "Funding Goal"}
                 </h2>
               </div>
               <div className="mt-3 h-1 rounded-full bg-[#BEDCB0]">
@@ -1296,61 +1372,6 @@ const CreateProjectFlow = ({
 
               {projectStep === 2 && (
                 <div className="max-w-3xl space-y-5">
-                  <div className="space-y-3">
-                    <Typography variant="small" className="font-semibold text-[#1F2937]">
-                      What do you need funds for? (Select farm milestones that apply)
-                    </Typography>
-                    <p className="text-xs text-[#5E6771] -mt-1">
-                      You will be required to provide evidence for each milestone when requesting for payment
-                    </p>
-
-                    <div className="space-y-2.5">
-                      {milestoneOptions.map((option) => {
-                        if (!option.id) return null;
-                        const selectedMilestone = projectMilestones.find((item) => item.milestoneId === option.id);
-                        const checked = Boolean(selectedMilestone);
-                        return (
-                          <button
-                            key={option.id}
-                            type="button"
-                            onClick={() => toggleProjectMilestone(option.id)}
-                            className={`flex w-full min-h-11 items-center gap-3 rounded-md border bg-transparent px-4 py-3 text-left transition-colors cursor-pointer ${checked
-                                ? "border-[#5DA63D] bg-[#F7FBF4]"
-                                : "border-[#B8C3CF]"
-                              }`}
-                          >
-                            <span className={`flex h-5 w-5 items-center justify-center rounded-sm border ${checked ? "border-[#5DA63D] bg-[#5DA63D] text-white" : "border-[#8A93A4] text-transparent"}`}>
-                              ✓
-                            </span>
-                            <span className="text-sm font-medium text-[#1F2937]">{option.name}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-1">
-                    <Button
-                      variant="light"
-                      className="rounded-md bg-[#E0E0E0] text-sm"
-                      onClick={() => setProjectStep(1)}
-                    >
-                      BACK
-                    </Button>
-                    <Button
-                      variant="primary"
-                      disabled={projectMilestones.length === 0}
-                      className="rounded-md text-sm"
-                      onClick={() => setProjectStep(3)}
-                    >
-                      CONTINUE
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {projectStep === 3 && (
-                <div className="max-w-3xl space-y-5">
                   <div className="space-y-2">
                     <label className="block text-sm font-semibold text-[#1F2937]">
                       Funding Goal
@@ -1384,7 +1405,7 @@ const CreateProjectFlow = ({
                     <Button
                       variant="light"
                       className="rounded-md bg-[#E0E0E0] text-sm"
-                      onClick={() => setProjectStep(2)}
+                      onClick={() => setProjectStep(1)}
                     >
                       BACK
                     </Button>
@@ -1406,7 +1427,7 @@ const CreateProjectFlow = ({
       </section>
     </div>
   );
-};
+};;
 
 const normalizeKycStatus = (status?: string) => status?.trim().toLowerCase().replace(/\s+/g, "_") ?? "";
 
@@ -1455,14 +1476,19 @@ const formatDate = (dateStr?: string) => {
 };
 
 const getDynamicProjectDates = (farm: any) => {
-  if (farm.Investment?.startDate || farm.Investment?.endDate) {
-    const start = farm.Investment.startDate ? formatDate(farm.Investment.startDate) : "";
-    const end = farm.Investment.endDate ? formatDate(farm.Investment.endDate) : "";
-    if (start && end) return `${start} - ${end}`;
-    if (start) return start;
-    if (end) return end;
+  const inv = farm.investmentProject || farm.Investment;
+  if (inv) {
+    const startDate = inv.startDate || inv.investmentTemplate?.startDate;
+    const endDate = inv.endDate || inv.investmentTemplate?.endDate;
+    if (startDate || endDate) {
+      const start = startDate ? formatDate(startDate) : "";
+      const end = endDate ? formatDate(endDate) : "";
+      if (start && end) return `${start} - ${end}`;
+      if (start) return start;
+      if (end) return end;
+    }
   }
-  
+
   return "";
 };
 
@@ -1544,7 +1570,7 @@ const getCategoryOverviewDetails = (
 
   const minFundingVal = template.fundingRules?.minGoal ?? template.minFunding ?? 0;
   const maxFundingVal = template.fundingRules?.maxGoal ?? template.maxFunding ?? 0;
-  
+
   let fundingRange = "-";
   if (minFundingVal || maxFundingVal) {
     fundingRange = `${formatCurrency(minFundingVal)} – ${formatCurrency(maxFundingVal)}`;
@@ -1579,9 +1605,8 @@ const MyFarms = () => {
 
   // Create Investment Project sub-flow states
   const [isCreatingProject, setIsCreatingProject] = useState(false);
-  const [projectStep, setProjectStep] = useState<1 | 2 | 3 | 'success'>(1);
+  const [projectStep, setProjectStep] = useState<1 | 2 | 'success'>(1);
   const [projectCategory, setProjectCategory] = useState("");
-  const [projectMilestones, setProjectMilestones] = useState<SelectedMilestone[]>([]);
   const [projectGoal, setProjectGoal] = useState("");
   const [projectAgreed, setProjectAgreed] = useState(false);
   const [customProjects, setCustomProjects] = useState<Record<string, any[]>>({});
@@ -1619,6 +1644,7 @@ const MyFarms = () => {
   const updateFarmMutation = useUpdateFarm();
   const addMilestonesMutation = useAddMilestonesToFarm();
   const uploadDocumentsMutation = useUploadDocToFarm();
+  const createInvestmentProjectMutation = useCreateInvestmentProject();
   const { data: farmDetailsResponse } = useGetFarmById(selectedFarmForDetails?.id);
   const selectedFarmDetails = farmDetailsResponse?.data || selectedFarmForDetails;
 
@@ -1730,7 +1756,6 @@ const MyFarms = () => {
     setIsCreatingProject(false);
     setProjectStep(1);
     setProjectCategory("");
-    setProjectMilestones([]);
     setProjectGoal("");
     setProjectAgreed(false);
   };
@@ -1739,41 +1764,19 @@ const MyFarms = () => {
     if (!selectedFarmForDetails) return;
     const farmId = selectedFarmForDetails.id;
     try {
-      if (projectCategory && projectCategory !== selectedFarmForDetails.farmCategoryId) {
-        await updateFarmMutation.mutateAsync({
-          farmId,
-          payload: {
-            farmCategoryId: projectCategory,
-          },
-        });
-      }
-
       const numericGoal = Number(projectGoal.replace(/\D/g, ""));
-      const totalWeight = projectMilestones.reduce((acc, item) => {
-        const milestoneObj = milestonesList.find((m: any) => m.id === item.milestoneId);
-        const weight = milestoneObj?.releasePercentage ?? 0;
-        return acc + weight;
-      }, 0);
 
-      const milestonesPayload = projectMilestones.map((item) => {
-        const milestoneObj = milestonesList.find((m: any) => m.id === item.milestoneId);
-        const pct = milestoneObj?.releasePercentage ?? 0;
-        const calculatedAmount = totalWeight > 0 ? Math.round((numericGoal * pct) / totalWeight) : 0;
-        return {
-          milestoneId: item.milestoneId,
-          amount: calculatedAmount,
-        };
-      });
-
-      await addMilestonesMutation.mutateAsync({
+      await createInvestmentProjectMutation.mutateAsync({
         farmId,
         payload: {
-          milestones: milestonesPayload,
+          farmCategoryId: projectCategory,
+          fundingGoalAmount: numericGoal,
         },
       });
 
       toast.success("Investment project created successfully!");
       queryClient.invalidateQueries({ queryKey: ["farms"] });
+      queryClient.invalidateQueries({ queryKey: ["farm", farmId] });
 
       const existingProjectsCount = (selectedFarmForDetails.Investment || (selectedFarmForDetails.SelectedMilestones && selectedFarmForDetails.SelectedMilestones.length > 0)) ? 1 : 0;
       const addedProjects = customProjects[farmId] || [];
@@ -1785,18 +1788,17 @@ const MyFarms = () => {
         name: `Investment Project ${totalCount + 1} - ${selectedCategoryName}`,
         categoryName: selectedCategoryName,
         status: "Funding Started" as const,
-        dates: `${new Date().toLocaleString('en-US', {month: 'short'})} ${new Date().getFullYear()} - ${new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).toLocaleString('en-US', {month: 'short'})} ${new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).getFullYear()}`,
+        dates: `${new Date().toLocaleString('en-US', { month: 'short' })} ${new Date().getFullYear()} - ${new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).toLocaleString('en-US', { month: 'short' })} ${new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).getFullYear()}`,
         raised: 0,
         goal: numericGoal,
         investors: 0,
         roi: `${parseFloat(String(roi)).toFixed(1)}% return`,
-        milestones: projectMilestones.map((item, idx) => {
-          const milestoneObj = milestonesList.find((m: any) => m.id === item.milestoneId);
-          const pct = milestoneObj?.releasePercentage ?? 0;
-          const calculatedAmount = totalWeight > 0 ? Math.round((numericGoal * pct) / totalWeight) : 0;
+        milestones: milestonesList.map((m: any, idx: number, arr: any[]) => {
+          const pct = getResolvedMilestonePercentage(m, idx, arr.length, activeTemplate?.milestones);
+          const calculatedAmount = Math.round((numericGoal * pct) / 100);
           return {
-            id: item.milestoneId,
-            name: milestoneObj?.name || `Milestone ${idx + 1}`,
+            id: m.id || String(idx),
+            name: m.name || `Milestone ${idx + 1}`,
             pct,
             amount: calculatedAmount,
             status: "Request for Funding" as const
@@ -1977,8 +1979,8 @@ const MyFarms = () => {
       header: "Investment Status",
       key: "investmentStatus",
       render: (farm) => {
-        const { investmentStatus, cycles } = getInvestmentDetails(farm);
-        const completedCount = Number(cycles) || 0;
+        const { investmentStatus, completedMilestones } = getInvestmentDetails(farm);
+        const completedCount = Number(completedMilestones) || 0;
 
         const badgeStyles: Record<string, string> = {
           "Not Started": "bg-[#F3F4F6] text-[#374151]",
@@ -2028,8 +2030,6 @@ const MyFarms = () => {
             setProjectStep={setProjectStep}
             projectCategory={projectCategory}
             setProjectCategory={setProjectCategory}
-            projectMilestones={projectMilestones}
-            setProjectMilestones={setProjectMilestones}
             projectGoal={projectGoal}
             setProjectGoal={setProjectGoal}
             projectAgreed={projectAgreed}
@@ -2037,7 +2037,6 @@ const MyFarms = () => {
             farmCategories={farmCategories}
             isFarmCategoriesLoading={isFarmCategoriesLoading}
             milestonesList={milestonesList}
-            milestoneOptions={milestoneOptions}
             activeTemplate={activeTemplate}
             selectedCategoryName={selectedCategoryName}
             isSubmitting={isSubmittingFarm}

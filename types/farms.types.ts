@@ -25,6 +25,11 @@ export interface AddFarmMilestonesPayload {
 	milestones: FarmMilestoneSelectionPayload[];
 }
 
+export interface CreateInvestmentProjectPayload {
+	farmCategoryId: string;
+	fundingGoalAmount: number;
+}
+
 export interface UploadFarmDocumentsPayload {
 	pictures: (File | string)[];
 	documents: (File | string)[];
