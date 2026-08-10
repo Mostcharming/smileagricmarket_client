@@ -3,6 +3,7 @@ import { buildQueryString, get, post, put, remove } from "@/utils";
 import {
 	AddFarmMilestonesPayload,
 	ApiResponse,
+	CreateInvestmentProjectPayload,
 	DeleteResourceResponse,
 	FarmPayload,
 	FarmResponse,
@@ -95,5 +96,16 @@ export const deleteFarmDoc = async (
 	documentId: string
 ): Promise<ApiResponse<DeleteResourceResponse>> => {
 	const response = await remove<DeleteResourceResponse>(webFarms.deleteFarmDoc(documentId));
+	return response;
+};
+
+export const createInvestmentProject = async (
+	farmId: string,
+	payload: CreateInvestmentProjectPayload
+): Promise<ApiResponse<any>> => {
+	const response = await post<any>(
+		webFarms.createInvestmentProject(farmId),
+		payload
+	);
 	return response;
 };

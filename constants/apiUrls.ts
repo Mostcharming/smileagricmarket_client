@@ -64,6 +64,7 @@ export const webFarms = {
     deleteFarmMilestone: (farmId: string, milestoneId: string) => `/web/farms/${farmId}/milestones/${milestoneId}`,
     uploadDocToFarm: (farmId: string) => `/web/farms/${farmId}/documents`,
     deleteFarmDoc: (documentId: string) => `/web/farms/documents/${documentId}`,
+    createInvestmentProject: (farmId: string) => `/web/farms/${farmId}/investment-projects`,
 };
 
 export const webProfile = {

@@ -1,7 +1,7 @@
 export const getPreviewImageUrl = (url?: string): string => {
   if (!url) return "";
 
-  if (url.startsWith("/api/image-proxy")) {
+  if (url.startsWith("/image-proxy")) {
     try {
       const proxyUrl = new URL(url, "https://app.smileagrimarket.com");
       const innerUrl = proxyUrl.searchParams.get("url");
@@ -20,7 +20,7 @@ export const getPreviewImageUrl = (url?: string): string => {
     const parsedUrl = new URL(url);
 
     if (parsedUrl.hostname === "app.smileagrimarket.com" && parsedUrl.pathname.startsWith("/api/v1/upload/")) {
-      return `/api/image-proxy?url=${encodeURIComponent(parsedUrl.toString())}`;
+      return `/image-proxy?url=${encodeURIComponent(parsedUrl.toString())}`;
     }
 
     return url;

@@ -1,6 +1,7 @@
 import {
 	addMilestonesToFarm,
 	createFarm,
+	createInvestmentProject,
 	deleteFarm,
 	deleteFarmDoc,
 	deleteFarmMilestone,
@@ -11,6 +12,7 @@ import {
 } from "@/api";
 import {
 	AddFarmMilestonesPayload,
+	CreateInvestmentProjectPayload,
 	FarmPayload,
 	PaginatedFilter,
 	UploadFarmDocumentsPayload,
@@ -95,5 +97,17 @@ export const useUploadDocToFarm = () => {
 export const useDeleteFarmDoc = () => {
 	return useMutation({
 		mutationFn: (docId: string) => deleteFarmDoc(docId),
+	});
+};
+
+export const useCreateInvestmentProject = () => {
+	return useMutation({
+		mutationFn: ({
+			farmId,
+			payload,
+		}: {
+			farmId: string;
+			payload: CreateInvestmentProjectPayload;
+		}) => createInvestmentProject(farmId, payload),
 	});
 };

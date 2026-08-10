@@ -64,7 +64,7 @@ export const getWebProfileWallet = async (): Promise<
 };
 
 export const getWebBanks = async (): Promise<ApiResponse<BankDirectoryEntry[]>> => {
-  const response = await fetch("/api/banks", {
+  const response = await fetch("/banks", {
     method: "GET",
     cache: "no-store",
   });

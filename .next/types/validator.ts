@@ -308,19 +308,19 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../app/api/banks/route.ts
+// Validate ../../app/banks/route.ts
 {
-  type __IsExpected<Specific extends RouteHandlerConfig<"/api/banks">> = Specific
-  const handler = {} as typeof import("../../app/api/banks/route.js")
+  type __IsExpected<Specific extends RouteHandlerConfig<"/banks">> = Specific
+  const handler = {} as typeof import("../../app/banks/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
 }
 
-// Validate ../../app/api/image-proxy/route.ts
+// Validate ../../app/image-proxy/route.ts
 {
-  type __IsExpected<Specific extends RouteHandlerConfig<"/api/image-proxy">> = Specific
-  const handler = {} as typeof import("../../app/api/image-proxy/route.js")
+  type __IsExpected<Specific extends RouteHandlerConfig<"/image-proxy">> = Specific
+  const handler = {} as typeof import("../../app/image-proxy/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

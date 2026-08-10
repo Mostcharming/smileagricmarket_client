@@ -125,16 +125,10 @@
       "namedRegex": "^/agri\\-landing(?:/)?$"
     },
     {
-      "page": "/api/banks",
-      "regex": "^/api/banks(?:/)?$",
+      "page": "/banks",
+      "regex": "^/banks(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/api/banks(?:/)?$"
-    },
-    {
-      "page": "/api/image-proxy",
-      "regex": "^/api/image\\-proxy(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/image\\-proxy(?:/)?$"
+      "namedRegex": "^/banks(?:/)?$"
     },
     {
       "page": "/dashboard",
@@ -153,6 +147,12 @@
       "regex": "^/forgot\\-password(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/forgot\\-password(?:/)?$"
+    },
+    {
+      "page": "/image-proxy",
+      "regex": "^/image\\-proxy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/image\\-proxy(?:/)?$"
     },
     {
       "page": "/invest",

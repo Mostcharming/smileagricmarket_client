@@ -1299,11 +1299,11 @@ const FarmDetailPage = () => {
           // Main Detail Page UI
           <div>
             <div className="mb-6 text-[12px] text-[#9DA59A]">
-                  <Link href="/invest" className="hover:text-[#697468]">
-                    Invest
-                  </Link>
-                  <span className="px-1.5">/</span>
-                  <span className="font-medium text-[#7A846F]">{farm.name}</span>
+              <Link href="/invest" className="hover:text-[#697468]">
+                Invest
+              </Link>
+              <span className="px-1.5">/</span>
+              <span className="font-medium text-[#7A846F]">{farm.name}</span>
             </div>
 
             <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -1490,13 +1490,12 @@ const FarmDetailPage = () => {
                         </div>
                       </div>
                       <span
-                        className={`rounded-full px-3 py-1 text-[11px] font-semibold shrink-0 ${
-                          timelineStatus === "Completed"
+                        className={`rounded-full px-3 py-1 text-[11px] font-semibold shrink-0 ${timelineStatus === "Completed"
                             ? "bg-[#ECF9E4] text-[#5B9A2C]"
                             : timelineStatus === "In Progress"
-                            ? "bg-[#FFF3E3] text-[#E08A2E]"
-                            : "bg-[#F3F4F6] text-[#7E8590]"
-                        }`}
+                              ? "bg-[#FFF3E3] text-[#E08A2E]"
+                              : "bg-[#F3F4F6] text-[#7E8590]"
+                          }`}
                       >
                         {timelineStatus}
                       </span>
@@ -1517,10 +1516,10 @@ const FarmDetailPage = () => {
                             </div>
                             <span
                               className={`rounded-full px-3 py-1 text-[11px] font-semibold ${milestone.status === "Completed"
-                                  ? "bg-[#ECF9E4] text-[#5B9A2C]"
-                                  : milestone.status === "In progress"
-                                    ? "bg-[#FFF3E3] text-[#E08A2E]"
-                                    : "bg-[#F3F4F6] text-[#7E8590]"
+                                ? "bg-[#ECF9E4] text-[#5B9A2C]"
+                                : milestone.status === "In progress"
+                                  ? "bg-[#FFF3E3] text-[#E08A2E]"
+                                  : "bg-[#F3F4F6] text-[#7E8590]"
                                 }`}
                             >
                               {milestone.status}
