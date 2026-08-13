@@ -65,7 +65,7 @@ const Onboarding = () => {
       onSuccess: async (response) => {
         setCookie(response.data.token);
         setStoredRole('user');
-        router.push("/dashboard");
+        router.push("/invest");
       },
       onError: (error) => {
         toast.error(error?.message || "An Error occured, please try again.");

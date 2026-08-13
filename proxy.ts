@@ -83,7 +83,7 @@ export function proxy(request: NextRequest) {
     }
     if (isRegularLoginPage || pathname === '/signup') {
       if (!isAdmin && !isMarketing) {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
+        return NextResponse.redirect(new URL('/invest', request.url));
       }
     }
   }
@@ -123,6 +123,9 @@ export function proxy(request: NextRequest) {
         response.cookies.delete('smileAgrimarketCookie');
       }
       return response;
+    }
+    if (pathname === '/dashboard') {
+      return NextResponse.redirect(new URL('/invest', request.url));
     }
   }
 
