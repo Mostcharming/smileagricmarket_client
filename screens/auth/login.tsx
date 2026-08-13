@@ -37,7 +37,7 @@ const Login = () => {
         setCookie(response.data.token);
         setStoredUser(response.data.user);
         setStoredRole(response.data.user?.role || 'user');
-        router.push('/dashboard');
+        router.push('/invest');
       },
       onError: (error) => {
         toast.error(error?.message || "Failed to login, please try again.");

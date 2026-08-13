@@ -12,13 +12,14 @@ const Viewer = dynamic(() => import("react-viewer"), { ssr: false });
 import { createPortal } from "react-dom";
 import { AddIcon, CheckIcon, CloseIcon, DocsIcon, EqualIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, ShieldIcon, TickIcon, UploadIcon, ClockIcon, WalletIcon, LayersIcon, ChevronIcon, InfoIcon, CalendarIcon, LocationIcon, TrendingUpIcon, PercentIcon, DownloadIcon } from "@/components/icons";
 import { Modal } from "@/components/modal";
+import KycModal from "@/components/modal/kycModal";
 import { Button, Input, MainHeader, Select, Table, Typography } from "@/components/ui";
 import { Column } from "@/components/ui/table";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { useGetFarmCategories, useGetWebMilestonesByCategory, useGetWebInvestmentTemplate } from "@/mutation/dashboard.mutation";
 import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById, useCreateInvestmentProject } from "@/mutation/farms.mutation";
-import { useGetKycStatus } from "@/mutation";
-import { MilestoneResponse, SelectOptions } from "@/types";
+import { useGetKycStatus, useSubmitKyc } from "@/mutation";
+import { ApiResponse, KycResponse, MilestoneResponse, SelectOptions, WebProfileCompletionStatusResponse } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -404,6 +405,19 @@ const FarmDetailsView = ({
     return farmProjects.find((p) => p.id === activeProjectId) || farmProjects[0];
   }, [farmProjects, activeProjectId]);
 
+  const isFarmVerified = useMemo(() => {
+    const status = String(farm.verificationStatus || farm.status || "").toLowerCase().trim();
+    return status === "verified" || status === "approved";
+  }, [farm.verificationStatus, farm.status]);
+
+  const hasActiveProject = useMemo(() => {
+    return farmProjects.some(
+      (project) => project.status && String(project.status).toLowerCase().trim() !== "completed"
+    );
+  }, [farmProjects]);
+
+  const isDisabled = !isFarmVerified || hasActiveProject;
+
   const handleRequestFunding = (projectId: string, milestoneId: string) => {
     const isCustom = projectId.startsWith("custom-p-");
 
@@ -535,9 +549,14 @@ const FarmDetailsView = ({
           <button
             type="button"
             onClick={onCreateProject}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#4E8A35] hover:bg-[#3D6E29] px-5 py-3 text-sm font-semibold text-white transition-colors shadow-sm cursor-pointer"
+            disabled={isDisabled}
+            className={`inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors shadow-sm ${
+              isDisabled
+                ? "bg-[#E5E7EB] text-[#9CA3AF] cursor-not-allowed"
+                : "bg-[#4E8A35] hover:bg-[#3D6E29] text-white cursor-pointer"
+            }`}
           >
-            <AddIcon color="#FFFFFF" size={16} />
+            <AddIcon color={isDisabled ? "#9CA3AF" : "#FFFFFF"} size={16} />
             <span>Create Investment Project</span>
           </button>
         </div>
@@ -1589,6 +1608,22 @@ const getCategoryOverviewDetails = (
   };
 };
 
+type VerificationStatus = "not_verified" | "in_progress" | "verified";
+
+const getVerificationStatus = (status?: string): VerificationStatus => {
+  const normalizedStatus = normalizeKycStatus(status);
+
+  if (["approved", "verified", "active"].includes(normalizedStatus)) {
+    return "verified";
+  }
+
+  if (["pending", "in_progress", "under_review", "reviewing"].includes(normalizedStatus)) {
+    return "in_progress";
+  }
+
+  return "not_verified";
+};
+
 const isKycVerifiedStatus = (status?: string) => {
   const normalizedStatus = normalizeKycStatus(status);
   return normalizedStatus === "approved" || normalizedStatus === "verified" || normalizedStatus === "active";
@@ -1737,6 +1772,82 @@ const MyFarms = () => {
   const isKycVerified = isKycVerifiedStatus(kycStatusResponse?.data?.status);
   const isVerificationRequired = !isKycStatusLoading && !isKycVerified;
 
+  const [isKycModalOpen, setIsKycModalOpen] = useState(false);
+  const [number, setNumber] = useState("");
+  const [identification, setIdentification] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
+
+  const { mutate: submitKyc, isPending: isSubmitKycPending } = useSubmitKyc();
+
+  const identificationOptions: SelectOptions[] = [
+    { label: "National ID Card", value: "national_id" },
+    { label: "International Passport", value: "passport" },
+    { label: "Driver's License", value: "driver_license" },
+    { label: "Taxpayer Identification Number", value: "tin" },
+    { label: "Permanent Voter's Card", value: "voter_card" },
+  ];
+
+  const verificationStatus = useMemo<VerificationStatus>(() => {
+    return getVerificationStatus(kycStatusResponse?.data?.status);
+  }, [kycStatusResponse?.data?.status]);
+
+  const handleKycDone = () => {
+    if (!photo) {
+      toast.error("Please upload a photo");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("identificationType", identification);
+    formData.append("identificationNumber", number);
+    formData.append("selfie", photo);
+
+    submitKyc(formData, {
+      onSuccess: async () => {
+        toast.success("KYC submitted successfully");
+        queryClient.setQueryData<ApiResponse<KycResponse>>(["kycStatus"], (current) => ({
+          success: current?.success ?? true,
+          message: current?.message ?? "KYC status updated successfully",
+          status: current?.status ?? 200,
+          data: {
+            ...(current?.data ?? {}),
+            status: "pending",
+          },
+        }));
+        queryClient.setQueryData<ApiResponse<WebProfileCompletionStatusResponse>>(
+          ["webProfileCompletionStatus"],
+          (current) => {
+            if (!current) {
+              return current;
+            }
+
+            return {
+              ...current,
+              data: {
+                ...current.data,
+                profileStatus: {
+                  ...current.data.profileStatus,
+                  kycVerification: false,
+                },
+              },
+            };
+          }
+        );
+        await queryClient.invalidateQueries({ queryKey: ["kycStatus"] });
+        await queryClient.invalidateQueries({ queryKey: ["webProfileCompletionStatus"] });
+        await queryClient.refetchQueries({ queryKey: ["kycStatus"] });
+        await queryClient.refetchQueries({ queryKey: ["webProfileCompletionStatus"] });
+        setIsKycModalOpen(false);
+        setNumber("");
+        setIdentification("");
+        setPhoto(null);
+      },
+      onError: (submitError) => {
+        toast.error(submitError?.message || "Failed to submit KYC");
+      },
+    });
+  };
+
   const resetForm = () => {
     photos.forEach((item) => URL.revokeObjectURL(item.preview));
     setStep(1);
@@ -1827,7 +1938,8 @@ const MyFarms = () => {
   };
 
   const handleVerifyAccount = () => {
-    router.push("/dashboard");
+    setIsKycModalOpen(true);
+    setShowVerificationModal(false);
   };
 
   const handleBackToList = () => {
@@ -2020,6 +2132,35 @@ const MyFarms = () => {
   return (
     <div className="min-h-screen bg-[#F6F9FB] w-full">
       <MainHeader activeTab="my-farms" />
+
+      {!isKycStatusLoading && verificationStatus === "not_verified" && (
+        <div className="w-full bg-[#E9EBEF]">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <InfoIcon className="shrink-0" />
+              <span className="text-sm text-[#1F2937] sm:text-base">
+                You are not verified yet. Please proceed to verify your profile to list your farms.
+              </span>
+            </div>
+            <Button
+              variant="primary"
+              className="rounded-md px-4! py-2! text-xs font-semibold tracking-[0.02em]"
+              onClick={() => setIsKycModalOpen(true)}
+            >
+              VERIFY YOUR PROFILE
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {!isKycStatusLoading && verificationStatus === "in_progress" && (
+        <div className="w-full bg-[#E9EBEF]">
+          <div className="mx-auto flex items-center justify-center gap-3 px-4 py-3">
+            <InfoIcon className="shrink-0" />
+            <span className="text-sm text-[#1F2937] sm:text-base">Your verification is in progress</span>
+          </div>
+        </div>
+      )}
 
       <main className="mx-auto w-full max-w-6xl px-4 py-8">
         {isCreatingProject ? (
@@ -2485,6 +2626,20 @@ const MyFarms = () => {
           </div>
         </div>
       </Modal>
+
+      <KycModal
+        isOpen={isKycModalOpen}
+        onClose={() => setIsKycModalOpen(false)}
+        number={number}
+        setNumber={setNumber}
+        identification={identification}
+        setIdentification={setIdentification}
+        identificationOptions={identificationOptions}
+        photo={photo}
+        setPhoto={setPhoto}
+        isPending={isSubmitKycPending}
+        onDone={handleKycDone}
+      />
     </div>
   );
 };

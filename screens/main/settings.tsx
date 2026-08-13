@@ -241,7 +241,7 @@ const SettingsPage = () => {
 
       <main className="mx-auto w-full max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8">
         <div className="mb-8 text-[13px] text-[#A0A79A]">
-          <Link href="/dashboard" className="hover:text-[#6B7280]">
+          <Link href="/invest" className="hover:text-[#6B7280]">
             Home
           </Link>
           <span className="px-1">/</span>

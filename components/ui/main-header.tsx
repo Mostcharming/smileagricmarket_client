@@ -28,15 +28,13 @@ const MainHeader = ({ activeTab }: MainHeaderProps) => {
   return (
     <header className="w-full border-y border-[#E5E7EB] bg-white relative z-50">
       <div className="mx-auto flex w-full max-w-7xl justify-between items-center px-4 sm:px-6 lg:px-8">
-        <Link href="/dashboard" aria-label="SmileAgrimarket Dashboard" className="inline-flex items-center py-4">
+        <Link href="/invest" aria-label="SmileAgrimarket Dashboard" className="inline-flex items-center py-4">
           <LogoIcon className="h-11 w-12" />
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-6 self-stretch" aria-label="Main dashboard navigation">
-          <Link href="/dashboard" className={tabClassName("dashboard")} aria-current={activeTab === "dashboard" ? "page" : undefined}>
-            <div className="flex items-center gap-1">Dashboard</div>
-          </Link>
+
           <Link href="/invest" className={tabClassName("invest")} aria-current={activeTab === "invest" ? "page" : undefined}>
             Invest
           </Link>
@@ -85,14 +83,7 @@ const MainHeader = ({ activeTab }: MainHeaderProps) => {
       {isOpen && (
         <div className="md:hidden border-t border-[#E5E7EB] bg-white shadow-lg absolute top-full left-0 right-0 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
           <nav className="pt-2 pb-4 space-y-1" aria-label="Mobile main dashboard navigation">
-            <Link
-              href="/dashboard"
-              onClick={() => setIsOpen(false)}
-              className={tabClassName("dashboard", true)}
-              aria-current={activeTab === "dashboard" ? "page" : undefined}
-            >
-              Dashboard
-            </Link>
+
             <Link
               href="/invest"
               onClick={() => setIsOpen(false)}
