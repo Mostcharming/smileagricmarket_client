@@ -11,27 +11,49 @@ import { toast } from "sonner"
 const VerifyOTP = () => {
   const router = useRouter()
   const [otp, setOtp] = useState("")
-  const [phoneParam] = useState(() => 
-    typeof window !== "undefined" ? sessionStorage.getItem("otp_phone") || "" : ""
-  )
+  const [contactParam] = useState(() => {
+    if (typeof window === "undefined") return ""
+    return (
+      sessionStorage.getItem("otp_contact") ||
+      sessionStorage.getItem("otp_phone") ||
+      sessionStorage.getItem("otp_email") ||
+      ""
+    )
+  })
+
+  const [contactType] = useState(() => {
+    if (typeof window === "undefined") return "phone"
+    const storedType = sessionStorage.getItem("otp_contact_type")
+    if (storedType) return storedType
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactParam) ? "email" : "phone"
+  })
 
   const { mutate: verifyMutate, isPending } = useVerifyOtp()
   const { mutate: resendMutate, isPending: isResending } = useRequestOtp()
 
   useEffect(() => {
-    if (!phoneParam) {
-      toast.error("Phone number not found. Please sign up again.")
+    if (!contactParam) {
+      toast.error("Contact information not found. Please sign up again.")
       router.push("/signup")
     }
-  }, [phoneParam, router])
+  }, [contactParam, router])
 
-  const maskPhone = (num: string) => {
-    const s = num.trim()
-    if (s.length <= 4) return s
-    const first = s.slice(0, 2)
-    const last = s.slice(-2)
-    const stars = "*".repeat(Math.max(0, s.length - 4))
-    return `${first}${stars}${last}`
+  const maskContact = (val: string, type: string) => {
+    const s = val.trim()
+    if (!s) return ""
+    if (type === "email") {
+      const parts = s.split("@")
+      if (parts.length !== 2) return s
+      const [user, domain] = parts
+      if (user.length <= 2) return `${user[0]}*@${domain}`
+      return `${user[0]}${"*".repeat(Math.max(1, user.length - 2))}${user[user.length - 1]}@${domain}`
+    } else {
+      if (s.length <= 4) return s
+      const first = s.slice(0, 2)
+      const last = s.slice(-2)
+      const stars = "*".repeat(Math.max(0, s.length - 4))
+      return `${first}${stars}${last}`
+    }
   }
 
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -39,11 +61,13 @@ const VerifyOTP = () => {
     setOtp(cleaned)
   }
 
-  const maskedPhone = useMemo(() => (phoneParam ? maskPhone(phoneParam) : ""), [phoneParam])
+  const maskedContact = useMemo(() => (contactParam ? maskContact(contactParam, contactType) : ""), [contactParam, contactType])
+
+  const isEmailType = contactType === "email"
 
   const handleVerify = () => {
-    if (!phoneParam) {
-      toast.error("Missing phone number.")
+    if (!contactParam) {
+      toast.error("Missing contact information.")
       return
     }
     if (!otp) {
@@ -55,10 +79,9 @@ const VerifyOTP = () => {
       return
     }
 
-    const payload = {
-      phoneNumber: phoneParam,
-      otp,
-    }
+    const payload = isEmailType
+      ? { email: contactParam, otp }
+      : { phoneNumber: contactParam, otp }
 
     verifyMutate(payload, {
       onSuccess: (response) => {
@@ -73,12 +96,16 @@ const VerifyOTP = () => {
   }
 
   const handleResend = () => {
-    if (!phoneParam) {
-      toast.error("Missing phone number.")
+    if (!contactParam) {
+      toast.error("Missing contact information.")
       return
     }
+    const payload = isEmailType
+      ? { email: contactParam }
+      : { phoneNumber: contactParam }
+
     resendMutate(
-      { phoneNumber: phoneParam },
+      payload,
       {
         onSuccess: () => {
           toast.success("OTP resent.")
@@ -96,7 +123,7 @@ const VerifyOTP = () => {
 
         <Typography variant="intro" className="w-full mt-10">Verify OTP</Typography>
         <Typography className="w-full mb-4">
-          We sent an OTP code to your number {maskedPhone || ""}.
+          We sent an OTP code to your {isEmailType ? "email address" : "number"} {maskedContact || ""}.
         </Typography>
 
         <div className="w-full flex flex-col gap-2">

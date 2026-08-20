@@ -15,7 +15,9 @@ const Onboarding = () => {
   const [step, setStep] = useState<1 | 2>(1)
 
   const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState(() => 
+    typeof window !== "undefined" ? sessionStorage.getItem("otp_email") || "" : ""
+  )
   const [gender, setGender] = useState("")
 
   const [password, setPassword] = useState("")

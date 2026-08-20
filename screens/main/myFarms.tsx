@@ -1592,7 +1592,8 @@ const getCategoryOverviewDetails = (
 
   let fundingRange = "-";
   if (minFundingVal || maxFundingVal) {
-    fundingRange = `${formatCurrency(minFundingVal)} – ${formatCurrency(maxFundingVal)}`;
+    // fundingRange = `${formatCurrency(minFundingVal)} – ${formatCurrency(maxFundingVal)}`;
+    fundingRange = `${formatCurrency(minFundingVal)}`;
   }
 
   const startDate = template.startDate ? formatDate(template.startDate) : (template.createdAt ? formatDate(template.createdAt) : "-");
