@@ -29,6 +29,14 @@
       "namedRegex": "^/admin/farms/(?<nxtPfarmId>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/admin/investments/milestone-review/[id]",
+      "regex": "^/admin/investments/milestone\\-review/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/admin/investments/milestone\\-review/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/invest/[farmId]",
       "regex": "^/invest/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -81,6 +89,24 @@
       "regex": "^/admin/farms(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/farms(?:/)?$"
+    },
+    {
+      "page": "/admin/investments",
+      "regex": "^/admin/investments(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/investments(?:/)?$"
+    },
+    {
+      "page": "/admin/investments/investment",
+      "regex": "^/admin/investments/investment(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/investments/investment(?:/)?$"
+    },
+    {
+      "page": "/admin/investments/milestone-review",
+      "regex": "^/admin/investments/milestone\\-review(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/investments/milestone\\-review(?:/)?$"
     },
     {
       "page": "/admin/investments/templates",

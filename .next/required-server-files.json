@@ -58,7 +58,17 @@
       "contentDispositionType": "attachment",
       "localPatterns": [
         {
-          "pathname": "**",
+          "pathname": "/image-proxy",
+          "search": "?url=*"
+        },
+        {
+          "pathname": "/image-proxy"
+        },
+        {
+          "pathname": "/**"
+        },
+        {
+          "pathname": "/_next/static/media/**",
           "search": ""
         }
       ],
