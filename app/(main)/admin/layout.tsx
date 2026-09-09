@@ -24,14 +24,17 @@ export default function AdminRootLayout({
   const afterAdmin = adminIndex >= 0 ? segments.slice(adminIndex + 1) : segments;
   const farmId = typeof params?.farmId === "string" ? params.farmId : undefined;
   const isFarmDetailPage = afterAdmin[0] === "farms" && afterAdmin.length > 1 && !!farmId;
+  const isMilestoneDetailPage = afterAdmin[0] === "investments" && afterAdmin[1] === "milestone-review" && afterAdmin.length > 2;
 
   const { data: farmData } = useGetAdminFarmById(isFarmDetailPage ? farmId : undefined);
 
   const rest = afterAdmin.filter((seg) => seg !== "dashboard");
+  const filteredRest = isMilestoneDetailPage ? rest.slice(0, 2) : rest;
+
   const breadcrumbs = [
     "Dashboard",
-    ...rest.slice(0, -1).map(formatSegment),
-    isFarmDetailPage ? farmData?.name || "Farm details" : formatSegment(rest[rest.length - 1] || ""),
+    ...filteredRest.slice(0, -1).map(formatSegment),
+    isFarmDetailPage ? farmData?.name || "Farm details" : formatSegment(filteredRest[filteredRest.length - 1] || ""),
   ].filter(Boolean);
   const title = breadcrumbs[breadcrumbs.length - 1];
 

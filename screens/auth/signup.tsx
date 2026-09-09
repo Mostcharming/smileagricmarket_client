@@ -57,8 +57,9 @@ const Signup = () => {
         type="text"
         value={contact}
         onChange={e => setContact(e.target.value)}
-        bottomText="You will receive an OTP code via email, SMS or Whatsapp"
+        bottomText="Only Nigerian phone numbers are supported. Use email if you don't have a Nigerian phone number."
       />
+      <div className="w-full text-left text-xs md:text-sm mt-2">You will receive an OTP code via SMS/Email</div>
 
       <Button
         variant="primary"

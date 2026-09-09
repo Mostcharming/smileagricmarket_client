@@ -17,7 +17,7 @@ import { Button, Input, MainHeader, Select, Table, Typography } from "@/componen
 import { Column } from "@/components/ui/table";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { useGetFarmCategories, useGetWebMilestonesByCategory, useGetWebInvestmentTemplate } from "@/mutation/dashboard.mutation";
-import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById, useCreateInvestmentProject } from "@/mutation/farms.mutation";
+import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById, useCreateInvestmentProject, useRequestMilestoneFunding } from "@/mutation/farms.mutation";
 import { useGetKycStatus, useSubmitKyc } from "@/mutation";
 import { ApiResponse, KycResponse, MilestoneResponse, SelectOptions, WebProfileCompletionStatusResponse } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -309,19 +309,60 @@ const RequestFundingView = ({
     setDocItems((prev) => prev.filter((d) => d.id !== id));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const requestFundingMutation = useRequestMilestoneFunding();
+  const queryClient = useQueryClient();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
+
+    if (photoItems.length === 0 && docItems.length === 0) {
+      toast.error("At least one photo (JPEG, PNG, WEBP) or document (PDF) evidence is required.");
+      return;
+    }
+
+    const selectedMilestoneId = milestone.selectedMilestoneId || milestone.milestoneId || milestone.Milestone?.id || milestone.id;
+
+    if (!selectedMilestoneId) {
+      toast.error("Milestone ID is missing.");
+      return;
+    }
+
+    let investmentProjectId: string | undefined = undefined;
+    if (project?.id && !project.id.startsWith("custom-p-") && !project.id.endsWith("-p1")) {
+      investmentProjectId = project.id;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const photos = photoItems.map((p) => p.file);
+      const files = docItems.map((d) => d.file);
+
+      const res = await requestFundingMutation.mutateAsync({
+        farmId: farm.id,
+        payload: {
+          selectedMilestoneId,
+          ...(investmentProjectId ? { investmentProjectId } : {}),
+          photos,
+          files,
+        },
+      });
+
+      toast.success(res.message || "Funding request submitted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["farms"] });
+      queryClient.invalidateQueries({ queryKey: ["farm", farm.id] });
+
       onSubmit({
         milestoneId: milestone.id,
-        photoFiles: photoItems.map((p) => p.file),
+        photoFiles: photos,
         videoFiles: videoItems.map((v) => v.file),
-        docFiles: docItems.map((d) => d.file),
+        docFiles: files,
         notes,
       });
+    } catch (error: any) {
+      toast.error(error.message || "Failed to request funding. Please try again.");
+    } finally {
       setIsSubmitting(false);
-    }, 400);
+    }
   };
 
   return (
@@ -759,7 +800,7 @@ const FarmDetailsView = ({
         apiProjects.push({
           id: inv.id,
           name: inv.name || inv.title || inv.investmentTemplate?.name || `Investment Project`,
-          categoryName: inv.farmCategory?.name || farm.Category?.name || inv.categoryName || "",
+          categoryName: inv.farmCategory?.name || farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || inv.categoryName || "",
           status: mappedStatus,
           dates: dynamicDates,
           raised: projectRaisedAmount,
@@ -794,8 +835,8 @@ const FarmDetailsView = ({
 
       apiProjects.push({
         id: farm.id + "-p1",
-        name: farm.Investment?.name || `Investment Project 1 - ${farm.Category?.name || ''}`,
-        categoryName: farm.Category?.name || "",
+        name: farm.Investment?.name || `Investment Project 1 - ${farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || ''}`,
+        categoryName: farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || "",
         status: mappedStatus,
         dates: dynamicDates,
         raised: farm.Investment?.amountRaised ?? 0,
@@ -807,7 +848,9 @@ const FarmDetailsView = ({
       });
     }
 
-    return [...addedProjects, ...apiProjects];
+    const addedProjectIds = new Set(addedProjects.map((p: any) => p.id));
+    const uniqueApiProjects = apiProjects.filter((p: any) => !addedProjectIds.has(p.id));
+    return [...addedProjects, ...uniqueApiProjects];
   }, [farm, customProjects, activeTemplate]);
 
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
@@ -837,13 +880,20 @@ const FarmDetailsView = ({
   } | null>(null);
 
   const handleOpenRequestFunding = (project: any, milestone: any, index: number) => {
+    if (index > 0) {
+      const prevM = project.milestones[index - 1];
+      const prevStatus = String(prevM?.status || "").toLowerCase().trim();
+      const isPrevCompleted = prevStatus === "completed" || prevM?.isCompleted === true;
+      if (!isPrevCompleted) {
+        toast.error("You cannot request funding for this milestone until the previous milestone is completed.");
+        return;
+      }
+    }
     setRequestFundingData({ project, milestone, index });
   };
 
   const handleCompleteRequestFunding = (projectId: string, milestoneId: string) => {
     const isCustom = projectId.startsWith("custom-p-");
-
-    toast.success("Funding request submitted successfully!");
 
     if (isCustom) {
       setCustomProjects((prev) => {
@@ -861,24 +911,6 @@ const FarmDetailsView = ({
         });
         return { ...prev, [farm.id]: updated };
       });
-    } else {
-      const projectToOverride = farmProjects.find(p => p.id === projectId);
-      if (projectToOverride) {
-        const updatedProject = {
-          ...projectToOverride,
-          milestones: projectToOverride.milestones.map((m: any) =>
-            m.id === milestoneId ? { ...m, status: "Processing Funding" } : m
-          ),
-        };
-        setCustomProjects((prev) => {
-          const farmList = prev[farm.id] || [];
-          const filtered = farmList.filter(p => p.id !== projectId);
-          return {
-            ...prev,
-            [farm.id]: [updatedProject, ...filtered],
-          };
-        });
-      }
     }
 
     setRequestFundingData(null);
@@ -1201,20 +1233,24 @@ const FarmDetailsView = ({
                 <div className="absolute left-[7px] top-3 bottom-6 w-[1.5px] bg-[#EAECE8]" />
                 <div className="space-y-6">
                   {activeProject.milestones.map((m: any, idx: number) => {
-                    const isCompleted = m.status === "Completed";
-                    const isProcessing = m.status === "Processing Funding" || m.status === "processing_funding" || m.status === "Requested" || m.status === "requested";
+                    const normStatus = String(m.status || "").toLowerCase().trim();
+                    const isCompleted = normStatus === "completed" || m.isCompleted === true;
+                    const isProcessing = normStatus === "processing funding" || normStatus === "processing_funding" || normStatus === "requested" || normStatus === "processing";
 
-                    const firstAvailableIndex = activeProject.milestones.findIndex(
-                      (ms: any) => ms.status !== "Completed" && ms.status !== "Processing Funding" && ms.status !== "processing_funding" && ms.status !== "Requested" && ms.status !== "requested"
-                    );
-                    const isCurrentActionable = idx === firstAvailableIndex;
+                    const isPrevCompleted = idx === 0 || (() => {
+                      const prevM = activeProject.milestones[idx - 1];
+                      const prevStatus = String(prevM?.status || "").toLowerCase().trim();
+                      return prevStatus === "completed" || prevM?.isCompleted === true;
+                    })();
+
+                    const isCurrentActionable = !isCompleted && !isProcessing && isPrevCompleted;
 
                     const isNameMilestoneFormat = m.name.toLowerCase().includes("milestone");
                     const milestoneLabel = isNameMilestoneFormat ? m.name : `MILESTONE ${idx + 1} - ${m.pct}%`;
                     const milestoneDesc = isNameMilestoneFormat ? "" : m.name;
 
                     return (
-                      <div key={m.id || idx} className="relative flex items-center justify-between pl-8 min-h-[56px]">
+                      <div key={m.id ? `milestone-${m.id}-${idx}` : `milestone-${idx}`} className="relative flex items-center justify-between pl-8 min-h-[56px]">
                         <span className={`absolute left-[7px] -translate-x-1/2 flex h-3.5 w-3.5 items-center justify-center rounded-full border-4 border-white z-10 ${
                           isCompleted ? "bg-[#4E8A35]" : isProcessing ? "bg-[#D97706]" : "bg-[#64B03F]"
                         }`} />
@@ -1271,10 +1307,10 @@ const FarmDetailsView = ({
           <div className="bg-white border border-[#E9EAEB] rounded-2xl py-6 px-4 shadow-xs h-fit">
             <h3 className="text-lg font-bold text-[#1F2937] mb-4">Investment History</h3>
             <div className="flex flex-col gap-4">
-              {farmProjects.map((p) => {
+              {farmProjects.map((p, pIdx) => {
                 return (
                   <button
-                    key={p.id}
+                    key={p.id ? `proj-${p.id}-${pIdx}` : `proj-${pIdx}`}
                     type="button"
                     onClick={() => setActiveProjectId(p.id)}
                     className="w-full text-left bg-white border border-[#E9EAEB] rounded-2xl p-5 transition-all cursor-pointer block"
@@ -2124,9 +2160,12 @@ const MyFarms = () => {
     ? projectCategory
     : (selectedFarmForDetails ? (selectedFarmForDetails.farmCategoryId || selectedFarmForDetails.Category?.id || selectedFarmForDetails.category) : farmCategory);
 
+  const shouldFetchCategoryData = Boolean(isCreatingProject || showAddFarm);
+  const categoryIdForQueries = shouldFetchCategoryData && activeCategoryId ? activeCategoryId : undefined;
+
   const { data: farmCategoriesResponse, isLoading: isFarmCategoriesLoading } = useGetFarmCategories();
-  const { data: milestonesResponse } = useGetWebMilestonesByCategory(activeCategoryId || undefined);
-  const { data: investmentTemplateResponse } = useGetWebInvestmentTemplate(activeCategoryId || undefined);
+  const { data: milestonesResponse } = useGetWebMilestonesByCategory(categoryIdForQueries);
+  const { data: investmentTemplateResponse } = useGetWebInvestmentTemplate(categoryIdForQueries);
 
   const createFarmMutation = useCreateFarm();
   const updateFarmMutation = useUpdateFarm();
@@ -2212,7 +2251,7 @@ const MyFarms = () => {
       ...farm,
       id: farm.id,
       name: farm.name,
-      category: farm.Category?.name || "Uncategorized",
+      category: farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || "Uncategorized",
       // keep legacy status for compatibility, but prefer verificationStatus when available
       status: farm.verificationStatus
         ? String(farm.verificationStatus)

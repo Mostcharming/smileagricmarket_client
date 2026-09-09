@@ -61,6 +61,7 @@ export const webFarms = {
     updateFarm: (farmId: string) => `/web/farms/${farmId}`,
     deleteFarm: (farmId: string) => `/web/farms/${farmId}`,
     addMilestonesToFarm: (farmId: string) => `/web/farms/${farmId}/milestones`,
+    requestMilestoneFunding: (farmId: string) => `/web/farms/${farmId}/milestones`,
     deleteFarmMilestone: (farmId: string, milestoneId: string) => `/web/farms/${farmId}/milestones/${milestoneId}`,
     uploadDocToFarm: (farmId: string) => `/web/farms/${farmId}/documents`,
     deleteFarmDoc: (documentId: string) => `/web/farms/documents/${documentId}`,
@@ -85,6 +86,14 @@ export const adminInvestments = {
     addMilestone: (investmentId: string) => `/web/admin/investments/${investmentId}/milestones`,
     updateMilestone: (milestoneId: string) => `/web/admin/investment-milestones/${milestoneId}`,
     deleteMilestone: (milestoneId: string) => `/web/admin/investment-milestones/${milestoneId}`,
+
+    // User investments & Milestone reviews
+    getUserInvestments: (query: string) => `/web/admin/user-investments${query}`,
+    getUserInvestmentMilestones: (query: string) => `/web/admin/user-investment-milestones${query}`,
+    downloadUserInvestmentMilestones: (query: string) => `/web/admin/user-investment-milestones/download${query}`,
+    getUserInvestmentMilestoneById: (milestoneId: string) => `/web/admin/user-investment-milestones/${milestoneId}`,
+    updateUserInvestmentMilestoneChecklist: (milestoneId: string) => `/web/admin/user-investment-milestones/${milestoneId}/checklist`,
+    reviewUserInvestmentMilestone: (milestoneId: string) => `/web/admin/user-investment-milestones/${milestoneId}/review`,
 };
 
 export const marketingAdminUrl = {

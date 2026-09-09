@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useMemo, useState, useEffect } from "react";
 import clsx from "clsx";
-import { EyeIcon, FilterIcon, SearchIcon } from "@/components/icons";
+import { EyeIcon, FilterIcon, GridIcon, ListIcon, SearchIcon } from "@/components/icons";
 import { MainHeader, Select } from "@/components/ui";
 import { useGetWebInvestments } from "@/mutation/investments.mutation";
 import { 
@@ -12,6 +11,7 @@ import {
   // useGetDashboard 
 } from "@/mutation/dashboard.mutation";
 import { formatNumberWithCommas } from "@/utils";
+import { getPreviewImageUrl } from "@/utils/image";
 
 // Standard options for select filters
 const riskOptions = [
@@ -77,12 +77,10 @@ const FieldImage = ({ farm }: { farm: MappedInvestment }) => {
   const imageUrl = farm.pictures?.[0];
   if (imageUrl) {
     return (
-      <Image
+      <img
         src={imageUrl}
         alt={farm.name}
-        fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        className="object-cover"
+        className="h-full w-full object-cover"
       />
     );
   }
@@ -96,7 +94,7 @@ const FieldCard = ({ farm }: { farm: MappedInvestment }) => {
       className="block overflow-hidden rounded-[18px] border border-[#DCE7D1] bg-white shadow-[0_2px_10px_rgba(17,24,39,0.04)] transition-transform hover:-translate-y-0.5"
     >
       <article>
-        {/* <div className="relative h-[208px]">
+        <div className="relative h-[208px]">
           <FieldImage farm={farm} />
           <div className="absolute left-3 bottom-3 rounded-full bg-[#CC7D4B] px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
             {farm.roi}% ROI • {farm.duration} MO
@@ -104,7 +102,7 @@ const FieldCard = ({ farm }: { farm: MappedInvestment }) => {
           <div className="absolute right-3 top-3 rounded-full bg-white opacity-70 px-2.5 py-1 text-[11px] font-semibold text-[#111811] shadow-sm">
             Verified
           </div>
-        </div> */}
+        </div>
 
         <div className="px-4 pb-4 pt-4">
           <div className="flex items-start justify-between gap-3">
@@ -373,34 +371,59 @@ const InvestPage = () => {
 
   // Filter & map raw api investments
   const filteredFarms = useMemo(() => {
-    const rawInvestments = investmentsResponse?.data?.investments ?? [];
+    const rawInvestments = (investmentsResponse?.data?.investments ?? (Array.isArray(investmentsResponse?.data) ? investmentsResponse.data : [])) as any[];
+    if (!Array.isArray(rawInvestments)) return [];
+
     return rawInvestments
       .map((investment) => {
-        const progress = investment.percentFunded;
-        const roi = investment.roi;
-        const duration = investment.duration.value;
-        const minInvestVal = investment.minimumInvest;
-        const totalVal = investment.totalExpectedFunding;
-        const investedVal = investment.fundingReceived;
+        const project = investment.investmentProjects?.[0] || {};
 
-        // Display risk cased correctly (e.g. "Low Risk", "Medium Risk", "High Risk")
-        const rName = investment.riskLevel || "";
-        const risk = (rName === "low" ? "LOW RISK" : rName === "medium" ? "MEDIUM RISK" : rName === "high" ? "HIGH RISK" : rName.toUpperCase()) + " RISK";
+        const progress = investment.percentFunded ?? project.percentFunded ?? 0;
+        const roi = investment.roi ?? project.roi ?? project.roiPercentage ?? 0;
 
-        // Image fallbacks
-        const pictures = investment.imageUrl ? [investment.imageUrl] : (investment.image ? [investment.image.fileUrl] : []);
+        const rawDuration = investment.duration ?? project.duration;
+        let duration = 0;
+        if (typeof rawDuration === "number") {
+          duration = rawDuration;
+        } else if (rawDuration && typeof rawDuration === "object") {
+          duration = typeof rawDuration.value === "number"
+            ? rawDuration.value
+            : (parseInt(String(rawDuration.value), 10) || 0);
+        } else if (typeof rawDuration === "string") {
+          duration = parseInt(rawDuration, 10) || 0;
+        } else if (investment.durationValue || project.durationValue) {
+          duration = investment.durationValue ?? project.durationValue ?? 0;
+        }
+
+        const minInvestVal = investment.minimumInvest ?? project.minimumInvest ?? project.investmentMinGoal ?? 0;
+        const totalVal = investment.totalExpectedFunding ?? investment.totalFundingAmount ?? project.totalExpectedFunding ?? project.fundingGoalAmount ?? 0;
+        const investedVal = investment.fundingReceived ?? investment.amountRaised ?? project.fundingReceived ?? project.amountRaised ?? 0;
+
+        const rName = investment.riskLevel || project.riskLevel || "";
+        const risk = (rName === "low" ? "LOW RISK" : rName === "medium" ? "MEDIUM RISK" : rName === "high" ? "HIGH RISK" : rName ? `${rName.toUpperCase()} RISK` : "LOW RISK");
+
+        const rawImageUrl = investment.imageUrl
+          || (investment.image?.fileUrl)
+          || (investment.images?.[0]?.fileUrl)
+          || (project.imageUrl)
+          || (project.image?.fileUrl);
+        const pictures = rawImageUrl ? [getPreviewImageUrl(rawImageUrl)] : [];
+
+        const farmCategory = investment.farmCategory || project.farmCategory;
+        const fundingStatus = investment.fundingStatus || project.fundingStatus;
+        const farmId = investment.farmId || investment.id || project.farmId;
 
         return {
-          id: investment.farmId,
-          href: `/invest/${investment.farmId}`,
-          name: investment.farmName,
+          id: farmId,
+          href: `/invest/${farmId}`,
+          name: investment.farmName || investment.name || project.name || "Farm",
           location: investment.location || "Nigeria",
-          crop: investment.farmCategory?.name || "Cassava",
-          manager: investment.farmOwnerName || "Smile Agri",
+          crop: farmCategory?.name || "Cassava",
+          manager: investment.farmOwnerName || investment.owner?.fullName || investment.owner?.name || investment.farmOwner?.fullName || "Smile Agri",
           risk,
           invested: `₦${formatNumberWithCommas(investedVal)}`,
           total: `₦${formatNumberWithCommas(totalVal)}`,
-          investors: `${Math.round(progress * 1.8)} investors`,
+          investors: `${investment.investorCount ?? investment.numberOfInvestors ?? project.investorCount ?? Math.round(progress * 1.8)} investors`,
           minInvest: `₦${formatNumberWithCommas(minInvestVal)}`,
           inspected: `Verified`,
           funded: `${progress}% funded`,
@@ -408,10 +431,10 @@ const InvestPage = () => {
           // attributes for filters
           roi,
           duration,
-          rawRisk: investment.riskLevel,
+          rawRisk: rName,
           rawLocation: investment.location,
-          rawCategory: investment.farmCategory?.id,
-          rawFundingStatus: investment.fundingStatus,
+          rawCategory: farmCategory?.id,
+          rawFundingStatus: fundingStatus,
           pictures,
         };
       })
@@ -613,12 +636,7 @@ const InvestPage = () => {
               )}
               aria-label="Grid view"
             >
-              <span className="grid grid-cols-2 gap-0.5">
-                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
-                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
-                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
-                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
-              </span>
+              <GridIcon size={16} />
             </button>
             <button
               type="button"
@@ -631,11 +649,7 @@ const InvestPage = () => {
               )}
               aria-label="List view"
             >
-              <span className="flex flex-col gap-1">
-                <span className="h-1 w-3 rounded-full bg-current" />
-                <span className="h-1 w-3 rounded-full bg-current" />
-                <span className="h-1 w-3 rounded-full bg-current" />
-              </span>
+              <ListIcon size={16} />
             </button>
           </div>
         </section>

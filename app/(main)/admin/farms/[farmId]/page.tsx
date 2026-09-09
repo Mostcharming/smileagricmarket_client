@@ -11,9 +11,11 @@ import AdminFarmActionModal from '@/components/modal/adminFarmActionModal';
 import { CheckIcon, DocsIcon, FarmIcon, LogoWhiteIcon, UsersIcon } from '@/components/icons';
 import dynamic from 'next/dynamic';
 const Viewer = dynamic(() => import('react-viewer'), { ssr: false });
-import { formatNumberWithCommas } from '@/utils';
+import { formatFarmCategory, formatNumberWithCommas } from '@/utils';
 import { getPreviewImageUrl } from '@/utils/image';
 import { AdminFarmDetailsResponse } from '@/types';
+
+export { formatFarmCategory };
 
 type DocumentItem = {
   id: string;

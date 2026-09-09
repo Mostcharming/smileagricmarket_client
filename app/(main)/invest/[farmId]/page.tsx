@@ -50,38 +50,64 @@ const FarmDetailPage = () => {
   const isLoading = isFarmDetailsLoading || (hasInvestedInDb && isPortfolioLoading);
 
   const farm = useMemo(() => {
-    const baseFarm = farmResponse?.data;
+    const baseFarm = farmResponse?.data as any;
     const portfolioFarm = portfolioFarmResponse?.data;
 
     if (!baseFarm) return null;
+
+    const project = baseFarm.investmentProjects?.[0] || {};
+
+    const roi = baseFarm.roi ?? project.roi ?? project.roiPercentage ?? 0;
+    const duration = baseFarm.duration ?? project.duration;
+    const riskLevel = baseFarm.riskLevel || project.riskLevel || "medium";
+    const minimumInvest = baseFarm.minimumInvest ?? project.minimumInvest ?? project.investmentMinGoal ?? 0;
+    const totalExpectedFunding = baseFarm.totalExpectedFunding ?? baseFarm.totalFundingAmount ?? project.totalExpectedFunding ?? project.fundingGoalAmount ?? 0;
+    const fundingReceived = baseFarm.fundingReceived ?? baseFarm.amountRaised ?? project.fundingReceived ?? project.amountRaised ?? 0;
+    const percentFunded = baseFarm.percentFunded ?? project.percentFunded ?? 0;
+    const startDate = baseFarm.startDate ?? project.startDate;
+    const endDate = baseFarm.endDate ?? project.endDate;
+    const farmCategory = baseFarm.farmCategory ?? project.farmCategory;
+    const milestones = portfolioFarm?.milestones || baseFarm.milestones || project.milestones || [];
+
+    const mergedBase = {
+      ...baseFarm,
+      name: baseFarm.farmName || baseFarm.name || project.name || "Farm",
+      roi,
+      duration,
+      riskLevel,
+      minimumInvest,
+      totalExpectedFunding,
+      fundingReceived,
+      percentFunded,
+      startDate,
+      endDate,
+      farmCategory,
+      milestones,
+    };
 
     if (portfolioFarm) {
       const template = portfolioFarm.investments?.[0];
       const transaction = template?.transactions?.[0];
 
       return {
-        ...baseFarm,
-        name: baseFarm.farmName || portfolioFarm.name,
+        ...mergedBase,
         Investment: {
           amount: portfolioFarm.userInvestment?.amountInvested ?? baseFarm.Investment?.amount,
           id: transaction?.reference ?? transaction?.id ?? baseFarm.Investment?.id,
           status: portfolioFarm.portfolioStatus ?? baseFarm.Investment?.status,
         },
-        milestones: portfolioFarm.milestones || baseFarm.milestones,
+        milestones: portfolioFarm.milestones || mergedBase.milestones,
         milestoneStats: portfolioFarm.milestoneStats ? {
           totalMilestones: portfolioFarm.milestoneStats.total,
           completedMilestones: portfolioFarm.milestoneStats.completed,
           inProgressMilestones: portfolioFarm.milestoneStats.pending,
           notStartedMilestones: 0,
           completionPercentage: portfolioFarm.milestoneStats.completionPercentage,
-        } : baseFarm.milestoneStats,
+        } : (mergedBase.milestoneStats || project.milestoneStats),
       };
     }
 
-    return {
-      ...baseFarm,
-      name: baseFarm.farmName,
-    };
+    return mergedBase;
   }, [farmResponse, portfolioFarmResponse]);
 
   // Viewer state for gallery lightbox
@@ -113,17 +139,30 @@ const FarmDetailPage = () => {
     const formatDate = (dateStr?: string) => {
       if (!dateStr) return "N/A";
       const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return "N/A";
       return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
     };
 
+    const rawDuration = farm.duration;
+    let durationVal = 6;
+    if (typeof rawDuration === "number") {
+      durationVal = rawDuration;
+    } else if (rawDuration && typeof rawDuration === "object") {
+      durationVal = typeof rawDuration.value === "number" ? rawDuration.value : (parseInt(String(rawDuration.value), 10) || 6);
+    } else if (typeof rawDuration === "string") {
+      durationVal = parseInt(rawDuration, 10) || 6;
+    } else if ((farm as any).durationValue) {
+      durationVal = (farm as any).durationValue;
+    }
+
     return {
-      roi: farm.roi,
-      duration: farm.duration?.value ?? 6,
+      roi: Number(farm.roi) || 0,
+      duration: durationVal,
       risk: farm.riskLevel || "medium",
-      totalVal: farm.totalExpectedFunding,
-      progress: farm.percentFunded,
-      investedVal: farm.fundingReceived,
-      minInvestVal: farm.minimumInvest,
+      totalVal: Number(farm.totalExpectedFunding) || 0,
+      progress: Number(farm.percentFunded) || 0,
+      investedVal: Number(farm.fundingReceived) || 0,
+      minInvestVal: Number(farm.minimumInvest) || 0,
       startDate: formatDate(farm.startDate),
       endDate: formatDate(farm.endDate),
     };
@@ -171,23 +210,39 @@ const FarmDetailPage = () => {
   const presets = useMemo(() => {
     if (!details) return [50000, 100000, 500000, 1000000];
     const min = details.minInvestVal;
-    const list = [50000, 100000, 500000, 1000000, 2000000, 5000000];
-    return list.filter((val) => val >= min).slice(0, 4);
+    const list = [min, min * 2, min * 4, min * 10].filter((val) => val > 0);
+    return list.length > 0 ? list : [50000, 100000, 500000, 1000000];
   }, [details]);
 
   const pictures = useMemo(() => {
-    const rawImages = (farm as any)?.photos || (farm as any)?.images || [];
-    return rawImages.map((pic: any) => ({
-      src: getPreviewImageUrl(pic.fileUrl || pic.url),
-      alt: pic.fileName || "Farm photo",
-    }));
+    if (!farm) return [];
+    const rawImages = (farm as any)?.images || (farm as any)?.photos || [];
+    if (Array.isArray(rawImages) && rawImages.length > 0) {
+      return rawImages.map((pic: any) => ({
+        src: getPreviewImageUrl(pic.fileUrl || pic.url || pic.src || pic),
+        alt: pic.fileName || pic.name || "Farm photo",
+      }));
+    }
+    if ((farm as any)?.imageUrl) {
+      return [{ src: getPreviewImageUrl((farm as any).imageUrl), alt: farm?.name || "Farm photo" }];
+    }
+    if ((farm as any)?.image?.fileUrl) {
+      return [{ src: getPreviewImageUrl((farm as any).image.fileUrl), alt: farm?.name || "Farm photo" }];
+    }
+    return [];
+  }, [farm]);
+
+  const farmDocuments = useMemo(() => {
+    if (!farm) return [];
+    const rawDocs = (farm as any)?.documents || [];
+    return rawDocs.filter((doc: any) => doc.documentType === "document" || doc.mimeType?.includes("pdf") || doc.fileName?.toLowerCase().endsWith(".pdf"));
   }, [farm]);
 
   const milestones = useMemo((): FarmMilestone[] => {
     if (!farm) return [];
     const sourceMilestones = farm.milestones || [];
     if (sourceMilestones.length > 0) {
-      return sourceMilestones.map((item) => {
+      return sourceMilestones.map((item: any) => {
         const name = item.name || `Milestone`;
         const status = (item.status || "not_started") as string;
 
@@ -195,7 +250,7 @@ const FarmDetailPage = () => {
         const st = status.toLowerCase();
         if (st === "completed" || st === "complete" || item.isCompleted) {
           normalizedStatus = "Completed";
-        } else if (st === "in progress" || st === "inprogress" || st === "in_progress") {
+        } else if (st === "in progress" || st === "inprogress" || st === "in_progress" || st === "processing" || st === "request_for_funding") {
           normalizedStatus = "In progress";
         }
 
@@ -210,7 +265,8 @@ const FarmDetailPage = () => {
   }, [farm]);
 
   const ownerName = useMemo(() => {
-    return farm?.farmOwnerName || farm?.farmOwner?.name || "Smile Agri";
+    const f = farm as any;
+    return f?.farmOwnerName || f?.farmOwner?.fullName || f?.farmOwner?.name || f?.owner?.fullName || f?.owner?.name || "Smile Agri";
   }, [farm]);
 
   const remainingUnits = useMemo(() => {

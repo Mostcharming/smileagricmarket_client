@@ -183,6 +183,24 @@ const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
                 >
                   <span className="text-sm">Templates</span>
                 </Link>
+                <Link
+                  href="/admin/investments/investment"
+                  onClick={onClose}
+                  className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
+                    isActive('/admin/investments/investment') || (isActive('/admin/investments') && !pathname.includes('/admin/investments/milestone-review') && !pathname.includes('/admin/investments/templates')) ? 'bg-gray-50 text-gray-900 font-medium' : 'text-gray-500 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="text-sm">Investments</span>
+                </Link>
+                <Link
+                  href="/admin/investments/milestone-review"
+                  onClick={onClose}
+                  className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
+                    isActive('/admin/investments/milestone-review') ? 'bg-gray-50 text-gray-900 font-medium' : 'text-gray-500 hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="text-sm">Milestone Review</span>
+                </Link>
               </div>
             )}
           </div>
