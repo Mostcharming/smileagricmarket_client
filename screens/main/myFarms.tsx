@@ -17,7 +17,7 @@ import { Button, Input, MainHeader, Select, Table, Typography } from "@/componen
 import { Column } from "@/components/ui/table";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { useGetFarmCategories, useGetWebMilestonesByCategory, useGetWebInvestmentTemplate } from "@/mutation/dashboard.mutation";
-import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById, useCreateInvestmentProject } from "@/mutation/farms.mutation";
+import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById, useCreateInvestmentProject, useRequestMilestoneFunding } from "@/mutation/farms.mutation";
 import { useGetKycStatus, useSubmitKyc } from "@/mutation";
 import { ApiResponse, KycResponse, MilestoneResponse, SelectOptions, WebProfileCompletionStatusResponse } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -53,6 +53,28 @@ type SelectedMilestone = {
 };
 
 const makeId = () => Math.random().toString(36).slice(2, 10);
+
+const formatCurrency = (val: string | number) => {
+  const num = typeof val === 'number' ? val : parseFloat(String(val));
+  if (isNaN(num)) return '₦0';
+  return new Intl.NumberFormat('en-NG', {
+    style: 'currency',
+    currency: 'NGN',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(num).replace('NGN', '₦');
+};
+
+const formatCurrencyWithDecimals = (val: string | number) => {
+  const num = typeof val === 'number' ? val : parseFloat(String(val));
+  if (isNaN(num)) return '₦0.00';
+  return new Intl.NumberFormat('en-NG', {
+    style: 'currency',
+    currency: 'NGN',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(num).replace('NGN', '₦').replace(/\s+/g, '');
+};
 
 const StepItem = ({
   title,
@@ -91,17 +113,25 @@ const getInvestmentDetails = (farm: any) => {
   const completedMilestones = farm.stats?.completedMilestones || inv?.milestones?.filter((m: any) => m.isCompleted).length || farm.SelectedMilestones?.filter((m: any) => m.isCompleted).length || 0;
   const verificationStatus = isVerified ? "Verified" : "Pending";
 
-  const rawStatus = inv?.investmentStatus || inv?.status || farm.status;
+  const rawStatus = inv?.investmentStatus || inv?.status;
   let investmentStatus = "Not Started";
-  const normalizedRawStatus = String(rawStatus || "").toLowerCase().trim();
-  if (normalizedRawStatus === "active") {
-    investmentStatus = "Active";
-  } else if (normalizedRawStatus === "funding started" || normalizedRawStatus === "funding_started" || normalizedRawStatus === "funding" || normalizedRawStatus === "pending") {
-    investmentStatus = "Funding Started";
-  } else if (normalizedRawStatus === "completed") {
-    investmentStatus = "Completed";
-  } else if (farm.stats?.completionPercentage > 0 && farm.stats?.completionPercentage < 100) {
-    investmentStatus = "Active";
+  if (!isVerified) {
+    investmentStatus = "Not Started";
+  } else {
+    const normalizedRawStatus = String(rawStatus || "").toLowerCase().trim();
+    if (normalizedRawStatus === "active") {
+      investmentStatus = "Active";
+    } else if (normalizedRawStatus === "funding started" || normalizedRawStatus === "funding_started" || normalizedRawStatus === "funding") {
+      investmentStatus = "Funding Started";
+    } else if (normalizedRawStatus === "completed") {
+      investmentStatus = "Completed";
+    } else if (normalizedRawStatus === "not started" || normalizedRawStatus === "not_started" || normalizedRawStatus === "pending") {
+      investmentStatus = "Not Started";
+    } else if (farm.stats?.completionPercentage > 0 && farm.stats?.completionPercentage < 100) {
+      investmentStatus = "Active";
+    } else if (invs.length > 0) {
+      investmentStatus = "Funding Started";
+    }
   }
 
   return {
@@ -197,6 +227,413 @@ const FarmActionCell = ({ onViewDetails }: { farm: any; onViewDetails: () => voi
         </div>,
         portalContainer
       )}
+    </div>
+  );
+};
+
+const RequestFundingView = ({
+  farm,
+  project,
+  milestone,
+  milestoneIndex,
+  totalMilestones,
+  previousMilestone,
+  onBack,
+  onSubmit,
+}: {
+  farm: any;
+  project: any;
+  milestone: any;
+  milestoneIndex: number;
+  totalMilestones: number;
+  previousMilestone?: any;
+  onBack: () => void;
+  onSubmit: (evidenceData: any) => void;
+}) => {
+  const [photoItems, setPhotoItems] = useState<PhotoItem[]>([]);
+  const [videoItems, setVideoItems] = useState<DocItem[]>([]);
+  const [docItems, setDocItems] = useState<DocItem[]>([]);
+  const [notes, setNotes] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const photoInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const docInputRef = useRef<HTMLInputElement>(null);
+
+  const prevName = previousMilestone?.name || "Land preparation";
+
+  const handleAddPhotos = (fileList: FileList | null) => {
+    if (!fileList || fileList.length === 0) return;
+    const items: PhotoItem[] = Array.from(fileList).map((file) => ({
+      id: makeId(),
+      name: file.name,
+      preview: URL.createObjectURL(file),
+      file,
+    }));
+    setPhotoItems((prev) => [...prev, ...items]);
+  };
+
+  const handleAddVideos = (fileList: FileList | null) => {
+    if (!fileList || fileList.length === 0) return;
+    const items: DocItem[] = Array.from(fileList).map((file) => ({
+      id: makeId(),
+      name: file.name,
+      file,
+    }));
+    setVideoItems((prev) => [...prev, ...items]);
+  };
+
+  const handleAddDocs = (fileList: FileList | null) => {
+    if (!fileList || fileList.length === 0) return;
+    const items: DocItem[] = Array.from(fileList).map((file) => ({
+      id: makeId(),
+      name: file.name,
+      file,
+    }));
+    setDocItems((prev) => [...prev, ...items]);
+  };
+
+  const removePhotoItem = (id: string) => {
+    setPhotoItems((prev) => {
+      const item = prev.find((p) => p.id === id);
+      if (item) URL.revokeObjectURL(item.preview);
+      return prev.filter((p) => p.id !== id);
+    });
+  };
+
+  const removeVideoItem = (id: string) => {
+    setVideoItems((prev) => prev.filter((v) => v.id !== id));
+  };
+
+  const removeDocItem = (id: string) => {
+    setDocItems((prev) => prev.filter((d) => d.id !== id));
+  };
+
+  const requestFundingMutation = useRequestMilestoneFunding();
+  const queryClient = useQueryClient();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (photoItems.length === 0 && docItems.length === 0) {
+      toast.error("At least one photo (JPEG, PNG, WEBP) or document (PDF) evidence is required.");
+      return;
+    }
+
+    const selectedMilestoneId = milestone.selectedMilestoneId || milestone.milestoneId || milestone.Milestone?.id || milestone.id;
+
+    if (!selectedMilestoneId) {
+      toast.error("Milestone ID is missing.");
+      return;
+    }
+
+    let investmentProjectId: string | undefined = undefined;
+    if (project?.id && !project.id.startsWith("custom-p-") && !project.id.endsWith("-p1")) {
+      investmentProjectId = project.id;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const photos = photoItems.map((p) => p.file);
+      const files = docItems.map((d) => d.file);
+
+      const res = await requestFundingMutation.mutateAsync({
+        farmId: farm.id,
+        payload: {
+          selectedMilestoneId,
+          ...(investmentProjectId ? { investmentProjectId } : {}),
+          photos,
+          files,
+        },
+      });
+
+      toast.success(res.message || "Funding request submitted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["farms"] });
+      queryClient.invalidateQueries({ queryKey: ["farm", farm.id] });
+
+      onSubmit({
+        milestoneId: milestone.id,
+        photoFiles: photos,
+        videoFiles: videoItems.map((v) => v.file),
+        docFiles: files,
+        notes,
+      });
+    } catch (error: any) {
+      toast.error(error.message || "Failed to request funding. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-5xl mx-auto py-4">
+      <div className="flex items-center gap-2 text-xs font-semibold text-[#8A9587] uppercase mb-6">
+        <button
+          type="button"
+          onClick={onBack}
+          className="hover:text-[#4E8A35] transition-colors cursor-pointer"
+        >
+          My Farms
+        </button>
+        <span>/</span>
+        <button
+          type="button"
+          onClick={onBack}
+          className="hover:text-[#4E8A35] transition-colors cursor-pointer normal-case"
+        >
+          {farm?.name || "Farm Details"}
+        </button>
+        <span>/</span>
+        <span className="text-[#1F2937] normal-case">Request Funding</span>
+      </div>
+
+      <div className="bg-white border border-[#E9EAEB] rounded-2xl p-6 sm:p-8 shadow-xs">
+        <div className="mb-6">
+          <span className="text-xs font-medium text-[#7A8077] block mb-1">
+            Milestone {milestoneIndex + 1} of {totalMilestones}
+          </span>
+          <h1 className="text-2xl sm:text-[28px] font-bold text-[#1F2937] leading-tight">
+            Request funding for - {milestone.name}
+          </h1>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div className="bg-[#F7F9F6] rounded-2xl p-5 flex flex-col justify-center">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#7A8077] uppercase tracking-wider mb-2">
+              <TrendingUpIcon size={16} className="text-[#4E8A35]" />
+              <span>ALLOCATION</span>
+            </div>
+            <div className="text-xl sm:text-2xl font-bold text-[#1F2937]">
+              {milestone.pct}% of {formatCurrency(project?.goal || 0)}
+            </div>
+          </div>
+
+          <div className="bg-[#F7F9F6] rounded-2xl p-5 flex flex-col justify-center">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#7A8077] uppercase tracking-wider mb-2">
+              <WalletIcon size={16} className="text-[#4E8A35]" />
+              <span>AMOUNT TO RELEASE</span>
+            </div>
+            <div className="text-xl sm:text-2xl font-bold text-[#1F2937]">
+              {formatCurrencyWithDecimals(milestone?.amount || 0)}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-[#F0FAF3] border border-[#CEEAD6] rounded-2xl p-4 sm:p-5 mb-8 text-xs font-medium text-[#2D5A1E] leading-relaxed">
+          You have to submit evidence of previous milestone to request funding for this milestone. Evidence submitted must be verified by the admin & funding will be released once evidence has been successfully verified by admin.
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-[#1F2937] mb-4">Submit evidence of previous Milestone</h2>
+            <div className="mb-6">
+              <span className="text-xs font-medium text-[#7A8077] block">Previous Milestone</span>
+              <span className="text-base font-bold text-[#1F2937] block mt-0.5">{prevName}</span>
+            </div>
+
+            <div className="mb-6">
+              <label className="text-xs font-bold text-[#1F2937] block mb-1">
+                Please upload photo evidence of previous milestone
+              </label>
+              <span className="text-xs font-normal text-[#7A8077] italic block mb-3">
+                Allowed Formats: JPG, PNG, WebP
+              </span>
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => handleAddPhotos(e.target.files)}
+              />
+
+              {photoItems.length > 0 && (
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5 mb-4">
+                  {photoItems.map((photo) => (
+                    <div
+                      key={photo.id}
+                      className="relative aspect-square overflow-hidden rounded-md bg-[#D9D9D9]"
+                    >
+                      <div
+                        role="img"
+                        aria-label={photo.name}
+                        className="h-full w-full bg-cover bg-center"
+                        style={{ backgroundImage: `url(${photo.preview})` }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhotoItem(photo.id)}
+                        className="absolute right-1 top-1 rounded-full bg-black/60 text-white p-0.5 cursor-pointer"
+                        aria-label="Remove photo"
+                      >
+                        <CloseIcon size={16} color="#FFFFFF" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Button
+                  type="button"
+                  variant="light"
+                  onClick={() => photoInputRef.current?.click()}
+                  className="w-full rounded-md"
+                  icon={<UploadIcon size={17} />}
+                >
+                  UPLOAD
+                </Button>
+                <Button
+                  type="button"
+                  variant="light"
+                  onClick={() => photoInputRef.current?.click()}
+                  className="w-full rounded-md"
+                  icon={<PhotoIcon size={18} />}
+                >
+                  TAKE A PHOTO
+                </Button>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="text-xs font-bold text-[#1F2937] block mb-1">
+                Please upload Video evidence of previous milestone
+              </label>
+              <span className="text-xs font-normal text-[#7A8077] italic block mb-3">
+                Allowed Formats: Mp4
+              </span>
+              <input
+                ref={videoInputRef}
+                type="file"
+                accept="video/mp4,video/*"
+                multiple
+                className="hidden"
+                onChange={(e) => handleAddVideos(e.target.files)}
+              />
+
+              {videoItems.length > 0 && (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 mb-4">
+                  {videoItems.map((video) => (
+                    <div key={video.id} className="flex items-center justify-between rounded-md bg-[#F3FFF7] p-4 border border-[#CEEAD6]/50">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex p-2 aspect-square items-center justify-center rounded-full bg-[#D4EDC8]">
+                          <DocsIcon />
+                        </div>
+                        <span className="text-sm font-medium text-[#1F2937] truncate max-w-[220px]">{video.name}</span>
+                      </div>
+                      <button type="button" onClick={() => removeVideoItem(video.id)} aria-label="Remove video" className="cursor-pointer hover:opacity-75">
+                        <CloseIcon size={18} color="#7A8077" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Button
+                  type="button"
+                  variant="light"
+                  onClick={() => videoInputRef.current?.click()}
+                  className="w-full rounded-md"
+                  icon={<UploadIcon size={17} />}
+                >
+                  UPLOAD
+                </Button>
+                <Button
+                  type="button"
+                  variant="light"
+                  onClick={() => videoInputRef.current?.click()}
+                  className="w-full rounded-md"
+                  icon={
+                    <svg className="w-4 h-4 text-[#1F2937]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  }
+                >
+                  RECORD VIDEO
+                </Button>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="text-xs font-bold text-[#1F2937] block mb-1">
+                Please upload file or document evidence of previous milestone
+              </label>
+              <span className="text-xs font-normal text-[#7A8077] italic block mb-3">
+                Allowed Formats: PDF
+              </span>
+              <input
+                ref={docInputRef}
+                type="file"
+                accept=".pdf,application/pdf"
+                multiple
+                className="hidden"
+                onChange={(e) => handleAddDocs(e.target.files)}
+              />
+
+              {docItems.length > 0 && (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 mb-4">
+                  {docItems.map((doc) => (
+                    <div key={doc.id} className="flex items-center justify-between rounded-md bg-[#F3FFF7] p-4 border border-[#CEEAD6]/50">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex p-2 aspect-square items-center justify-center rounded-full bg-[#D4EDC8]">
+                          <DocsIcon />
+                        </div>
+                        <span className="text-sm font-medium text-[#1F2937] truncate max-w-[220px]">{doc.name}</span>
+                      </div>
+                      <button type="button" onClick={() => removeDocItem(doc.id)} aria-label="Remove document" className="cursor-pointer hover:opacity-75">
+                        <CloseIcon size={18} color="#7A8077" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Button
+                  type="button"
+                  variant="light"
+                  onClick={() => docInputRef.current?.click()}
+                  className="w-full rounded-md"
+                  icon={<UploadIcon size={17} />}
+                >
+                  UPLOAD
+                </Button>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <Input
+                id="additional-notes"
+                label="Additional Notes"
+                as="textarea"
+                rows={4}
+                value={notes}
+                onChange={(e: any) => setNotes(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              variant="light"
+              onClick={onBack}
+              className="rounded-xl px-6 py-2.5 text-sm font-semibold"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              isLoading={isSubmitting}
+              className="rounded-xl px-6 py-2.5 text-sm font-semibold bg-[#64B03F] hover:bg-[#529333] border-none"
+            >
+              Submit
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
@@ -308,6 +745,8 @@ const FarmDetailsView = ({
     const apiProjects: any[] = [];
     const roiFromTemplate = activeTemplate?.fundingRules?.roi ?? activeTemplate?.roi ?? 0;
     const roiText = roiFromTemplate ? `${roiFromTemplate}% return` : "0% return";
+    const farmStatusStr = String(farm.verificationStatus || farm.status || "").toLowerCase().trim();
+    const isVerified = farmStatusStr === "verified" || farmStatusStr === "approved";
 
     const invs = Array.isArray(farm.investmentProjects)
       ? farm.investmentProjects
@@ -342,11 +781,17 @@ const FarmDetailsView = ({
         const totalAllocation = invMilestones.reduce((acc: number, mm: any) => acc + (Number(mm.pct) || 0), 0);
 
         const rawStatusStr = String(inv.investmentStatus || inv.status || "").toLowerCase().trim();
-        let mappedStatus = "Funding Started";
-        if (rawStatusStr === "active") {
-          mappedStatus = "Active";
-        } else if (rawStatusStr === "completed") {
-          mappedStatus = "Completed";
+        let mappedStatus = "Not Started";
+        if (isVerified) {
+          if (rawStatusStr === "active") {
+            mappedStatus = "Active";
+          } else if (rawStatusStr === "completed") {
+            mappedStatus = "Completed";
+          } else if (rawStatusStr === "funding started" || rawStatusStr === "funding_started" || rawStatusStr === "funding") {
+            mappedStatus = "Funding Started";
+          } else if (rawStatusStr !== "not started" && rawStatusStr !== "not_started" && rawStatusStr !== "pending" && rawStatusStr !== "") {
+            mappedStatus = "Funding Started";
+          }
         }
 
         const rawRoi = inv.roi || inv.investmentTemplate?.roiPercentage;
@@ -355,7 +800,7 @@ const FarmDetailsView = ({
         apiProjects.push({
           id: inv.id,
           name: inv.name || inv.title || inv.investmentTemplate?.name || `Investment Project`,
-          categoryName: inv.farmCategory?.name || farm.Category?.name || inv.categoryName || "",
+          categoryName: inv.farmCategory?.name || farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || inv.categoryName || "",
           status: mappedStatus,
           dates: dynamicDates,
           raised: projectRaisedAmount,
@@ -380,11 +825,19 @@ const FarmDetailsView = ({
       }));
       const totalAllocation = milestones.reduce((acc: number, mm: any) => acc + (Number(mm.pct) || 0), 0);
 
+      const rawStatusStr = String(farm.Investment?.status || farm.Investment?.investmentStatus || "").toLowerCase().trim();
+      let mappedStatus = "Not Started";
+      if (isVerified) {
+        if (rawStatusStr === "active") mappedStatus = "Active";
+        else if (rawStatusStr === "completed") mappedStatus = "Completed";
+        else mappedStatus = "Funding Started";
+      }
+
       apiProjects.push({
         id: farm.id + "-p1",
-        name: farm.Investment?.name || `Investment Project 1 - ${farm.Category?.name || ''}`,
-        categoryName: farm.Category?.name || "",
-        status: farm.Investment?.status || "Funding Started",
+        name: farm.Investment?.name || `Investment Project 1 - ${farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || ''}`,
+        categoryName: farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || "",
+        status: mappedStatus,
         dates: dynamicDates,
         raised: farm.Investment?.amountRaised ?? 0,
         goal: farm.Investment?.amount ?? 0,
@@ -395,7 +848,9 @@ const FarmDetailsView = ({
       });
     }
 
-    return [...addedProjects, ...apiProjects];
+    const addedProjectIds = new Set(addedProjects.map((p: any) => p.id));
+    const uniqueApiProjects = apiProjects.filter((p: any) => !addedProjectIds.has(p.id));
+    return [...addedProjects, ...uniqueApiProjects];
   }, [farm, customProjects, activeTemplate]);
 
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
@@ -418,10 +873,27 @@ const FarmDetailsView = ({
 
   const isDisabled = !isFarmVerified || hasActiveProject;
 
-  const handleRequestFunding = (projectId: string, milestoneId: string) => {
-    const isCustom = projectId.startsWith("custom-p-");
+  const [requestFundingData, setRequestFundingData] = useState<{
+    project: any;
+    milestone: any;
+    index: number;
+  } | null>(null);
 
-    toast.success("Funding request submitted successfully!");
+  const handleOpenRequestFunding = (project: any, milestone: any, index: number) => {
+    if (index > 0) {
+      const prevM = project.milestones[index - 1];
+      const prevStatus = String(prevM?.status || "").toLowerCase().trim();
+      const isPrevCompleted = prevStatus === "completed" || prevM?.isCompleted === true;
+      if (!isPrevCompleted) {
+        toast.error("You cannot request funding for this milestone until the previous milestone is completed.");
+        return;
+      }
+    }
+    setRequestFundingData({ project, milestone, index });
+  };
+
+  const handleCompleteRequestFunding = (projectId: string, milestoneId: string) => {
+    const isCustom = projectId.startsWith("custom-p-");
 
     if (isCustom) {
       setCustomProjects((prev) => {
@@ -431,7 +903,7 @@ const FarmDetailsView = ({
             return {
               ...proj,
               milestones: proj.milestones.map((m: any) =>
-                m.id === milestoneId ? { ...m, status: "Requested" } : m
+                m.id === milestoneId ? { ...m, status: "Processing Funding" } : m
               ),
             };
           }
@@ -439,34 +911,16 @@ const FarmDetailsView = ({
         });
         return { ...prev, [farm.id]: updated };
       });
-    } else {
-      const projectToOverride = farmProjects.find(p => p.id === projectId);
-      if (projectToOverride) {
-        const updatedProject = {
-          ...projectToOverride,
-          milestones: projectToOverride.milestones.map((m: any) =>
-            m.id === milestoneId ? { ...m, status: "Requested" } : m
-          ),
-        };
-        setCustomProjects((prev) => {
-          const farmList = prev[farm.id] || [];
-          const filtered = farmList.filter(p => p.id !== projectId);
-          return {
-            ...prev,
-            [farm.id]: [updatedProject, ...filtered],
-          };
-        });
-      }
     }
+
+    setRequestFundingData(null);
   };
 
   const activeAllocationPct = useMemo(() => {
     if (!activeProject) return 0;
-    // Prefer pre-computed totalAllocation on project
     if (typeof activeProject.totalAllocation === 'number') {
       return activeProject.totalAllocation;
     }
-    // If no completed milestones, show sum of milestone pct as allocation
     const total = activeProject.milestones.reduce((acc: number, m: any) => acc + (Number(m.pct) || 0), 0);
     return total;
   }, [activeProject]);
@@ -487,6 +941,30 @@ const FarmDetailsView = ({
     if (!activeProject || activeProject.goal === 0) return 0;
     return Math.round((releasedAmount / activeProject.goal) * 100);
   }, [activeProject, releasedAmount]);
+
+  if (requestFundingData) {
+    const prevMilestone = requestFundingData.index > 0
+      ? requestFundingData.project.milestones[requestFundingData.index - 1]
+      : null;
+
+    return (
+      <RequestFundingView
+        farm={farm}
+        project={requestFundingData.project}
+        milestone={requestFundingData.milestone}
+        milestoneIndex={requestFundingData.index}
+        totalMilestones={requestFundingData.project.milestones.length}
+        previousMilestone={prevMilestone}
+        onBack={() => setRequestFundingData(null)}
+        onSubmit={() =>
+          handleCompleteRequestFunding(
+            requestFundingData.project.id,
+            requestFundingData.milestone.id
+          )
+        }
+      />
+    );
+  }
 
   return (
     <div className="w-full">
@@ -661,9 +1139,11 @@ const FarmDetailsView = ({
                   <span className="text-xs font-medium text-[#5E6771] block mt-0.5">{activeProject.dates || ""}</span>
                 </div>
               </div>
-              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${activeProject.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
-                  activeProject.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
-                    "bg-[#EFF6FF] text-[#1D4ED8]"
+              <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
+                  activeProject.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
+                    activeProject.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
+                      activeProject.status === "Completed" ? "bg-[#EFF6FF] text-[#1D4ED8]" :
+                        "bg-[#F3F4F6] text-[#374151]"
                 }`}>
                 {activeProject.status}
               </span>
@@ -685,21 +1165,31 @@ const FarmDetailsView = ({
               </div>
             </div>
 
-            {activeProject.status === "Funding Started" && (
-              <div className="mt-6 bg-[#FFF5F3] border border-[#FFE2DC] rounded-2xl p-4 text-xs font-semibold text-[#DF2C0C] leading-relaxed">
-                Funding has started for this investment, but the funding goal has not been reached. You can only request for funding only after funding goal has been reached
-              </div>
-            )}
-            {activeProject.status === "Active" && (
-              <div className="mt-6 bg-[#E6F4EA] border border-[#CEEAD6] rounded-2xl p-4 text-xs font-semibold text-[#137333] leading-relaxed">
-                Funding has been completed for this cycle. You can proceed to request payment for your next milestone.
-              </div>
-            )}
-            {activeProject.status === "Completed" && (
-              <div className="mt-6 bg-[#EFF6FF] border border-[#BFDBFE] rounded-2xl p-4 text-xs font-semibold text-[#1E40AF] leading-relaxed">
-                This investment cycle has been completed successfully and all payouts have been distributed.
-              </div>
-            )}
+            {(() => {
+              if (activeProject.status === "Completed") {
+                return (
+                  <div className="mt-6 bg-[#EFF6FF] border border-[#BFDBFE] rounded-2xl p-4 text-xs font-semibold text-[#1E40AF] leading-relaxed">
+                    This investment cycle has been completed successfully and all payouts have been distributed.
+                  </div>
+                );
+              }
+
+              const isFundingGoalReached = activeProject.status === "Active" || (activeProject.goal > 0 && activeProject.raised >= activeProject.goal);
+
+              if (isFundingGoalReached) {
+                return (
+                  <div className="mt-6 bg-[#E6F4EA] border border-[#CEEAD6] rounded-2xl p-4 text-xs font-semibold text-[#137333] leading-relaxed">
+                    Funding has been completed for this cycle. You can proceed to request payment for your next milestone.
+                  </div>
+                );
+              }
+
+              return (
+                <div className="mt-6 bg-[#FFF5F3] border border-[#FFE2DC] rounded-2xl p-4 text-xs font-semibold text-[#DF2C0C] leading-relaxed">
+                  Funding has started for this investment, but the funding goal has not been reached. You can only request for funding only after funding goal has been reached
+                </div>
+              );
+            })()}
 
             <div className="mt-8">
               <h4 className="text-base font-bold text-[#1F2937]">Farm Milestone Timeline</h4>
@@ -743,18 +1233,27 @@ const FarmDetailsView = ({
                 <div className="absolute left-[7px] top-3 bottom-6 w-[1.5px] bg-[#EAECE8]" />
                 <div className="space-y-6">
                   {activeProject.milestones.map((m: any, idx: number) => {
-                    const isCompleted = m.status === "Completed";
-                    const isRequested = m.status === "Requested";
-                    const isActionable = m.status === "Request for Funding";
+                    const normStatus = String(m.status || "").toLowerCase().trim();
+                    const isCompleted = normStatus === "completed" || m.isCompleted === true;
+                    const isProcessing = normStatus === "processing funding" || normStatus === "processing_funding" || normStatus === "requested" || normStatus === "processing";
+
+                    const isPrevCompleted = idx === 0 || (() => {
+                      const prevM = activeProject.milestones[idx - 1];
+                      const prevStatus = String(prevM?.status || "").toLowerCase().trim();
+                      return prevStatus === "completed" || prevM?.isCompleted === true;
+                    })();
+
+                    const isCurrentActionable = !isCompleted && !isProcessing && isPrevCompleted;
 
                     const isNameMilestoneFormat = m.name.toLowerCase().includes("milestone");
                     const milestoneLabel = isNameMilestoneFormat ? m.name : `MILESTONE ${idx + 1} - ${m.pct}%`;
                     const milestoneDesc = isNameMilestoneFormat ? "" : m.name;
 
                     return (
-                      <div key={m.id || idx} className="relative flex items-center justify-between pl-8 min-h-[56px]">
-                        <span className={`absolute left-[7px] -translate-x-1/2 flex h-3.5 w-3.5 items-center justify-center rounded-full border-4 border-white z-10 ${isCompleted ? "bg-[#4E8A35]" : "bg-[#64B03F]"
-                          }`} />
+                      <div key={m.id ? `milestone-${m.id}-${idx}` : `milestone-${idx}`} className="relative flex items-center justify-between pl-8 min-h-[56px]">
+                        <span className={`absolute left-[7px] -translate-x-1/2 flex h-3.5 w-3.5 items-center justify-center rounded-full border-4 border-white z-10 ${
+                          isCompleted ? "bg-[#4E8A35]" : isProcessing ? "bg-[#D97706]" : "bg-[#64B03F]"
+                        }`} />
 
                         <div className="flex-1 flex flex-row items-center justify-between py-2">
                           <div className="flex flex-col">
@@ -767,20 +1266,29 @@ const FarmDetailsView = ({
                             <span className="text-sm font-bold text-[#1F2937]">{formatCurrencyWithDecimals(m.amount)}</span>
                             <div>
                               {isCompleted && (
-                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#047857] bg-[#ECFDF5] px-3 py-2 rounded-lg border border-[#A7F3D0]">
+                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#047857] bg-[#ECFDF5] px-3.5 py-1.5 rounded-lg border border-[#A7F3D0]">
                                   Completed ✓
                                 </span>
                               )}
-                              {isRequested && (
-                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#D97706] bg-[#FFFBEB] px-3 py-2 rounded-lg border border-[#FDE68A]">
-                                  Requested
+                              {isProcessing && (
+                                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#D97706] bg-[#FFFBEB] px-3.5 py-1.5 rounded-lg border border-[#FDE68A]">
+                                  Processing Funding
                                 </span>
                               )}
-                              {isActionable && (
+                              {!isCompleted && !isProcessing && (
                                 <button
                                   type="button"
-                                  onClick={() => handleRequestFunding(activeProject.id, m.id)}
-                                  className="bg-[#F4FAF0] hover:bg-[#EAF3E6] text-[#4E8A35] text-xs font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer"
+                                  disabled={!isCurrentActionable}
+                                  onClick={() => {
+                                    if (isCurrentActionable) {
+                                      handleOpenRequestFunding(activeProject, m, idx);
+                                    }
+                                  }}
+                                  className={`text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-colors ${
+                                    isCurrentActionable
+                                      ? "bg-[#64B03F] hover:bg-[#529333] text-white cursor-pointer shadow-xs"
+                                      : "bg-[#F4FAF0] text-[#A3D995] cursor-not-allowed border border-[#E2F3DA]"
+                                  }`}
                                 >
                                   Request for Funding
                                 </button>
@@ -799,10 +1307,10 @@ const FarmDetailsView = ({
           <div className="bg-white border border-[#E9EAEB] rounded-2xl py-6 px-4 shadow-xs h-fit">
             <h3 className="text-lg font-bold text-[#1F2937] mb-4">Investment History</h3>
             <div className="flex flex-col gap-4">
-              {farmProjects.map((p) => {
+              {farmProjects.map((p, pIdx) => {
                 return (
                   <button
-                    key={p.id}
+                    key={p.id ? `proj-${p.id}-${pIdx}` : `proj-${pIdx}`}
                     type="button"
                     onClick={() => setActiveProjectId(p.id)}
                     className="w-full text-left bg-white border border-[#E9EAEB] rounded-2xl p-5 transition-all cursor-pointer block"
@@ -812,9 +1320,11 @@ const FarmDetailsView = ({
                         <span className="text-sm font-bold text-[#1F2937] block leading-tight">{p.name}</span>
                         <span className="text-xs font-medium text-[#5E6771] block mt-1">{p.dates || ""}</span>
                       </div>
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider shrink-0 ${p.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
-                          p.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
-                            "bg-[#EFF6FF] text-[#1D4ED8]"
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider shrink-0 ${
+                          p.status === "Active" ? "bg-[#ECFDF5] text-[#047857]" :
+                            p.status === "Funding Started" ? "bg-[#FFF5F3] text-[#DF2C0C]" :
+                              p.status === "Completed" ? "bg-[#EFF6FF] text-[#1D4ED8]" :
+                                "bg-[#F3F4F6] text-[#374151]"
                         }`}>
                         {p.status}
                       </span>
@@ -1450,28 +1960,6 @@ const CreateProjectFlow = ({
 
 const normalizeKycStatus = (status?: string) => status?.trim().toLowerCase().replace(/\s+/g, "_") ?? "";
 
-const formatCurrency = (val: string | number) => {
-  const num = typeof val === 'number' ? val : parseFloat(val);
-  if (isNaN(num)) return '₦0';
-  return new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(num).replace('NGN', '₦');
-};
-
-const formatCurrencyWithDecimals = (val: string | number) => {
-  const num = typeof val === 'number' ? val : parseFloat(val);
-  if (isNaN(num)) return '₦0.00';
-  return new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(num).replace('NGN', '₦').replace(/\s+/g, '');
-};
-
 const formatDuration = (monthsStr: string | number) => {
   const months = typeof monthsStr === 'number' ? monthsStr : parseInt(monthsStr);
   if (isNaN(months)) return '';
@@ -1672,9 +2160,12 @@ const MyFarms = () => {
     ? projectCategory
     : (selectedFarmForDetails ? (selectedFarmForDetails.farmCategoryId || selectedFarmForDetails.Category?.id || selectedFarmForDetails.category) : farmCategory);
 
+  const shouldFetchCategoryData = Boolean(isCreatingProject || showAddFarm);
+  const categoryIdForQueries = shouldFetchCategoryData && activeCategoryId ? activeCategoryId : undefined;
+
   const { data: farmCategoriesResponse, isLoading: isFarmCategoriesLoading } = useGetFarmCategories();
-  const { data: milestonesResponse } = useGetWebMilestonesByCategory(activeCategoryId || undefined);
-  const { data: investmentTemplateResponse } = useGetWebInvestmentTemplate(activeCategoryId || undefined);
+  const { data: milestonesResponse } = useGetWebMilestonesByCategory(categoryIdForQueries);
+  const { data: investmentTemplateResponse } = useGetWebInvestmentTemplate(categoryIdForQueries);
 
   const createFarmMutation = useCreateFarm();
   const updateFarmMutation = useUpdateFarm();
@@ -1760,7 +2251,7 @@ const MyFarms = () => {
       ...farm,
       id: farm.id,
       name: farm.name,
-      category: farm.Category?.name || "Uncategorized",
+      category: farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || "Uncategorized",
       // keep legacy status for compatibility, but prefer verificationStatus when available
       status: farm.verificationStatus
         ? String(farm.verificationStatus)
@@ -1895,11 +2386,14 @@ const MyFarms = () => {
       const totalCount = existingProjectsCount + addedProjects.length;
       const roi = activeTemplate?.fundingRules?.roi ?? activeTemplate?.roi ?? 42.0;
 
+      const farmVerStatusStr = String(selectedFarmForDetails?.verificationStatus || selectedFarmForDetails?.status || "").toLowerCase().trim();
+      const isVerified = farmVerStatusStr === "verified" || farmVerStatusStr === "approved";
+
       const newProject = {
         id: `custom-p-${Date.now()}`,
         name: `Investment Project ${totalCount + 1} - ${selectedCategoryName}`,
         categoryName: selectedCategoryName,
-        status: "Funding Started" as const,
+        status: isVerified ? ("Funding Started" as const) : ("Not Started" as const),
         dates: `${new Date().toLocaleString('en-US', { month: 'short' })} ${new Date().getFullYear()} - ${new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).toLocaleString('en-US', { month: 'short' })} ${new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).getFullYear()}`,
         raised: 0,
         goal: numericGoal,

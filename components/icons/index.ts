@@ -36,3 +36,8 @@ export { CalendarIcon } from "./calendar";
 export { PercentIcon } from "./percent";
 export { DownloadIcon } from "./download";
 export { FileTextIcon } from "./fileText";
+export { LockIcon } from "./lock";
+export { FlagIcon } from "./flag";
+export { MessageSquareIcon } from "./messageSquare";
+export { GridIcon } from "./grid";
+export { ListIcon } from "./list";

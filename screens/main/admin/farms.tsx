@@ -8,6 +8,9 @@ import { DEFAULT_PAGE_SIZE } from '@/constants';
 import { Column } from '@/components/ui/table';
 import { MoreIcon } from '@/components/icons';
 import { FarmStatusBadge, Pagination, SearchInput, Select, Table, Typography } from '@/components/ui';
+import { formatFarmCategory } from '@/utils';
+
+export { formatFarmCategory };
 
 const buildStatusOptions = (): SelectOptions[] => [
   { label: 'Active', value: 'active' },
@@ -36,8 +39,6 @@ const formatFarmStatus = (farm: FarmResponse) => {
 
   return normalizedStatus === 'approved' ? 'active' : normalizedStatus;
 };
-
-const formatFarmCategory = (farm: FarmResponse) => farm.Category?.name || 'Uncategorized';
 
 const AdminFarmsDashboard = () => {
   const router = useRouter();

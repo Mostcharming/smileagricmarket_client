@@ -35,6 +35,13 @@ export interface UploadFarmDocumentsPayload {
 	documents: (File | string)[];
 }
 
+export interface RequestMilestoneFundingPayload {
+	selectedMilestoneId: string;
+	investmentProjectId?: string;
+	photos?: (File | string)[];
+	files?: (File | string)[];
+}
+
 export interface FarmMilestoneResponse {
 	id: string;
 	milestoneId?: string;
@@ -70,6 +77,21 @@ export interface Statistics {
 	completionPercentage?: number;
 }
 
+export interface InvestmentProjectItem {
+	id?: string;
+	farmCategoryId?: string;
+	investmentId?: string;
+	expectedInvestment?: string;
+	investmentReceived?: string;
+	investmentStatus?: string;
+	startDate?: string;
+	endDate?: string;
+	currency?: string;
+	Category?: Category;
+	category?: Category;
+	farmCategory?: Category;
+}
+
 export interface FarmResponse {
 	id: string;
 	name: string;
@@ -77,6 +99,12 @@ export interface FarmResponse {
 	location?: string;
 	size?: number;
 	Category?: Category;
+	category?: Category;
+	farmCategory?: Category;
+	InvestmentProjects?: InvestmentProjectItem[];
+	investmentProjects?: InvestmentProjectItem[];
+	InvestmentProject?: InvestmentProjectItem;
+	investmentProject?: InvestmentProjectItem;
 	Investment?: Investment & {
 		investmentReceived?: string;
 		expectedInvestment?: string;

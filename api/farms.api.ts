@@ -9,6 +9,7 @@ import {
 	FarmResponse,
 	FarmsDirectory,
 	PaginatedFilter,
+	RequestMilestoneFundingPayload,
 	UploadFarmDocumentsPayload,
 } from "@/types";
 
@@ -56,6 +57,46 @@ export const addMilestonesToFarm = async (
 	const response = await post<FarmResponse>(
 		webFarms.addMilestonesToFarm(farmId),
 		payload
+	);
+	return response;
+};
+
+export const requestMilestoneFunding = async (
+	farmId: string,
+	payload: RequestMilestoneFundingPayload
+): Promise<ApiResponse<any>> => {
+	const formData = new FormData();
+
+	formData.append("selectedMilestoneId", payload.selectedMilestoneId);
+
+	if (payload.investmentProjectId) {
+		formData.append("investmentProjectId", payload.investmentProjectId);
+	}
+
+	if (payload.photos && payload.photos.length > 0) {
+		payload.photos.forEach((photo: File | string) => {
+			if (photo instanceof File) {
+				formData.append("photos", photo);
+			}
+		});
+	}
+
+	if (payload.files && payload.files.length > 0) {
+		payload.files.forEach((file: File | string) => {
+			if (file instanceof File) {
+				formData.append("files", file);
+			}
+		});
+	}
+
+	const response = await post<any>(
+		webFarms.requestMilestoneFunding(farmId),
+		formData,
+		{
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		}
 	);
 	return response;
 };

@@ -7,6 +7,7 @@ import {
 	deleteFarmMilestone,
 	getFarmById,
 	getFarms,
+	requestMilestoneFunding,
 	updateFarm,
 	uploadDocToFarm,
 } from "@/api";
@@ -15,6 +16,7 @@ import {
 	CreateInvestmentProjectPayload,
 	FarmPayload,
 	PaginatedFilter,
+	RequestMilestoneFundingPayload,
 	UploadFarmDocumentsPayload,
 } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -109,5 +111,17 @@ export const useCreateInvestmentProject = () => {
 			farmId: string;
 			payload: CreateInvestmentProjectPayload;
 		}) => createInvestmentProject(farmId, payload),
+	});
+};
+
+export const useRequestMilestoneFunding = () => {
+	return useMutation({
+		mutationFn: ({
+			farmId,
+			payload,
+		}: {
+			farmId: string;
+			payload: RequestMilestoneFundingPayload;
+		}) => requestMilestoneFunding(farmId, payload),
 	});
 };
