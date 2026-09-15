@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Sprout, X } from "lucide-react";
+import { X } from "lucide-react";
+import { LogoMark } from "@/components/site/logo";
 import { WaitlistForm } from "@/components/site/waitlist-form";
 
 const DELAY_MS = 5_000;
@@ -71,9 +72,7 @@ export function BetaPopup() {
               <X className="size-5" />
             </button>
 
-            <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-mint text-leaf">
-              <Sprout className="size-6" />
-            </span>
+            <LogoMark className="size-8 md:size-10" />
             <h2
               id="beta-popup-title"
               className="mt-4 text-2xl font-semibold leading-tight text-ink"
