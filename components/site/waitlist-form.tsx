@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/agri-button";
 import { cn } from "@/lib/utils";
 import { useCreateBetaSignup } from "@/mutation";
 
-type Role = "investor" | "operator";
+type Role = "investor" | "farm_owner";
 
 const roleLabels: Record<Role, string> = {
   investor: "I want to invest",
-  operator: "I run a farm",
+  farm_owner: "I run a farm",
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,7 +39,7 @@ export function WaitlistForm() {
     const firstName = firstPart.charAt(0).toUpperCase() + firstPart.slice(1);
 
     mutate(
-      { email: email.trim(), firstName },
+      { email: email.trim(), firstName, type: role },
       {
         onSuccess: () => {
           setSubmitted(true);
