@@ -124,7 +124,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "E:\\Dir\\DEV\\smile\\client",
+    "outputFileTracingRoot": "C:\\Users\\USER\\Documents\\Mayowa\\Dev\\Smile\\client",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -182,7 +182,7 @@
       "proxyPrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 3,
+      "cpus": 15,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,
@@ -314,11 +314,11 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "E:\\Dir\\DEV\\smile\\client"
+      "root": "C:\\Users\\USER\\Documents\\Mayowa\\Dev\\Smile\\client"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "E:\\Dir\\DEV\\smile\\client",
+  "appDir": "C:\\Users\\USER\\Documents\\Mayowa\\Dev\\Smile\\client",
   "relativeAppDir": "",
   "files": [
     ".next\\routes-manifest.json",
