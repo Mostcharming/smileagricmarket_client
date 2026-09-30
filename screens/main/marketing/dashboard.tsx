@@ -220,6 +220,15 @@ const MarketingDashboard = () => {
       ),
     },
     {
+      header: 'Type',
+      key: 'type',
+      render: (item) => (
+        <span className="capitalize text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
+          {item.type ? (item.type === 'farm_owner' ? 'Farm Owner' : item.type === 'investor' ? 'Investor' : item.type) : '—'}
+        </span>
+      ),
+    },
+    {
       header: '',
       key: 'actions',
       render: (item) => (

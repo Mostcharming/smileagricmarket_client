@@ -11,10 +11,13 @@ export interface MarketingLoginResponse {
     marketingAdmin: MarketingAdmin;
 }
 
+export type BetaSignupType = "investor" | "farm_owner";
+
 export interface BetaSignup {
     id: string;
     email: string;
     firstName: string;
+    type?: BetaSignupType | string;
     source: string;
     confirmationEmailSentAt: string | null;
     createdAt: string;
@@ -23,6 +26,7 @@ export interface BetaSignup {
 export interface BetaSignupPayload {
     email: string;
     firstName: string;
+    type?: BetaSignupType | string;
 }
 
 export interface BetaSignupsPagination {
