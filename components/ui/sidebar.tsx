@@ -142,7 +142,7 @@ const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
                   href="/admin/farms"
                   onClick={onClose}
                   className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
-                    isActive('/admin/farms') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
+                    isActive('/admin/farms') || (pathname.startsWith('/admin/farms') && !pathname.includes('/admin/milestones')) ? 'bg-gray-50 text-gray-900 font-medium' : 'text-gray-500 hover:bg-gray-50'
                   }`}
                 >
                   <span className="text-sm">Farms</span>

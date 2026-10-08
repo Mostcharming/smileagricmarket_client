@@ -6,7 +6,7 @@ import { useGetAdminFarms, useGetCategories } from '@/mutation';
 import type { FarmCategoryResponse, FarmResponse, SelectOptions } from '@/types';
 import { DEFAULT_PAGE_SIZE } from '@/constants';
 import { Column } from '@/components/ui/table';
-import { MoreIcon } from '@/components/icons';
+import { EyeIcon } from '@/components/icons';
 import { FarmStatusBadge, Pagination, SearchInput, Select, Table, Typography } from '@/components/ui';
 import { formatFarmCategory } from '@/utils';
 
@@ -117,9 +117,18 @@ const AdminFarmsDashboard = () => {
     {
       header: '',
       key: 'actions',
-      render: () => (
-        <button type="button" className="text-[#9CA3AF] transition-colors hover:text-[#6B7280]">
-          <MoreIcon size={20} />
+      render: (farm) => (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/admin/farms/${farm.id}`);
+          }}
+          className="text-[#9CA3AF] transition-colors hover:text-[#4E8931] p-1.5 rounded-lg hover:bg-gray-100 cursor-pointer"
+          title="View farm details"
+          aria-label="View farm details"
+        >
+          <EyeIcon size={20} color="currentColor" />
         </button>
       ),
     },

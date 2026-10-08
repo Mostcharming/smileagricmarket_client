@@ -14,7 +14,8 @@ interface AdminLayoutProps {
 
 const AdminLayout = ({ children, breadcrumbs = [] }: AdminLayoutProps) => {
   const pathname = usePathname();
-  const isFullWidthPage = pathname === '/admin/milestones' || pathname === '/admin/investments/templates';
+  const isFarmDetailPage = pathname.startsWith('/admin/farms/') && pathname !== '/admin/farms';
+  const isFullWidthPage = pathname === '/admin/milestones' || pathname === '/admin/investments/templates' || isFarmDetailPage;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
