@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
 import { toast } from "sonner";
@@ -39,6 +39,9 @@ const formatRisk = (risk: string) => {
 
 const FarmDetailPage = () => {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const fromSource = searchParams?.get("from");
+  const isTopupAction = searchParams?.get("action") === "topup";
   const farmId = params?.farmId as string | undefined;
 
   const { data: farmResponse, isLoading: isFarmDetailsLoading } = useGetWebInvestmentById(farmId);
@@ -116,7 +119,9 @@ const FarmDetailPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Investment state management
-  const [step, setStep] = useState<'details' | 'calculator' | 'review' | 'success'>('details');
+  const [step, setStep] = useState<'details' | 'calculator' | 'topup' | 'review' | 'success'>(
+    isTopupAction ? 'topup' : 'details'
+  );
   const [investAmount, setInvestAmount] = useState(0);
   const [selectedDuration, setSelectedDuration] = useState(0);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -124,8 +129,17 @@ const FarmDetailPage = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(true);
 
   const hasInvested = useMemo(() => {
-    return !!farm?.Investment?.amount || !!farm?.userInvestment?.amountInvested || hasSessionInvested;
-  }, [farm, hasSessionInvested]);
+    return (
+      fromSource === "portfolio" ||
+      !!farm?.Investment?.amount ||
+      !!farm?.userInvestment?.amountInvested ||
+      hasSessionInvested
+    );
+  }, [farm, hasSessionInvested, fromSource]);
+
+  const isFromPortfolio = fromSource === "portfolio" || hasInvested || step === 'topup';
+  const activeHeaderTab = isFromPortfolio ? "my-portfolio" : "invest";
+  const isTopupMode = step === 'topup' || (hasInvested && (step === 'review' || step === 'success'));
 
   // Review step states
   const [expandedSection, setExpandedSection] = useState<string | null>('keyTerms');
@@ -393,6 +407,43 @@ const FarmDetailPage = () => {
     return investmentHistory.reduce((sum, item) => sum + item.amount, 0);
   }, [investmentHistory]);
 
+  const existingInvestmentAmount = useMemo(() => {
+    const userInvest = farm?.userInvestment?.amountInvested;
+    if (userInvest && userInvest > 0) return userInvest;
+
+    const invAmount = farm?.Investment?.amount;
+    if (invAmount && invAmount > 0) return invAmount;
+
+    if (totalInvestedInHistory > 0) return totalInvestedInHistory;
+
+    return 105000;
+  }, [farm, totalInvestedInHistory]);
+
+  const topupPresets = useMemo(() => {
+    return [50000, 100000, 500000, 1000000];
+  }, []);
+
+  const farmThumbnail = useMemo(() => {
+    if (pictures.length > 0) return pictures[0].src;
+    const f = farm as any;
+    if (f?.image?.fileUrl) return getPreviewImageUrl(f.image.fileUrl);
+    if (f?.images?.[0]?.fileUrl) return getPreviewImageUrl(f.images[0].fileUrl);
+    return "";
+  }, [pictures, farm]);
+
+  const farmStatusBadge = useMemo(() => {
+    if (farm?.portfolioStatus === "completed" || (details && details.progress >= 100)) {
+      return {
+        label: "Completed",
+        className: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
+      };
+    }
+    return {
+      label: "Funding in Progress",
+      className: "bg-[#FEF3EB] text-[#D97706] border-[#FED7AA]/60",
+    };
+  }, [farm, details]);
+
   const timelineStatus = useMemo(() => {
     if (milestones.length === 0) return "Not Started";
     const completedCount = milestones.filter(m => m.status === "Completed").length;
@@ -425,7 +476,11 @@ const FarmDetailPage = () => {
   };
 
   const handleInvest = () => {
-    setStep('calculator');
+    if (hasInvested) {
+      setStep('topup');
+    } else {
+      setStep('calculator');
+    }
   };
 
   const handleProceedInvest = () => {
@@ -486,7 +541,7 @@ const FarmDetailPage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#F4F7F6]">
-        <MainHeader activeTab="invest" />
+        <MainHeader activeTab={activeHeaderTab} />
         <main className="mx-auto w-full max-w-7xl px-4 pb-24 pt-6 sm:px-6 lg:px-8">
           <div className="animate-pulse">
             <div className="mb-6 h-4 w-32 rounded bg-[#DCE7D1]" />
@@ -519,7 +574,7 @@ const FarmDetailPage = () => {
   if (!farm || !details) {
     return (
       <div className="min-h-screen bg-[#F4F7F6]">
-        <MainHeader activeTab="invest" />
+        <MainHeader activeTab={activeHeaderTab} />
         <main className="mx-auto w-full max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm">
             <InfoIcon className="h-8 w-8 text-[#5A8D31]" />
@@ -536,9 +591,335 @@ const FarmDetailPage = () => {
 
   return (
     <div className='min-h-screen bg-[#F4F7F6]'>
-      <MainHeader activeTab="invest" />
+      <MainHeader activeTab={activeHeaderTab} />
 
       <main className="mx-auto w-full max-w-7xl px-4 pb-24 pt-6 sm:px-6 lg:px-8">
+        {step === 'topup' && (
+          // Invest Topup Step UI matching the attached design
+          <div>
+            {/* Breadcrumbs */}
+            <div className="mb-6 text-[12px] text-[#8B988A] flex items-center gap-1.5 font-medium">
+              <Link href="/my-portfolio" className="hover:text-[#4B5548] transition-colors">
+                My Portfolio
+              </Link>
+              <span className="text-[#C4CFC3]">/</span>
+              <button
+                type="button"
+                onClick={() => setStep('details')}
+                className="hover:text-[#4B5548] cursor-pointer"
+              >
+                {farm.name}
+              </button>
+              <span className="text-[#C4CFC3]">/</span>
+              <span className="text-[#556358] font-semibold">Topup Investment</span>
+            </div>
+
+            {/* Section Header */}
+            <div className="mb-8">
+              <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#008751] mb-2 flex items-center gap-1.5">
+                <span>TOPUP INVESTMENT</span>
+              </div>
+              <h1 className="text-[30px] sm:text-[40px] font-bold leading-[1.15] text-[#111827] tracking-tight">
+                How much would you like to reinvest?
+              </h1>
+            </div>
+
+            {/* Farm Summary Banner Card */}
+            <div className="rounded-[20px] sm:rounded-[24px] border border-[#E5E7EB] bg-white p-4 sm:p-5 flex items-center justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)] mb-8">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl overflow-hidden shrink-0 bg-[#F4F7EE] border border-[#E5E7EB] relative">
+                  {farmThumbnail ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={farmThumbnail}
+                      alt={farm.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <FarmFieldArt />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <h2 className="text-base sm:text-lg font-bold text-[#111827] truncate">
+                    {farm.name}
+                  </h2>
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-[#6B7280] mt-1 font-medium">
+                    <LocationIcon size={16} color="#6B7280" />
+                    <span className="truncate">{farm.location || "Nigeria"}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="shrink-0 pl-3">
+                <span className={`inline-flex items-center rounded-full px-4 py-1.5 text-xs sm:text-[13px] font-semibold border ${farmStatusBadge.className}`}>
+                  {farmStatusBadge.label}
+                </span>
+              </div>
+            </div>
+
+            {/* Main Topup Card */}
+            <div className="mx-auto rounded-[28px] border border-[#E2E8E0] bg-white text-[#111827] shadow-[0_4px_25px_rgba(0,0,0,0.03)] overflow-hidden">
+              <div className="grid md:grid-cols-2">
+                {/* Left Column - Inputs */}
+                <div className="p-6 sm:p-8 border-b md:border-b-0 md:border-r border-[#EEF2EC] flex flex-col justify-between">
+                  <div className="space-y-6">
+                    {/* Additional Investment Amount */}
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-[0.14em] text-[#718073] mb-2.5">
+                        ADDITIONAL INVESTMENT AMOUNT
+                      </label>
+                      <div className="bg-[#F5F7F5] border border-transparent focus-within:border-[#008751] focus-within:bg-white rounded-xl px-4 py-3 flex items-center gap-2 transition-all">
+                        <span className="text-lg sm:text-xl font-medium text-[#718073] select-none">₦</span>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={investAmount === 0 ? "" : investAmount}
+                          placeholder={String(details?.minInvestVal || 250000)}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/[^0-9]/g, "");
+                            setInvestAmount(val ? parseInt(val, 10) : 0);
+                          }}
+                          className="w-full bg-transparent text-xl sm:text-2xl font-bold text-[#111827] outline-none placeholder:text-[#9AA59C]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Slider */}
+                    <div className="relative pt-1">
+                      <input
+                        type="range"
+                        min={minSlider}
+                        max={maxSlider}
+                        step={stepSlider}
+                        value={currentAmount}
+                        onChange={(e) => setInvestAmount(Number(e.target.value))}
+                        className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-[#DDE7DD] focus:outline-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[2.5px] [&::-webkit-slider-thumb]:border-[#008751] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-[2.5px] [&::-moz-range-thumb]:border-[#008751] [&::-moz-range-thumb]:shadow-md"
+                        style={{
+                          background: `linear-gradient(to right, #008751 0%, #008751 ${sliderPercent}%, #DDE7DD ${sliderPercent}%, #DDE7DD 100%)`
+                        }}
+                      />
+                      <div className="flex justify-between text-[11px] text-[#8B988A] mt-2 font-semibold select-none">
+                        <span>{formatCompactNaira(minSlider)}</span>
+                        <span className="translate-x-[-20%]">{formatCompactNaira(Math.round((minSlider + maxSlider) / 2))}</span>
+                        <span>{formatCompactNaira(maxSlider)}</span>
+                      </div>
+                    </div>
+
+                    {/* Presets */}
+                    <div className="flex flex-wrap gap-2 sm:gap-2.5">
+                      {topupPresets.map((preset) => (
+                        <button
+                          key={preset}
+                          type="button"
+                          onClick={() => setInvestAmount(preset)}
+                          className={clsx(
+                            "flex-1 min-w-[70px] sm:min-w-[80px] rounded-full py-2.5 px-1.5 sm:px-2 text-xs font-semibold text-center transition-all cursor-pointer border",
+                            currentAmount === preset
+                              ? "bg-[#008751] border-[#008751] text-white shadow-sm"
+                              : "bg-[#EDF2ED] border-transparent text-[#3A483D] hover:bg-[#E2EAE2]"
+                          )}
+                        >
+                          {formatCompactNaira(preset)}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Duration */}
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-[0.14em] text-[#718073] mb-2.5">
+                        DURATION
+                      </label>
+                      <div className="bg-[#EDF2ED] rounded-full p-1.5 inline-flex items-center gap-1.5 w-full sm:w-auto">
+                        {durations.map((d) => (
+                          <button
+                            key={d}
+                            type="button"
+                            onClick={() => setSelectedDuration(d)}
+                            className={clsx(
+                              "rounded-full px-6 py-2 text-xs font-bold transition-all cursor-pointer",
+                              currentDuration === d
+                                ? "bg-[#008751] text-white shadow-sm"
+                                : "bg-transparent text-[#556358] hover:text-[#111827]"
+                            )}
+                          >
+                            {d} mo
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 space-y-4">
+                    {/* Terms Checkbox */}
+                    <div
+                      onClick={() => setAgreedToTerms(!agreedToTerms)}
+                      className="bg-[#EEF7EE] border border-[#BCE4C4] rounded-2xl p-4 sm:p-4.5 flex items-start gap-3 cursor-pointer transition-all hover:border-[#96D8A2]"
+                    >
+                      <div
+                        className={clsx(
+                          "mt-0.5 h-4.5 w-4.5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors border",
+                          agreedToTerms
+                            ? "bg-[#008751] border-[#008751] text-white"
+                            : "bg-white border-[#A6CDB0]"
+                        )}
+                      >
+                        {agreedToTerms && (
+                          <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-xs sm:text-[13px] text-[#2C382F] leading-snug select-none">
+                        I have read the{" "}
+                        <Link
+                          href="/legal/terms-and-conditions"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="font-bold text-[#008751] underline hover:text-[#00663d]"
+                        >
+                          terms & conditions
+                        </Link>{" "}
+                        applied to this investment & agree to it
+                      </span>
+                    </div>
+
+                    {/* Proceed Button */}
+                    <button
+                      type="button"
+                      onClick={handleProceedInvest}
+                      className="w-full rounded-2xl bg-[#008751] hover:bg-[#007446] py-3.5 sm:py-4 px-6 text-sm font-bold text-white shadow-[0_8px_24px_rgba(0,135,81,0.25)] transition-all cursor-pointer flex items-center justify-center gap-2 group"
+                    >
+                      Proceed to Invest
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="transform transition-transform group-hover:translate-x-1"
+                      >
+                        <path
+                          d="M8.00008 12.6666L12.6667 7.99998L8.00008 3.33331"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M3.33342 8H12.6667"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right Column - Returns Details */}
+                <div className="p-6 sm:p-8 flex flex-col justify-between gap-6">
+                  {/* Top Formula Row */}
+                  <div className="flex items-center justify-between gap-2 sm:gap-4 pb-6 border-b border-[#EEF2EC]">
+                    {/* Current Investment */}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] text-[#9CA3AF] mb-1 truncate">
+                        CURRENT INVESTMENT
+                      </div>
+                      <div className="text-[17px] sm:text-[20px] font-bold text-[#111827] tracking-tight truncate">
+                        ₦{formatNumberWithCommas(existingInvestmentAmount)}
+                      </div>
+                    </div>
+
+                    <span className="text-lg font-bold text-[#9CA3AF] shrink-0 select-none pb-1">+</span>
+
+                    {/* Additional Amount */}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] text-[#9CA3AF] mb-1 truncate">
+                        ADDITIONAL AMOUNT
+                      </div>
+                      <div className="text-[17px] sm:text-[20px] font-bold text-[#008751] tracking-tight truncate">
+                        ₦{formatNumberWithCommas(currentAmount)}
+                      </div>
+                    </div>
+
+                    <span className="text-lg font-bold text-[#9CA3AF] shrink-0 select-none pb-1">=</span>
+
+                    {/* Total Invested */}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] text-[#9CA3AF] mb-1 truncate">
+                        TOTAL INVESTED
+                      </div>
+                      <div className="text-[17px] sm:text-[20px] font-bold text-[#111827] tracking-tight truncate">
+                        ₦{formatNumberWithCommas(existingInvestmentAmount + currentAmount)}
+                      </div>
+                      <div className="text-[10px] sm:text-[11px] font-medium text-[#6B7280] mt-0.5 whitespace-nowrap truncate">
+                        +₦{formatNumberWithCommas(expectedProfit)} profit in {currentDuration} months
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 2x2 Info Grid */}
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    {/* Expected Profit */}
+                    <div className="bg-[#EEF9F1] border border-[#BCE4C4] rounded-[20px] p-4 sm:p-5 flex flex-col justify-between min-h-[96px]">
+                      <div className="flex items-center gap-1.5 text-[#008751]">
+                        <TrendingUpIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#008751]">
+                          EXPECTED PROFIT
+                        </span>
+                      </div>
+                      <div className="text-[18px] sm:text-[22px] font-bold text-[#111827] mt-2 tracking-tight">
+                        ₦{formatNumberWithCommas(expectedProfit)}
+                      </div>
+                    </div>
+
+                    {/* ROI */}
+                    <div className="bg-[#EDF4F7] rounded-[20px] p-4 sm:p-5 flex flex-col justify-between min-h-[96px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <PercentIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
+                          % ROI
+                        </span>
+                      </div>
+                      <div className="text-[18px] sm:text-[22px] font-bold text-[#111827] mt-2 tracking-tight">
+                        {currentRoi.toFixed(1)}%
+                      </div>
+                    </div>
+
+                    {/* Principal */}
+                    <div className="bg-[#EDF4F7] rounded-[20px] p-4 sm:p-5 flex flex-col justify-between min-h-[96px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <WalletIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
+                          PRINCIPAL
+                        </span>
+                      </div>
+                      <div className="text-[18px] sm:text-[22px] font-bold text-[#111827] mt-2 tracking-tight">
+                        ₦{formatNumberWithCommas(currentAmount)}
+                      </div>
+                    </div>
+
+                    {/* Payout Date */}
+                    <div className="bg-[#EDF4F7] rounded-[20px] p-4 sm:p-5 flex flex-col justify-between min-h-[96px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <CalendarIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
+                          PAYOUT DATE
+                        </span>
+                      </div>
+                      <div className="text-[15px] sm:text-[18px] font-bold text-[#111827] mt-2 truncate tracking-tight">
+                        {payoutDateString}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {step === 'calculator' && (
           // Investment Calculator Step UI
           <div>
@@ -835,8 +1216,8 @@ const FarmDetailPage = () => {
           // Review Agreement Step UI
           <div>
             <div className="mb-6 text-[12px] text-[#9DA59A] flex items-center gap-1.5 font-medium">
-              <Link href="/invest" className="hover:text-[#697468] transition-colors">
-                Invest
+              <Link href={isTopupMode ? "/my-portfolio" : "/invest"} className="hover:text-[#697468] transition-colors">
+                {isTopupMode ? "My Portfolio" : "Invest"}
               </Link>
               <span className="text-[#B9C0B5] font-light">/</span>
               <button
@@ -849,10 +1230,10 @@ const FarmDetailPage = () => {
               <span className="text-[#B9C0B5] font-light">/</span>
               <button
                 type="button"
-                onClick={() => setStep('calculator')}
+                onClick={() => setStep(isTopupMode ? 'topup' : 'calculator')}
                 className="hover:text-[#697468] cursor-pointer font-medium transition-colors"
               >
-                Set Investment
+                {isTopupMode ? "Topup Investment" : "Set Investment"}
               </button>
               <span className="text-[#B9C0B5] font-light">/</span>
               <span className="font-semibold text-[#1C241D]">Review Investment</span>
@@ -1505,8 +1886,8 @@ const FarmDetailPage = () => {
           // Main Detail Page UI
           <div>
             <div className="mb-6 text-[12px] text-[#9DA59A]">
-              <Link href="/invest" className="hover:text-[#697468]">
-                Invest
+              <Link href={isFromPortfolio ? "/my-portfolio" : "/invest"} className="hover:text-[#697468]">
+                {isFromPortfolio ? "My Portfolio" : "Invest"}
               </Link>
               <span className="px-1.5">/</span>
               <span className="font-medium text-[#7A846F]">{farm.name}</span>
@@ -1974,7 +2355,7 @@ const FarmDetailPage = () => {
                         onClick={handleInvest}
                         className="mt-5 w-full rounded-[6px] bg-[#67A73B] py-3 text-[14px] font-semibold text-white shadow-[0_10px_18px_rgba(103,167,59,0.22)] cursor-pointer hover:bg-[#589230] transition-colors uppercase"
                       >
-                        {hasInvested ? "ADD ANOTHER INVESTMENT" : "INVEST NOW"}
+                        {hasInvested ? "TOPUP YOUR INVESTMENT" : "INVEST NOW"}
                       </button>
                     )}
 
@@ -2008,7 +2389,7 @@ const FarmDetailPage = () => {
         )}
       </main>
 
-      {step === 'details' && !hasInvested && details.progress < 100 && (
+      {step === 'details' && details.progress < 100 && (
         <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[#E2EAD8] bg-white shadow-[0_-10px_30px_rgba(0,0,0,0.04)]">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-8 px-6 py-5 sm:px-8 lg:px-12">
             {/* Funding Goal */}
@@ -2039,7 +2420,7 @@ const FarmDetailPage = () => {
               onClick={handleInvest}
               className="rounded-[6px] bg-[#67A73B] px-5 py-3 text-[14px] font-semibold text-white shadow-[0_10px_18px_rgba(103,167,59,0.22)] cursor-pointer hover:bg-[#589230] transition-colors uppercase"
             >
-              {hasInvested ? "ADD ANOTHER INVESTMENT" : "INVEST NOW"}
+              {hasInvested ? "TOPUP YOUR INVESTMENT" : "INVEST NOW"}
             </button>
           </div>
         </div>
