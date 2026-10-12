@@ -231,7 +231,7 @@ export default function MyPortfolio() {
             {filteredInvestments.map((item) => (
               <Link
                 key={item.id}
-                href={`/invest/${item.id}`}
+                href={`/invest/${item.id}?from=portfolio`}
                 className="group flex flex-col sm:flex-row bg-white border border-[#E5E7EB] rounded-[20px] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.01)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
               >
                 {/* Image Section */}

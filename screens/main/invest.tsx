@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
 import clsx from "clsx";
 import { EyeIcon, FilterIcon, GridIcon, ListIcon, SearchIcon } from "@/components/icons";
+import { ArrowRight } from "lucide-react";
 import { MainHeader, Select } from "@/components/ui";
 import { useGetWebInvestments } from "@/mutation/investments.mutation";
 import { 
@@ -148,7 +149,7 @@ const FieldCard = ({ farm }: { farm: MappedInvestment }) => {
 
             <div className="inline-flex items-center gap-2 rounded-full bg-[#1F2E16] px-4 py-2 text-sm font-semibold text-white shadow-[0_6px_14px_rgba(31,46,22,0.18)] transition hover:bg-[#2A3D1D]">
               View details
-              <span aria-hidden="true">→</span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
             </div>
           </div>
 
@@ -227,7 +228,7 @@ const FieldRow = ({ farm }: { farm: MappedInvestment }) => {
               </span>
               <div className="inline-flex items-center whitespace-nowrap gap-2 rounded-full bg-[#1F2E16] px-4 py-2 text-sm font-semibold text-white shadow-[0_6px_14px_rgba(31,46,22,0.18)] transition hover:bg-[#2A3D1D]">
                 View details
-                <span aria-hidden="true">→</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
               </div>
             </div>
           </div>

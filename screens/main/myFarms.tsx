@@ -10,14 +10,14 @@ import { getPreviewImageUrl } from "@/utils/image";
 
 const Viewer = dynamic(() => import("react-viewer"), { ssr: false });
 import { createPortal } from "react-dom";
-import { AddIcon, CheckIcon, CloseIcon, DocsIcon, EqualIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, ShieldIcon, TickIcon, UploadIcon, ClockIcon, WalletIcon, LayersIcon, ChevronIcon, InfoIcon, CalendarIcon, LocationIcon, TrendingUpIcon, PercentIcon, DownloadIcon } from "@/components/icons";
+import { AddIcon, CheckIcon, CloseIcon, DocsIcon, EqualIcon, FarmIcon, FilterIcon, MoreIcon, PhotoIcon, SearchIcon, ShieldIcon, TickIcon, UploadIcon, ClockIcon, WalletIcon, LayersIcon, ChevronIcon, InfoIcon, CalendarIcon, LocationIcon, TrendingUpIcon, PercentIcon, DownloadIcon, DeleteIcon } from "@/components/icons";
 import { Modal } from "@/components/modal";
 import KycModal from "@/components/modal/kycModal";
 import { Button, Input, MainHeader, Select, Table, Typography } from "@/components/ui";
 import { Column } from "@/components/ui/table";
 import { DEFAULT_PAGE_SIZE } from "@/constants";
 import { useGetFarmCategories, useGetWebMilestonesByCategory, useGetWebInvestmentTemplate } from "@/mutation/dashboard.mutation";
-import { useAddMilestonesToFarm, useCreateFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById, useCreateInvestmentProject, useRequestMilestoneFunding } from "@/mutation/farms.mutation";
+import { useAddMilestonesToFarm, useCreateFarm, useDeleteFarm, useGetFarms, useUploadDocToFarm, useUpdateFarm, useGetFarmById, useCreateInvestmentProject, useRequestMilestoneFunding } from "@/mutation/farms.mutation";
 import { useGetKycStatus, useSubmitKyc } from "@/mutation";
 import { ApiResponse, KycResponse, MilestoneResponse, SelectOptions, WebProfileCompletionStatusResponse } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -142,7 +142,15 @@ const getInvestmentDetails = (farm: any) => {
   };
 };
 
-const FarmActionCell = ({ onViewDetails }: { farm: any; onViewDetails: () => void }) => {
+const FarmActionCell = ({
+  farm,
+  onViewDetails,
+  onDelete,
+}: {
+  farm: any;
+  onViewDetails: () => void;
+  onDelete: () => void;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -223,6 +231,18 @@ const FarmActionCell = ({ onViewDetails }: { farm: any; onViewDetails: () => voi
             className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors font-medium cursor-pointer block whitespace-nowrap"
           >
             View Details
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen(false);
+              onDelete();
+            }}
+            className="w-full text-left px-4 py-2.5 text-sm text-[#DC2626] hover:bg-red-50 active:bg-red-100 transition-colors font-medium cursor-pointer flex items-center gap-2 whitespace-nowrap border-t border-gray-100"
+          >
+            <DeleteIcon size={16} color="#DC2626" />
+            <span>Delete</span>
           </button>
         </div>,
         portalContainer
@@ -799,7 +819,7 @@ const FarmDetailsView = ({
 
         apiProjects.push({
           id: inv.id,
-          name: inv.name || inv.title || inv.investmentTemplate?.name || `Investment Project`,
+          name: inv.name || inv.title || inv.investmentTemplate?.name || `Farm Project`,
           categoryName: inv.farmCategory?.name || farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || inv.categoryName || "",
           status: mappedStatus,
           dates: dynamicDates,
@@ -835,7 +855,7 @@ const FarmDetailsView = ({
 
       apiProjects.push({
         id: farm.id + "-p1",
-        name: farm.Investment?.name || `Investment Project 1 - ${farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || ''}`,
+        name: farm.Investment?.name || `Farm Project 1 - ${farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || ''}`,
         categoryName: farm.Category?.name || farm.InvestmentProjects?.[0]?.Category?.name || farm.investmentProjects?.[0]?.Category?.name || "",
         status: mappedStatus,
         dates: dynamicDates,
@@ -988,8 +1008,8 @@ const FarmDetailsView = ({
               const status = String(farm.verificationStatus || farm.status || "").toLowerCase().trim();
               if (status === "verified" || status === "approved") {
                 return (
-                  <span className="inline-flex items-center rounded-full bg-[#ECFDF5] px-2.5 py-1 text-xs font-semibold text-[#047857] gap-1 shrink-0">
-                    <svg className="w-3.5 h-3.5 text-[#047857]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="inline-flex items-center rounded-full bg-[#D9F8DC] px-2.5 py-0.5 text-xs font-semibold text-[#192218] gap-1 shrink-0">
+                    <svg className="w-3.5 h-3.5 text-[#192218]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Verified
@@ -998,7 +1018,7 @@ const FarmDetailsView = ({
               }
               if (status === "rejected") {
                 return (
-                  <span className="inline-flex items-center rounded-full bg-[#FEF2F2] px-2.5 py-1 text-xs font-semibold text-[#DC2626] gap-1 shrink-0">
+                  <span className="inline-flex items-center rounded-full bg-[#FEF2F2] px-2.5 py-0.5 text-xs font-semibold text-[#DC2626] gap-1 shrink-0">
                     <svg className="w-3.5 h-3.5 text-[#DC2626]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <circle cx="12" cy="12" r="9" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
@@ -1008,7 +1028,7 @@ const FarmDetailsView = ({
                 );
               }
               return (
-                <span className="inline-flex items-center rounded-full bg-[#F3F4F6] px-2.5 py-1 text-xs font-semibold text-[#4B5563] gap-1 shrink-0">
+                <span className="inline-flex items-center rounded-full bg-[#F3F4F6] px-2.5 py-0.5 text-xs font-semibold text-[#4B5563] gap-1 shrink-0">
                   <svg className="w-3.5 h-3.5 text-[#4B5563]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <circle cx="12" cy="12" r="9" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3" />
@@ -1018,25 +1038,30 @@ const FarmDetailsView = ({
               );
             })()}
           </div>
-          <div className="flex items-center gap-2 text-[#5E6771] mt-2 text-sm">
-            <LocationIcon size={16} />
+          <div className="flex items-center gap-1.5 text-[#5E6771] mt-2 text-sm">
+            <LocationIcon size={16} color="#5E6771" />
             <span>{farm.location || "Location not provided"}</span>
           </div>
         </div>
-        <div>
+        <div className="flex flex-col items-start md:items-center">
           <button
             type="button"
             onClick={onCreateProject}
             disabled={isDisabled}
-            className={`inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors shadow-sm ${
+            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors ${
               isDisabled
-                ? "bg-[#E5E7EB] text-[#9CA3AF] cursor-not-allowed"
-                : "bg-[#4E8A35] hover:bg-[#3D6E29] text-white cursor-pointer"
+                ? "bg-[#EEF7EB] text-[#76BD5F] cursor-not-allowed"
+                : "bg-[#4E8A35] hover:bg-[#3D6E29] text-white cursor-pointer shadow-sm"
             }`}
           >
-            <AddIcon color={isDisabled ? "#9CA3AF" : "#FFFFFF"} size={16} />
-            <span>Create Investment Project</span>
+            <AddIcon color={isDisabled ? "#76BD5F" : "#FFFFFF"} size={16} />
+            <span>Create Farm Project</span>
           </button>
+          {isDisabled && (
+            <span className="text-[10px] font-bold text-[#5E6771] tracking-[0.06em] uppercase mt-2 text-center w-full md:w-auto">
+              ACTIVE PROJECT IN PROGRESS
+            </span>
+          )}
         </div>
       </div>
 
@@ -1067,7 +1092,7 @@ const FarmDetailsView = ({
           </div>
           <div className="mt-4">
             <span className="text-2xl font-bold text-[#1F2937]">{stats.currentCycle}</span>
-            <p className="text-xs font-medium text-[#5E6771] mt-1">Active Investment Project</p>
+            <p className="text-xs font-medium text-[#5E6771] mt-1">Active Farm Project</p>
           </div>
         </div>
 
@@ -1114,13 +1139,13 @@ const FarmDetailsView = ({
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E2F3DA] text-[#4E8A35] shrink-0">
               <FarmIcon size={18} />
             </div>
-            <span className="text-lg font-bold text-[#1F2937]">No Active Investment Project</span>
+            <span className="text-lg font-bold text-[#1F2937]">No Active Farm Project</span>
           </div>
 
           <div className="bg-white border border-[#E9EAEB] rounded-2xl p-6 shadow-xs flex flex-col min-h-[92px]">
             <h3 className="text-lg font-bold text-[#1F2937]">Investment History</h3>
             <div className="flex flex-1 text-sm text-[#7A8077] py-4">
-              No investment projects created yet
+              No farm projects created yet
             </div>
           </div>
         </div>
@@ -1548,10 +1573,10 @@ const CreateProjectFlow = ({
           </div>
 
           <h1 className="text-xl sm:text-2xl font-bold text-[#192218] leading-tight mb-2.5 tracking-tight">
-            Investment Project Creation Successful
+            Farm Project Creation Successful
           </h1>
           <p className="text-xs sm:text-sm text-[#737E71] font-mono max-w-md mx-auto mb-7 tracking-tight">
-            Your investment project for <span className="font-semibold text-[#192218]">{farm.name}</span> has been created successfully and is now open to investors.
+            Your farm project for <span className="font-semibold text-[#192218]">{farm.name}</span> has been created successfully and is now open to investors.
           </p>
 
           {/* Info Outer Box */}
@@ -1615,7 +1640,7 @@ const CreateProjectFlow = ({
                   <svg className="h-3.5 w-3.5 text-[#8C9788]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
                   </svg>
-                  <span>INVESTMENT START DATE</span>
+                  <span>FUNDING START DATE</span>
                 </div>
                 <span className="text-xs sm:text-sm font-bold text-[#192218]">
                   {startDateLabel}
@@ -1628,7 +1653,7 @@ const CreateProjectFlow = ({
                   <svg className="h-3.5 w-3.5 text-[#8C9788]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
                   </svg>
-                  <span>INVESTMENT END DATE</span>
+                  <span>FUNDING END DATE</span>
                 </div>
                 <span className="text-xs sm:text-sm font-bold text-[#192218]">
                   {endDateLabel}
@@ -1677,7 +1702,7 @@ const CreateProjectFlow = ({
       </div>
 
       <div className="mb-8">
-        <h1 className="text-[32px] font-bold text-[#1F2937] leading-tight">Create Investment Project</h1>
+        <h1 className="text-[32px] font-bold text-[#1F2937] leading-tight">Create Farm Project</h1>
         <p className="text-sm text-[#5E6771] mt-1.5">Create an investment cycle to get an investment on your farm project</p>
       </div>
 
@@ -1793,7 +1818,7 @@ const CreateProjectFlow = ({
                                   <div className="flex flex-col gap-1.5 rounded-[12px] bg-[#F7FAF5] px-4 py-3">
                                     <div className="flex items-center gap-1.5">
                                       <CalendarIcon size={14} color="#80916E" />
-                                      <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Investment Start Date</span>
+                                      <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Funding Start Date</span>
                                     </div>
                                     <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{overviewDetails.startDate}</span>
                                   </div>
@@ -1801,14 +1826,14 @@ const CreateProjectFlow = ({
                                   <div className="flex flex-col gap-1.5 rounded-[12px] bg-[#F7FAF5] px-4 py-3">
                                     <div className="flex items-center gap-1.5">
                                       <CalendarIcon size={14} color="#80916E" />
-                                      <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Investment End Date</span>
+                                      <span className="text-[10px] font-bold text-[#8A9587] uppercase tracking-[0.08em]">Funding End Date</span>
                                     </div>
                                     <span className="text-sm font-semibold text-[#1F2937] mt-0.5">{overviewDetails.endDate}</span>
                                   </div>
                                 </div>
 
                                 <div className="mt-4 rounded-[12px] bg-[#D9F8DC] p-4 text-xs font-semibold leading-relaxed text-[#013611]">
-                                  Note: <strong className="font-bold">Funding goal</strong> for this farm category must be reached on or before the <strong className="font-bold">Investment End Date.</strong> If the funding goal is not reached by this date, <strong className="font-bold">investments will be reimbursed back to the investors and the farm funding will be closed.</strong>
+                                  Note: <strong className="font-bold">Funding goal</strong> for this farm category must be reached on or before the <strong className="font-bold">Funding End Date.</strong> If the funding goal is not reached by this date, <strong className="font-bold">investments will be reimbursed back to the investors and the farm funding will be closed.</strong>
                                 </div>
                               </div>
                             </div>
@@ -1945,7 +1970,7 @@ const CreateProjectFlow = ({
                       onClick={onSubmit}
                       isLoading={isSubmitting}
                     >
-                      CREATE INVESTMENT PROJECT
+                      CREATE FARM PROJECT
                     </Button>
                   </div>
                 </div>
@@ -2127,7 +2152,7 @@ const MyFarms = () => {
   const [search, setSearch] = useState("");
   const [selectedFarmForDetails, setSelectedFarmForDetails] = useState<any | null>(null);
 
-  // Create Investment Project sub-flow states
+  // Create Farm Project sub-flow states
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [projectStep, setProjectStep] = useState<1 | 2 | 'success'>(1);
   const [projectCategory, setProjectCategory] = useState("");
@@ -2169,9 +2194,24 @@ const MyFarms = () => {
 
   const createFarmMutation = useCreateFarm();
   const updateFarmMutation = useUpdateFarm();
+  const deleteFarmMutation = useDeleteFarm();
   const addMilestonesMutation = useAddMilestonesToFarm();
   const uploadDocumentsMutation = useUploadDocToFarm();
   const createInvestmentProjectMutation = useCreateInvestmentProject();
+  const [farmToDelete, setFarmToDelete] = useState<any | null>(null);
+
+  const handleDeleteFarm = async () => {
+    if (!farmToDelete?.id) return;
+    try {
+      await deleteFarmMutation.mutateAsync(farmToDelete.id);
+      toast.success("Farm deleted successfully");
+      await queryClient.invalidateQueries({ queryKey: ["farms"] });
+      setFarmToDelete(null);
+    } catch (error: any) {
+      const message = error?.response?.data?.message || error?.message || "Failed to delete farm";
+      toast.error(message);
+    }
+  };
   const { data: farmDetailsResponse } = useGetFarmById(selectedFarmForDetails?.id);
   const selectedFarmDetails = farmDetailsResponse?.data || selectedFarmForDetails;
 
@@ -2377,7 +2417,7 @@ const MyFarms = () => {
         },
       });
 
-      toast.success("Investment project created successfully!");
+      toast.success("Farm project created successfully!");
       queryClient.invalidateQueries({ queryKey: ["farms"] });
       queryClient.invalidateQueries({ queryKey: ["farm", farmId] });
 
@@ -2391,7 +2431,7 @@ const MyFarms = () => {
 
       const newProject = {
         id: `custom-p-${Date.now()}`,
-        name: `Investment Project ${totalCount + 1} - ${selectedCategoryName}`,
+        name: `Farm Project ${totalCount + 1} - ${selectedCategoryName}`,
         categoryName: selectedCategoryName,
         status: isVerified ? ("Funding Started" as const) : ("Not Started" as const),
         dates: `${new Date().toLocaleString('en-US', { month: 'short' })} ${new Date().getFullYear()} - ${new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).toLocaleString('en-US', { month: 'short' })} ${new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).getFullYear()}`,
@@ -2419,7 +2459,7 @@ const MyFarms = () => {
 
       setProjectStep('success');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to create investment project.");
+      toast.error(err?.response?.data?.message || "Failed to create farm project.");
     }
   };
 
@@ -2619,6 +2659,7 @@ const MyFarms = () => {
         <FarmActionCell
           farm={farm}
           onViewDetails={() => setSelectedFarmForDetails(farm)}
+          onDelete={() => setFarmToDelete(farm)}
         />
       ),
     },
@@ -3135,6 +3176,52 @@ const MyFarms = () => {
         isPending={isSubmitKycPending}
         onDone={handleKycDone}
       />
+
+      {/* Delete Farm Confirmation Modal */}
+      <Modal
+        isOpen={Boolean(farmToDelete)}
+        onClose={() => {
+          if (!deleteFarmMutation.isPending) {
+            setFarmToDelete(null);
+          }
+        }}
+        maxWidth="max-w-md"
+      >
+        <div className="p-6">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FEE2E2] text-[#DC2626] mx-auto mb-4">
+            <DeleteIcon size={24} color="#DC2626" />
+          </div>
+          <h3 className="text-lg font-bold text-[#1F2937] text-center mb-2">
+            Delete Farm
+          </h3>
+          <p className="text-sm text-[#5E6771] text-center mb-6">
+            Are you sure you want to delete{" "}
+            <span className="font-semibold text-[#1F2937]">
+              {farmToDelete?.name || "this farm"}
+            </span>
+            ? This action cannot be undone.
+          </p>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="light"
+              type="button"
+              className="flex-1 rounded-lg py-2.5 text-sm font-semibold border-[#D1D5DB] text-[#374151] hover:bg-gray-50"
+              onClick={() => setFarmToDelete(null)}
+              disabled={deleteFarmMutation.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              className="flex-1 rounded-lg py-2.5 text-sm font-semibold bg-[#B91C1C]! border-[#B91C1C]! text-white"
+              onClick={handleDeleteFarm}
+              isLoading={deleteFarmMutation.isPending}
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

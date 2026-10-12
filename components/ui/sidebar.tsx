@@ -14,7 +14,6 @@ interface SidebarProps {
 const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
   const pathname = usePathname() ?? '';
   const [usersOpen, setUsersOpen] = useState(pathname.includes('/admin/users') || pathname.includes('/admin/verification'));
-  const [farmsOpen, setFarmsOpen] = useState(pathname.includes('/admin/milestones') || pathname.includes('/admin/farms'));
   const [investmentsOpen, setInvestmentsOpen] = useState(pathname.includes('/admin/investments'));
   const totalUsers = useUserCount();
   const totalVerification = useVerificationCount();
@@ -109,47 +108,16 @@ const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
             )}
           </div>
 
-          <div>
-            <button
-              onClick={() => setFarmsOpen(!farmsOpen)}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors ${
-                pathname.includes('/admin/milestones') || pathname.includes('/admin/farms') ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-50'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <FarmIcon size={20} />
-                <span className="font-medium text-sm">Farms</span>
-              </div>
-              <ChevronIcon
-                size={16}
-                color={pathname.includes('/admin/milestones') || pathname.includes('/admin/farms') ? '#FFFFFF' : '#92998E'}
-                className={`transition-transform ${farmsOpen ? 'rotate-180' : ''}`}
-              />
-            </button>
-
-            {farmsOpen && (
-              <div className="mt-1 space-y-1">
-                <Link
-                  href="/admin/milestones"
-                  onClick={onClose}
-                  className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
-                    isActive('/admin/milestones') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
-                  }`}
-                >
-                  <span className="text-sm">Milestones</span>
-                </Link>
-                <Link
-                  href="/admin/farms"
-                  onClick={onClose}
-                  className={`flex items-center justify-between pl-7 px-3 py-2 rounded-lg transition-colors ${
-                    isActive('/admin/farms') ? 'bg-gray-50 text-gray-900' : 'text-gray-500 hover:bg-gray-50'
-                  }`}
-                >
-                  <span className="text-sm">Farms</span>
-                </Link>
-              </div>
-            )}
-          </div>
+          <Link
+            href="/admin/farms"
+            onClick={onClose}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+              pathname.startsWith('/admin/farms') ? 'bg-gray-50 text-gray-900 font-medium' : 'text-gray-500 hover:bg-gray-50'
+            }`}
+          >
+            <FarmIcon size={20} />
+            <span className="font-medium text-sm">Farms</span>
+          </Link>
 
           <div>
             <button

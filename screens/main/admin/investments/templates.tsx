@@ -429,11 +429,11 @@ const TemplatesDashboard = () => {
                         <span className="font-semibold text-gray-900 text-right">{formatDuration(currentTemplate.duration)}</span>
                       </div>
                       <div className="p-5 flex justify-between items-center">
-                        <span className="text-gray-400">Investment Start Date</span>
+                        <span className="text-gray-400">Funding Start Date</span>
                         <span className="font-semibold text-gray-900 text-right">{formatDateString(currentTemplate.startDate)}</span>
                       </div>
                       <div className="p-5 flex justify-between items-center">
-                        <span className="text-gray-400">Investment End Date</span>
+                        <span className="text-gray-400">Funding End Date</span>
                         <span className="font-semibold text-gray-900 text-right">{formatDateString(currentTemplate.endDate)}</span>
                       </div>
                       <div className="p-5 flex justify-between items-center">
@@ -567,7 +567,7 @@ const TemplatesDashboard = () => {
                         type="date"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
-                        label="Investment Start Date"
+                        label="Funding Start Date"
                         className="[&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                       />
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center pr-1">
@@ -586,7 +586,7 @@ const TemplatesDashboard = () => {
                         type="date"
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
-                        label="Investment End Date"
+                        label="Funding End Date"
                         className="[&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-3 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                       />
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none flex items-center pr-1">
@@ -767,11 +767,11 @@ const TemplatesDashboard = () => {
                     <span className="font-semibold text-gray-900">{formatDuration(duration)}</span>
                   </div>
                   <div className="p-5 flex justify-between items-center">
-                    <span className="text-gray-400">Investment Start Date</span>
+                    <span className="text-gray-400">Funding Start Date</span>
                     <span className="font-semibold text-gray-900">{formatDateString(startDate)}</span>
                   </div>
                   <div className="p-5 flex justify-between items-center">
-                    <span className="text-gray-400">Investment End Date</span>
+                    <span className="text-gray-400">Funding End Date</span>
                     <span className="font-semibold text-gray-900">{formatDateString(endDate)}</span>
                   </div>
                   <div className="p-5 flex justify-between items-center">

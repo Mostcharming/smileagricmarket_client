@@ -408,7 +408,7 @@ export const legalPolicies: LegalPolicy[] = [
     effectiveDate: "July 9, 2026",
     lastUpdated: "July 9, 2026",
     html: `<p>This Seller Policy ("Policy") governs the participation of all sellers on <strong>Smile Agri-Market Technologies Ltd</strong> ("Smile Agri-Market," "Company," "we," "our," or "us"), including through <a href="https://smileagrimarket.com/" target="_blank" rel="noopener noreferrer"><strong>https://smileagrimarket.com</strong></a> and our mobile applications (collectively, the "Platform").</p>
-<p>By registering as a seller, listing products, or offering services on the Platform, you agree to comply with this Policy, our Terms & Conditions, Privacy Policy, and all applicable laws.</p>
+<p>By registering as a seller, listing products, or offering services on the Platform, you agree to comply with this Policy, our <a href="/legal/terms-and-conditions">Terms & Conditions</a>, <a href="/legal/privacy-policy">Privacy Policy</a>, and all applicable laws.</p>
 <h2>1. Purpose</h2>
 <p>Smile Agri-Market is committed to building a trusted, transparent, and reliable agricultural marketplace. This Policy establishes the standards all sellers must follow to protect buyers, promote fair trading, and maintain the integrity of the Platform.</p>
 <h2>2. Seller Eligibility</h2>
@@ -490,7 +490,7 @@ export const legalPolicies: LegalPolicy[] = [
 <ul><li>Food safety.</li><li>Consumer protection.</li><li>Agriculture.</li><li>Product labeling.</li><li>Environmental protection.</li><li>Taxation.</li><li>Employment.</li><li>Import and export controls, where applicable.</li></ul>
 <h2>20. Suspension and Termination</h2>
 <p>Smile Agri-Market may suspend or terminate seller accounts for reasons including:</p>
-<ul><li>Fraud.</li><li>Repeated customer complaints.</li><li>Failure to meet quality standards.</li><li>Sale of prohibited goods.</li><li>Repeated order cancellations.</li><li>Misrepresentation.</li><li>Failure to complete verification.</li><li>Violation of this Policy or our Terms & Conditions.</li></ul>
+<ul><li>Fraud.</li><li>Repeated customer complaints.</li><li>Failure to meet quality standards.</li><li>Sale of prohibited goods.</li><li>Repeated order cancellations.</li><li>Misrepresentation.</li><li>Failure to complete verification.</li><li>Violation of this Policy or our <a href="/legal/terms-and-conditions">Terms & Conditions</a>.</li></ul>
 <p>We may also remove listings or withhold payouts where reasonably necessary to investigate suspected misconduct.</p>
 <h2>21. Limitation of Liability</h2>
 <p>Sellers acknowledge that Smile Agri-Market provides a marketplace platform and does not guarantee sales volumes, buyer behavior, uninterrupted access to the Platform, or the performance of third-party service providers.</p>
@@ -511,7 +511,7 @@ export const legalPolicies: LegalPolicy[] = [
     effectiveDate: "July 9, 2026",
     lastUpdated: "July 9, 2026",
     html: `<p>This Buyer Policy ("Policy") governs all purchases made through <strong>Smile Agri-Market Technologies Ltd</strong> ("Smile Agri-Market," "we," "our," or "us") via <a href="https://smileagrimarket.com/" target="_blank" rel="noopener noreferrer"><strong>https://smileagrimarket.com</strong></a>, our mobile applications, and related services (collectively, the "Platform").</p>
-<p>By creating a buyer account, placing an order, or using the Platform to purchase products or services, you agree to comply with this Policy, our Terms & Conditions, Privacy Policy, Refund & Cancellation Policy, and all other applicable Platform policies.</p>
+<p>By creating a buyer account, placing an order, or using the Platform to purchase products or services, you agree to comply with this Policy, our <a href="/legal/terms-and-conditions">Terms & Conditions</a>, <a href="/legal/privacy-policy">Privacy Policy</a>, <a href="/legal/refund-policy">Refund & Cancellation Policy</a>, and all other applicable Platform policies.</p>
 <h2>1. Purpose</h2>
 <p>Smile Agri-Market is committed to providing a secure, transparent, and efficient agricultural marketplace. This Policy explains your rights and responsibilities as a buyer and outlines the standards that apply when purchasing products or services through the Platform.</p>
 <h2>2. Buyer Eligibility</h2>
@@ -616,7 +616,7 @@ export const legalPolicies: LegalPolicy[] = [
     lastUpdated: "July 9, 2026",
     html: `<p>This Acceptable Use Policy ("Policy") sets out the rules for using the services provided by <strong>Smile Agri-Market Technologies Ltd</strong> ("Smile Agri-Market," "Company," "we," "our," or "us") through <a href="https://smileagrimarket.com/" target="_blank" rel="noopener noreferrer"><strong>https://smileagrimarket.com</strong></a>, our mobile applications, APIs, and related services (collectively, the "Platform").</p>
 <p>This Policy applies to all users, including buyers, sellers, farmers, cooperatives, logistics providers, warehouses, consultants, financial partners, advertisers, visitors, and any other person or organization using the Platform.</p>
-<p>By accessing or using the Platform, you agree to comply with this Policy, our Terms & Conditions, Privacy Policy, Seller Policy, Buyer Policy, and all applicable laws.</p>
+<p>By accessing or using the Platform, you agree to comply with this Policy, our <a href="/legal/terms-and-conditions">Terms & Conditions</a>, <a href="/legal/privacy-policy">Privacy Policy</a>, <a href="/legal/seller-policy">Seller Policy</a>, <a href="/legal/buyer-policy">Buyer Policy</a>, and all applicable laws.</p>
 <h2>1. Purpose</h2>
 <p>Smile Agri-Market is committed to maintaining a safe, secure, transparent, and trustworthy digital marketplace for agriculture.</p>
 <p>This Policy explains acceptable and prohibited uses of the Platform and helps protect our users, business partners, and systems.</p>
@@ -811,7 +811,7 @@ export const legalPolicies: LegalPolicy[] = [
     effectiveDate: "July 9, 2026",
     lastUpdated: "July 9, 2026",
     html: `<p>This Shipping & Delivery Policy ("Policy") explains how orders placed through <strong>Smile Agri-Market Technologies Ltd</strong> ("Smile Agri-Market," "we," "our," or "us") are processed, shipped, delivered, and managed. This Policy applies to purchases made through <a href="https://smileagrimarket.com/" target="_blank" rel="noopener noreferrer"><strong>https://smileagrimarket.com</strong></a>, our mobile applications, and related services (collectively, the "Platform").</p>
-<p>By placing an order through the Platform, you agree to this Policy, our Terms & Conditions, Buyer Policy, Seller Policy, and Refund & Cancellation Policy.</p>
+<p>By placing an order through the Platform, you agree to this Policy, our <a href="/legal/terms-and-conditions">Terms & Conditions</a>, <a href="/legal/buyer-policy">Buyer Policy</a>, <a href="/legal/seller-policy">Seller Policy</a>, and <a href="/legal/refund-policy">Refund & Cancellation Policy</a>.</p>
 <h2>1. Purpose</h2>
 <p>Smile Agri-Market connects buyers with farmers, suppliers, and other agricultural businesses. Depending on the product and location, deliveries may be arranged by:</p>
 <ul><li>The seller</li><li>Smile Agri-Market</li><li>Approved logistics partners</li><li>Independent courier or freight providers</li></ul>
@@ -924,7 +924,7 @@ export const legalPolicies: LegalPolicy[] = [
     effectiveDate: "July 9, 2026",
     lastUpdated: "July 9, 2026",
     html: `<p>This Returns Policy ("Policy") explains the conditions under which products purchased through <strong>Smile Agri-Market Technologies Ltd</strong> ("Smile Agri-Market," "we," "our," or "us") may be returned. It applies to purchases made through <a href="https://smileagrimarket.com/" target="_blank" rel="noopener noreferrer"><strong>https://smileagrimarket.com</strong></a>, our mobile applications, and related services (collectively, the "Platform").</p>
-<p>This Policy should be read together with our <strong>Terms & Conditions</strong>, <strong>Refund & Cancellation Policy</strong>, <strong>Buyer Policy</strong>, and <strong>Seller Policy</strong>.</p>
+<p>This Policy should be read together with our <a href="/legal/terms-and-conditions"><strong>Terms & Conditions</strong></a>, <a href="/legal/refund-policy"><strong>Refund & Cancellation Policy</strong></a>, <a href="/legal/buyer-policy"><strong>Buyer Policy</strong></a>, and <a href="/legal/seller-policy"><strong>Seller Policy</strong></a>.</p>
 <h2>1. Purpose</h2>
 <p>Smile Agri-Market is committed to providing a fair and transparent marketplace for buyers and sellers. This Policy establishes the procedures and conditions for returning eligible products while recognizing that many agricultural products are perishable and require special handling.</p>
 <h2>2. Scope</h2>

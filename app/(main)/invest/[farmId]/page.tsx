@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
 import { toast } from "sonner";
@@ -39,39 +39,39 @@ const formatRisk = (risk: string) => {
 
 const FarmDetailPage = () => {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const fromSource = searchParams?.get("from");
+  const isTopupAction = searchParams?.get("action") === "topup";
   const farmId = params?.farmId as string | undefined;
 
   const { data: farmResponse, isLoading: isFarmDetailsLoading } = useGetWebInvestmentById(farmId);
-  const hasInvestedInDb = !!farmResponse?.data?.Investment;
-  const { data: portfolioFarmResponse, isLoading: isPortfolioLoading } = useGetPortfolioFarmById(
-    farmId && hasInvestedInDb ? farmId : undefined
-  );
+  const { data: portfolioFarmResponse, isLoading: isPortfolioLoading } = useGetPortfolioFarmById(farmId);
 
-  const isLoading = isFarmDetailsLoading || (hasInvestedInDb && isPortfolioLoading);
+  const isLoading = isFarmDetailsLoading || isPortfolioLoading;
 
   const farm = useMemo(() => {
     const baseFarm = farmResponse?.data as any;
     const portfolioFarm = portfolioFarmResponse?.data;
 
-    if (!baseFarm) return null;
+    if (!baseFarm && !portfolioFarm) return null;
 
-    const project = baseFarm.investmentProjects?.[0] || {};
+    const project = baseFarm?.investmentProjects?.[0] || portfolioFarm?.investments?.[0] || {};
 
-    const roi = baseFarm.roi ?? project.roi ?? project.roiPercentage ?? 0;
-    const duration = baseFarm.duration ?? project.duration;
-    const riskLevel = baseFarm.riskLevel || project.riskLevel || "medium";
-    const minimumInvest = baseFarm.minimumInvest ?? project.minimumInvest ?? project.investmentMinGoal ?? 0;
-    const totalExpectedFunding = baseFarm.totalExpectedFunding ?? baseFarm.totalFundingAmount ?? project.totalExpectedFunding ?? project.fundingGoalAmount ?? 0;
-    const fundingReceived = baseFarm.fundingReceived ?? baseFarm.amountRaised ?? project.fundingReceived ?? project.amountRaised ?? 0;
-    const percentFunded = baseFarm.percentFunded ?? project.percentFunded ?? 0;
-    const startDate = baseFarm.startDate ?? project.startDate;
-    const endDate = baseFarm.endDate ?? project.endDate;
-    const farmCategory = baseFarm.farmCategory ?? project.farmCategory;
-    const milestones = portfolioFarm?.milestones || baseFarm.milestones || project.milestones || [];
+    const roi = baseFarm?.roi ?? project?.roi ?? project?.roiPercentage ?? 0;
+    const duration = baseFarm?.duration ?? project?.duration;
+    const riskLevel = baseFarm?.riskLevel || project?.riskLevel || "medium";
+    const minimumInvest = baseFarm?.minimumInvest ?? project?.minimumInvest ?? project?.investmentMinGoal ?? 0;
+    const totalExpectedFunding = baseFarm?.totalExpectedFunding ?? baseFarm?.totalFundingAmount ?? project?.totalExpectedFunding ?? project?.fundingGoalAmount ?? 0;
+    const fundingReceived = baseFarm?.fundingReceived ?? baseFarm?.amountRaised ?? project?.fundingReceived ?? project?.amountRaised ?? 0;
+    const percentFunded = baseFarm?.percentFunded ?? project?.percentFunded ?? 0;
+    const startDate = baseFarm?.startDate ?? project?.startDate;
+    const endDate = baseFarm?.endDate ?? project?.endDate;
+    const farmCategory = baseFarm?.farmCategory ?? project?.farmCategory;
+    const milestones = portfolioFarm?.milestones || baseFarm?.milestones || project?.milestones || [];
 
     const mergedBase = {
-      ...baseFarm,
-      name: baseFarm.farmName || baseFarm.name || project.name || "Farm",
+      ...(baseFarm || {}),
+      name: baseFarm?.farmName || baseFarm?.name || portfolioFarm?.name || project?.name || "Farm",
       roi,
       duration,
       riskLevel,
@@ -88,14 +88,18 @@ const FarmDetailPage = () => {
     if (portfolioFarm) {
       const template = portfolioFarm.investments?.[0];
       const transaction = template?.transactions?.[0];
+      const allTransactions = portfolioFarm.investments?.flatMap((inv: any) => inv.transactions || []) || [];
 
       return {
         ...mergedBase,
         Investment: {
-          amount: portfolioFarm.userInvestment?.amountInvested ?? baseFarm.Investment?.amount,
-          id: transaction?.reference ?? transaction?.id ?? baseFarm.Investment?.id,
-          status: portfolioFarm.portfolioStatus ?? baseFarm.Investment?.status,
+          amount: portfolioFarm.userInvestment?.amountInvested ?? baseFarm?.Investment?.amount,
+          id: transaction?.reference ?? transaction?.id ?? baseFarm?.Investment?.id,
+          status: portfolioFarm.portfolioStatus ?? baseFarm?.Investment?.status,
         },
+        userInvestment: portfolioFarm.userInvestment,
+        portfolioInvestments: portfolioFarm.investments,
+        transactions: allTransactions.length > 0 ? allTransactions : (transaction ? [transaction] : []),
         milestones: portfolioFarm.milestones || mergedBase.milestones,
         milestoneStats: portfolioFarm.milestoneStats ? {
           totalMilestones: portfolioFarm.milestoneStats.total,
@@ -103,7 +107,7 @@ const FarmDetailPage = () => {
           inProgressMilestones: portfolioFarm.milestoneStats.pending,
           notStartedMilestones: 0,
           completionPercentage: portfolioFarm.milestoneStats.completionPercentage,
-        } : (mergedBase.milestoneStats || project.milestoneStats),
+        } : (mergedBase.milestoneStats || project?.milestoneStats),
       };
     }
 
@@ -115,15 +119,27 @@ const FarmDetailPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Investment state management
-  const [step, setStep] = useState<'details' | 'calculator' | 'review' | 'success'>('details');
+  const [step, setStep] = useState<'details' | 'calculator' | 'topup' | 'review' | 'success'>(
+    isTopupAction ? 'topup' : 'details'
+  );
   const [investAmount, setInvestAmount] = useState(0);
   const [selectedDuration, setSelectedDuration] = useState(0);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [hasSessionInvested, setHasSessionInvested] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(true);
 
   const hasInvested = useMemo(() => {
-    return !!farm?.Investment?.amount || hasSessionInvested;
-  }, [farm, hasSessionInvested]);
+    return (
+      fromSource === "portfolio" ||
+      !!farm?.Investment?.amount ||
+      !!farm?.userInvestment?.amountInvested ||
+      hasSessionInvested
+    );
+  }, [farm, hasSessionInvested, fromSource]);
+
+  const isFromPortfolio = fromSource === "portfolio" || hasInvested || step === 'topup';
+  const activeHeaderTab = isFromPortfolio ? "my-portfolio" : "invest";
+  const isTopupMode = step === 'topup' || (hasInvested && (step === 'review' || step === 'success'));
 
   // Review step states
   const [expandedSection, setExpandedSection] = useState<string | null>('keyTerms');
@@ -174,13 +190,13 @@ const FarmDetailPage = () => {
   }, [investAmount, details]);
 
   const currentDuration = useMemo(() => {
-    return details?.duration ?? 6;
-  }, [details]);
+    return selectedDuration || (details?.duration ?? 0);
+  }, [selectedDuration, details]);
 
   // Dynamic calculations for the calculator
   const currentRoi = useMemo(() => {
     if (!details || currentDuration === 0) return 0;
-    return details.roi * (currentDuration / details.duration);
+    return details.roi * (currentDuration / (details.duration || currentDuration || 1));
   }, [details, currentDuration]);
 
   const expectedProfit = useMemo(() => {
@@ -193,26 +209,85 @@ const FarmDetailPage = () => {
   }, [currentAmount, expectedProfit]);
 
   const payoutDateString = useMemo(() => {
+    if (details?.endDate && details.endDate !== "N/A") {
+      return details.endDate;
+    }
     if (currentDuration === 0) return "";
     const date = new Date();
     date.setMonth(date.getMonth() + currentDuration);
-    const day = String(date.getDate()).padStart(2, "0");
-    const monthsArr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const monthsArr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
     const month = monthsArr[date.getMonth()];
     const year = date.getFullYear();
     return `${day} ${month} ${year}`;
-  }, [currentDuration]);
+  }, [currentDuration, details]);
 
   const durations = useMemo(() => {
     return [details?.duration ?? 6];
   }, [details]);
 
-  const presets = useMemo(() => {
-    if (!details) return [50000, 100000, 500000, 1000000];
-    const min = details.minInvestVal;
-    const list = [min, min * 2, min * 4, min * 10].filter((val) => val > 0);
-    return list.length > 0 ? list : [50000, 100000, 500000, 1000000];
+  const formatCompactNaira = (val: number) => {
+    if (val >= 1000000) {
+      const m = val / 1000000;
+      return `₦${m % 1 === 0 ? m : m.toFixed(1)}M`;
+    }
+    if (val >= 1000) {
+      const k = val / 1000;
+      return `₦${k % 1 === 0 ? k : k.toFixed(0)}K`;
+    }
+    return `₦${formatNumberWithCommas(val)}`;
+  };
+
+  const minSlider = useMemo(() => {
+    return details?.minInvestVal || 10000;
   }, [details]);
+
+  const maxSlider = useMemo(() => {
+    if (!details) return 5000000;
+    const remainingFunding = details.totalVal > details.investedVal ? details.totalVal - details.investedVal : details.totalVal;
+    return remainingFunding > minSlider ? remainingFunding : Math.max(minSlider * 10, 1000000);
+  }, [details, minSlider]);
+
+  const stepSlider = useMemo(() => {
+    if (minSlider >= 500000) return 50000;
+    if (minSlider >= 100000) return 10000;
+    if (minSlider >= 10000) return 5000;
+    return 1000;
+  }, [minSlider]);
+
+  const sliderPercent = useMemo(() => {
+    if (maxSlider <= minSlider) return 0;
+    return Math.min(Math.max(((currentAmount - minSlider) / (maxSlider - minSlider)) * 100, 0), 100);
+  }, [currentAmount, minSlider, maxSlider]);
+
+  const presets = useMemo(() => {
+    const min = details?.minInvestVal || 10000;
+    const max = maxSlider;
+
+    if (max <= min) return [min];
+
+    const candidateTiers = [
+      min,
+      min * 2,
+      min * 5,
+      min * 10,
+      min * 20,
+      min * 50,
+      max
+    ];
+
+    const valid = candidateTiers.filter((v) => v < max);
+    let selected: number[] = [];
+    if (valid.length <= 4) {
+      selected = [...valid, max];
+    } else {
+      selected = [valid[0], valid[1], valid[Math.floor(valid.length / 2)], valid[valid.length - 1], max];
+    }
+
+    const rounded = selected.map((val) => Math.round(val / 1000) * 1000);
+    const unique = Array.from(new Set(rounded)).sort((a, b) => a - b);
+    return unique;
+  }, [details, maxSlider]);
 
   const pictures = useMemo(() => {
     if (!farm) return [];
@@ -266,13 +341,108 @@ const FarmDetailPage = () => {
 
   const ownerName = useMemo(() => {
     const f = farm as any;
-    return f?.farmOwnerName || f?.farmOwner?.fullName || f?.farmOwner?.name || f?.owner?.fullName || f?.owner?.name || "Smile Agri";
+    return f?.farmOwnerName || f?.farmOwner?.fullName || f?.farmOwner?.name || f?.owner?.fullName || f?.owner?.name || farm?.name || "Farm Partner";
   }, [farm]);
 
+  const totalUnits = useMemo(() => {
+    const f = farm as any;
+    if (f?.totalUnits) return Number(f.totalUnits);
+    if (f?.units) return Number(f.units);
+    if (details?.totalVal && details?.minInvestVal && details.minInvestVal > 0) {
+      return Math.floor(details.totalVal / details.minInvestVal);
+    }
+    return 0;
+  }, [farm, details]);
+
   const remainingUnits = useMemo(() => {
-    if (!details) return 48;
-    return Math.max(0, Math.ceil(((100 - details.progress) / 100) * 250));
-  }, [details]);
+    if (!details) return 0;
+    if (totalUnits > 0) {
+      return Math.max(0, Math.ceil(((100 - details.progress) / 100) * totalUnits));
+    }
+    return Math.max(0, 100 - details.progress);
+  }, [details, totalUnits]);
+
+  const formatHistoryDate = (dateStr?: string) => {
+    if (!dateStr) return "N/A";
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+  };
+
+  const investmentHistory = useMemo(() => {
+    const portfolioTransactions: any[] = farm?.transactions || [];
+    if (portfolioTransactions.length > 0) {
+      return portfolioTransactions.map((tx, idx) => ({
+        id: tx.id || tx.reference || `tx-${idx}`,
+        title: idx === 0 ? "Initial investment" : `Top-up #${idx}`,
+        date: tx.investedAt || tx.paidAt || tx.createdAt,
+        roi: Number(farm?.roi || details?.roi || 0),
+        maturesDate: tx.effectiveEndDate || farm?.endDate || details?.endDate,
+        amount: Number(tx.amount || 0),
+      }));
+    }
+
+    if (hasInvested) {
+      const amount = farm?.Investment?.amount || farm?.userInvestment?.amountInvested || investAmount || currentAmount;
+      if (amount > 0) {
+        return [
+          {
+            id: farm?.Investment?.id || transactionId || "tx-initial",
+            title: "Initial investment",
+            date: farm?.startDate || farm?.createdAt,
+            roi: Number(farm?.roi || details?.roi || 0),
+            maturesDate: farm?.endDate || details?.endDate,
+            amount: Number(amount),
+          }
+        ];
+      }
+    }
+
+    return [];
+  }, [farm, details, hasInvested, investAmount, currentAmount, transactionId]);
+
+  const totalInvestedInHistory = useMemo(() => {
+    if (investmentHistory.length === 0) return 0;
+    return investmentHistory.reduce((sum, item) => sum + item.amount, 0);
+  }, [investmentHistory]);
+
+  const existingInvestmentAmount = useMemo(() => {
+    const userInvest = farm?.userInvestment?.amountInvested;
+    if (userInvest && userInvest > 0) return userInvest;
+
+    const invAmount = farm?.Investment?.amount;
+    if (invAmount && invAmount > 0) return invAmount;
+
+    if (totalInvestedInHistory > 0) return totalInvestedInHistory;
+
+    return 105000;
+  }, [farm, totalInvestedInHistory]);
+
+  const topupPresets = useMemo(() => {
+    return [50000, 100000, 500000, 1000000];
+  }, []);
+
+  const farmThumbnail = useMemo(() => {
+    if (pictures.length > 0) return pictures[0].src;
+    const f = farm as any;
+    if (f?.image?.fileUrl) return getPreviewImageUrl(f.image.fileUrl);
+    if (f?.images?.[0]?.fileUrl) return getPreviewImageUrl(f.images[0].fileUrl);
+    return "";
+  }, [pictures, farm]);
+
+  const farmStatusBadge = useMemo(() => {
+    if (farm?.portfolioStatus === "completed" || (details && details.progress >= 100)) {
+      return {
+        label: "Completed",
+        className: "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]",
+      };
+    }
+    return {
+      label: "Funding in Progress",
+      className: "bg-[#FEF3EB] text-[#D97706] border-[#FED7AA]/60",
+    };
+  }, [farm, details]);
 
   const timelineStatus = useMemo(() => {
     if (milestones.length === 0) return "Not Started";
@@ -306,7 +476,11 @@ const FarmDetailPage = () => {
   };
 
   const handleInvest = () => {
-    setStep('calculator');
+    if (hasInvested) {
+      setStep('topup');
+    } else {
+      setStep('calculator');
+    }
   };
 
   const handleProceedInvest = () => {
@@ -367,7 +541,7 @@ const FarmDetailPage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#F4F7F6]">
-        <MainHeader activeTab="invest" />
+        <MainHeader activeTab={activeHeaderTab} />
         <main className="mx-auto w-full max-w-7xl px-4 pb-24 pt-6 sm:px-6 lg:px-8">
           <div className="animate-pulse">
             <div className="mb-6 h-4 w-32 rounded bg-[#DCE7D1]" />
@@ -400,7 +574,7 @@ const FarmDetailPage = () => {
   if (!farm || !details) {
     return (
       <div className="min-h-screen bg-[#F4F7F6]">
-        <MainHeader activeTab="invest" />
+        <MainHeader activeTab={activeHeaderTab} />
         <main className="mx-auto w-full max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-sm">
             <InfoIcon className="h-8 w-8 text-[#5A8D31]" />
@@ -417,136 +591,155 @@ const FarmDetailPage = () => {
 
   return (
     <div className='min-h-screen bg-[#F4F7F6]'>
-      <MainHeader activeTab="invest" />
+      <MainHeader activeTab={activeHeaderTab} />
 
       <main className="mx-auto w-full max-w-7xl px-4 pb-24 pt-6 sm:px-6 lg:px-8">
-        {step === 'calculator' && (
-          // Investment Calculator Step UI
+        {step === 'topup' && (
+          // Invest Topup Step UI matching the attached design
           <div>
-            <div className="mb-6 text-[12px] text-[#9DA59A]">
-              <Link href="/invest" className="hover:text-[#697468]">
-                Invest
+            {/* Breadcrumbs */}
+            <div className="mb-6 text-[12px] text-[#8B988A] flex items-center gap-1.5 font-medium">
+              <Link href="/my-portfolio" className="hover:text-[#4B5548] transition-colors">
+                My Portfolio
               </Link>
-              <span className="px-1.5">/</span>
+              <span className="text-[#C4CFC3]">/</span>
               <button
                 type="button"
                 onClick={() => setStep('details')}
-                className="hover:text-[#697468] cursor-pointer font-medium"
+                className="hover:text-[#4B5548] cursor-pointer"
               >
                 {farm.name}
               </button>
-              <span className="px-1.5">/</span>
-              <span className="font-medium text-[#7A846F]">Set Investment</span>
+              <span className="text-[#C4CFC3]">/</span>
+              <span className="text-[#556358] font-semibold">Topup Investment</span>
             </div>
 
-            <div className="text-center py-6 sm:py-8 max-w-3xl mx-auto">
-              <div className="text-[11.5px] font-bold uppercase tracking-[0.22em] text-[#599C38] mb-2.5">
-                INVESTMENT • CALCULATOR
+            {/* Section Header */}
+            <div className="mb-8">
+              <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#008751] mb-2 flex items-center gap-1.5">
+                <span>TOPUP INVESTMENT</span>
               </div>
-              <h1 className="text-[28px] sm:text-[40px] font-bold leading-tight text-[#1C2420] tracking-[-0.03em]">
-                See your money <span className="text-[#599C38]">grow</span> before you invest.
+              <h1 className="text-[30px] sm:text-[40px] font-bold leading-[1.15] text-[#111827] tracking-tight">
+                How much would you like to reinvest?
               </h1>
-              <p className="mt-3 text-xs sm:text-sm text-[#6C756B] max-w-xl mx-auto">
-                Move the slider, pick a duration, and watch your projected returns update in real time.
-              </p>
             </div>
 
-            <div className="mx-auto rounded-[28px] border border-[#2A343D]/30 bg-[#14210E] text-white shadow-[0_24px_60px_rgba(7,19,5,0.3)] overflow-hidden mt-6">
-              <div className="grid md:grid-cols-2">
-                {/* Header */}
-                <div className="p-6 sm:p-8 md:col-span-2 border-b border-b-[#152A11] flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1C3A16] text-[#4ADE80]">
-                      <InvestmentIcon size={22} color="currentColor" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-white">Investment Calculator</h3>
-                      <p className="text-[11px] text-[#8B9A86]">Project your returns in real time</p>
-                    </div>
-                  </div>
-
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0D2411] border border-[#1D4E26] px-3 py-1 text-[11px] font-medium text-[#4ADE80]">
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#22C55E]"></span>
-                    </span>
-                    Live preview
-                  </span>
+            {/* Farm Summary Banner Card */}
+            <div className="rounded-[20px] sm:rounded-[24px] border border-[#E5E7EB] bg-white p-4 sm:p-5 flex items-center justify-between shadow-[0_2px_12px_rgba(0,0,0,0.02)] mb-8">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl overflow-hidden shrink-0 bg-[#F4F7EE] border border-[#E5E7EB] relative">
+                  {farmThumbnail ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={farmThumbnail}
+                      alt={farm.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <FarmFieldArt />
+                  )}
                 </div>
+                <div className="min-w-0">
+                  <h2 className="text-base sm:text-lg font-bold text-[#111827] truncate">
+                    {farm.name}
+                  </h2>
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-[#6B7280] mt-1 font-medium">
+                    <LocationIcon size={16} color="#6B7280" />
+                    <span className="truncate">{farm.location || "Nigeria"}</span>
+                  </div>
+                </div>
+              </div>
 
+              <div className="shrink-0 pl-3">
+                <span className={`inline-flex items-center rounded-full px-4 py-1.5 text-xs sm:text-[13px] font-semibold border ${farmStatusBadge.className}`}>
+                  {farmStatusBadge.label}
+                </span>
+              </div>
+            </div>
+
+            {/* Main Topup Card */}
+            <div className="mx-auto rounded-[28px] border border-[#E2E8E0] bg-white text-[#111827] shadow-[0_4px_25px_rgba(0,0,0,0.03)] overflow-hidden">
+              <div className="grid md:grid-cols-2">
                 {/* Left Column - Inputs */}
-                <div className="p-6 sm:p-8 border-b md:border-b-0 md:border-r border-[#152A11] flex flex-col justify-between">
-                  <div>
-                    {/* Investment Amount Display */}
-                    <div className="mb-6">
-                      <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-[#8B9A86] mb-3">
-                        INVESTMENT AMOUNT
+                <div className="p-6 sm:p-8 border-b md:border-b-0 md:border-r border-[#EEF2EC] flex flex-col justify-between">
+                  <div className="space-y-6">
+                    {/* Additional Investment Amount */}
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-[0.14em] text-[#718073] mb-2.5">
+                        ADDITIONAL INVESTMENT AMOUNT
                       </label>
-                      <div className="text-[32px] sm:text-[38px] font-bold text-white tracking-tight flex items-baseline">
-                        <span className="text-2xl font-medium text-[#8B9A86] mr-2">₦</span>
-                        {formatNumberWithCommas(currentAmount)}
+                      <div className="bg-[#F5F7F5] border border-transparent focus-within:border-[#008751] focus-within:bg-white rounded-xl px-4 py-3 flex items-center gap-2 transition-all">
+                        <span className="text-lg sm:text-xl font-medium text-[#718073] select-none">₦</span>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={investAmount === 0 ? "" : investAmount}
+                          placeholder={String(details?.minInvestVal || 250000)}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/[^0-9]/g, "");
+                            setInvestAmount(val ? parseInt(val, 10) : 0);
+                          }}
+                          className="w-full bg-transparent text-xl sm:text-2xl font-bold text-[#111827] outline-none placeholder:text-[#9AA59C]"
+                        />
                       </div>
                     </div>
 
                     {/* Slider */}
-                    <div className="mb-6 relative">
+                    <div className="relative pt-1">
                       <input
                         type="range"
-                        min={details.minInvestVal}
-                        max={5000000}
-                        step={10000}
+                        min={minSlider}
+                        max={maxSlider}
+                        step={stepSlider}
                         value={currentAmount}
                         onChange={(e) => setInvestAmount(Number(e.target.value))}
-                        className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-[#142C10] focus:outline-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#4ADE80] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-lg [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#4ADE80] [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-lg"
+                        className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-[#DDE7DD] focus:outline-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[2.5px] [&::-webkit-slider-thumb]:border-[#008751] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-[2.5px] [&::-moz-range-thumb]:border-[#008751] [&::-moz-range-thumb]:shadow-md"
                         style={{
-                          background: `linear-gradient(to right, #4ADE80 0%, #4ADE80 ${((currentAmount - details.minInvestVal) / (5000000 - details.minInvestVal)) * 100
-                            }%, #142C10 ${((currentAmount - details.minInvestVal) / (5000000 - details.minInvestVal)) * 100
-                            }%, #142C10 100%)`
+                          background: `linear-gradient(to right, #008751 0%, #008751 ${sliderPercent}%, #DDE7DD ${sliderPercent}%, #DDE7DD 100%)`
                         }}
                       />
-                      <div className="flex justify-between text-[11px] text-[#607559] mt-2 font-medium">
-                        <span>₦{formatNumberWithCommas(details.minInvestVal >= 1000000 ? `${details.minInvestVal / 1000000}M` : `${details.minInvestVal / 1000}K`)}</span>
-                        <span>₦5M</span>
+                      <div className="flex justify-between text-[11px] text-[#8B988A] mt-2 font-semibold select-none">
+                        <span>{formatCompactNaira(minSlider)}</span>
+                        <span className="translate-x-[-20%]">{formatCompactNaira(Math.round((minSlider + maxSlider) / 2))}</span>
+                        <span>{formatCompactNaira(maxSlider)}</span>
                       </div>
                     </div>
 
-                    {/* Preset buttons */}
-                    {presets.length > 0 && (
-                      <div className="w-full flex flex-wrap gap-2.5 mb-8">
-                        {presets.map((preset) => (
-                          <button
-                            key={preset}
-                            type="button"
-                            onClick={() => setInvestAmount(preset)}
-                            className={clsx(
-                              "flex-1 rounded-xl px-4 py-2.5 text-xs font-semibold border transition-all cursor-pointer",
-                              currentAmount === preset
-                                ? "bg-[#1C3A16] border-[#4ADE80] text-white"
-                                : "bg-[#14210E] border-[#2A343D99] text-[#95A0AA] hover:border-[#306129]"
-                            )}
-                          >
-                            ₦{preset >= 1000000 ? `${preset / 1000000}M` : `${preset / 1000}K`}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    {/* Presets */}
+                    <div className="flex flex-wrap gap-2 sm:gap-2.5">
+                      {topupPresets.map((preset) => (
+                        <button
+                          key={preset}
+                          type="button"
+                          onClick={() => setInvestAmount(preset)}
+                          className={clsx(
+                            "flex-1 min-w-[70px] sm:min-w-[80px] rounded-full py-2.5 px-1.5 sm:px-2 text-xs font-semibold text-center transition-all cursor-pointer border",
+                            currentAmount === preset
+                              ? "bg-[#008751] border-[#008751] text-white shadow-sm"
+                              : "bg-[#EDF2ED] border-transparent text-[#3A483D] hover:bg-[#E2EAE2]"
+                          )}
+                        >
+                          {formatCompactNaira(preset)}
+                        </button>
+                      ))}
+                    </div>
 
                     {/* Duration */}
-                    <div className="mb-8">
-                      <label className="block text-[11px] font-bold uppercase tracking-[0.15em] text-[#8B9A86] mb-3">
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-[0.14em] text-[#718073] mb-2.5">
                         DURATION
                       </label>
-                      <div className="bg-[#101A0B] rounded-2xl p-2 flex flex-wrap gap-1.5">
+                      <div className="bg-[#EDF2ED] rounded-full p-1.5 inline-flex items-center gap-1.5 w-full sm:w-auto">
                         {durations.map((d) => (
                           <button
                             key={d}
                             type="button"
                             onClick={() => setSelectedDuration(d)}
                             className={clsx(
-                              "rounded-xl px-5 py-1 text-xs font-semibold transition-all cursor-pointer min-w-[130px] text-center",
+                              "rounded-full px-6 py-2 text-xs font-bold transition-all cursor-pointer",
                               currentDuration === d
-                                ? "bg-[#4ADE80] text-[#071305] shadow-md"
-                                : "bg-transparent text-[#8B9A86] hover:bg-[#122410] hover:text-white"
+                                ? "bg-[#008751] text-white shadow-sm"
+                                : "bg-transparent text-[#556358] hover:text-[#111827]"
                             )}
                           >
                             {d} mo
@@ -556,27 +749,46 @@ const FarmDetailPage = () => {
                     </div>
                   </div>
 
-                  <div>
+                  <div className="mt-8 space-y-4">
                     {/* Terms Checkbox */}
-                    <div className="mb-6">
-                      <label className="bg-[#14210E] border border-[#213A15] rounded-2xl p-6 flex items-start gap-3 cursor-pointer group">
-                        <input
-                          type="checkbox"
-                          checked={agreedToTerms}
-                          onChange={(e) => setAgreedToTerms(e.target.checked)}
-                          className="mt-0.5 h-4.5 w-4.5 rounded border-[#1D3E17] bg-[#091507] text-[#4ADE80] focus:ring-0 focus:ring-offset-0 cursor-pointer"
-                        />
-                        <span className="text-xs text-[#8B9A86] leading-relaxed group-hover:text-[#A1B29C] transition-colors">
-                          I have read the <span className="text-[#4ADE80] hover:underline">terms & conditions</span> applied to this investment and agree to it
-                        </span>
-                      </label>
+                    <div
+                      onClick={() => setAgreedToTerms(!agreedToTerms)}
+                      className="bg-[#EEF7EE] border border-[#BCE4C4] rounded-2xl p-4 sm:p-4.5 flex items-start gap-3 cursor-pointer transition-all hover:border-[#96D8A2]"
+                    >
+                      <div
+                        className={clsx(
+                          "mt-0.5 h-4.5 w-4.5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors border",
+                          agreedToTerms
+                            ? "bg-[#008751] border-[#008751] text-white"
+                            : "bg-white border-[#A6CDB0]"
+                        )}
+                      >
+                        {agreedToTerms && (
+                          <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-xs sm:text-[13px] text-[#2C382F] leading-snug select-none">
+                        I have read the{" "}
+                        <Link
+                          href="/legal/terms-and-conditions"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="font-bold text-[#008751] underline hover:text-[#00663d]"
+                        >
+                          terms & conditions
+                        </Link>{" "}
+                        applied to this investment & agree to it
+                      </span>
                     </div>
 
                     {/* Proceed Button */}
                     <button
                       type="button"
                       onClick={handleProceedInvest}
-                      className="w-full rounded-2xl bg-gradient-to-r from-[#22C55E] to-[#4ADE80] hover:from-[#16A34A] hover:to-[#22C55E] py-4 px-6 text-sm font-bold text-[#071305] shadow-[0_10px_30px_rgba(74,222,128,0.25)] transition-all cursor-pointer flex items-center justify-center gap-2 group"
+                      className="w-full rounded-2xl bg-[#008751] hover:bg-[#007446] py-3.5 sm:py-4 px-6 text-sm font-bold text-white shadow-[0_8px_24px_rgba(0,135,81,0.25)] transition-all cursor-pointer flex items-center justify-center gap-2 group"
                     >
                       Proceed to Invest
                       <svg
@@ -607,79 +819,389 @@ const FarmDetailPage = () => {
                 </div>
 
                 {/* Right Column - Returns Details */}
-                <div className="p-6 sm:p-8 flex flex-col gap-8">
-                  {/* Total Return Box */}
-                  <div className="bg-[#0C1408] border border-[#213A15] rounded-[22px] p-4 sm:p-6 relative overflow-hidden">
-                    {/* Subtle glow background */}
-                    <div className="absolute -right-20 -top-20 w-44 h-44 rounded-full bg-[#22C55E]/10 blur-3xl pointer-events-none" />
-
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#4ADE80] block mb-2">
-                      TOTAL RETURN
-                    </span>
-                    <div className="text-[34px] sm:text-[42px] font-bold text-[#4ADE80] tracking-tight leading-none mb-2">
-                      ₦{formatNumberWithCommas(totalReturn)}
+                <div className="p-6 sm:p-8 flex flex-col justify-between gap-6">
+                  {/* Top Formula Row */}
+                  <div className="flex items-center justify-between gap-2 sm:gap-4 pb-6 border-b border-[#EEF2EC]">
+                    {/* Current Investment */}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] text-[#9CA3AF] mb-1 truncate">
+                        CURRENT INVESTMENT
+                      </div>
+                      <div className="text-[17px] sm:text-[20px] font-bold text-[#111827] tracking-tight truncate">
+                        ₦{formatNumberWithCommas(existingInvestmentAmount)}
+                      </div>
                     </div>
-                    <p className="text-xs text-[#8B9A86] font-medium">
-                      +₦{formatNumberWithCommas(expectedProfit)} profit in {currentDuration} months
-                    </p>
+
+                    <span className="text-lg font-bold text-[#9CA3AF] shrink-0 select-none pb-1">+</span>
+
+                    {/* Additional Amount */}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] text-[#9CA3AF] mb-1 truncate">
+                        ADDITIONAL AMOUNT
+                      </div>
+                      <div className="text-[17px] sm:text-[20px] font-bold text-[#008751] tracking-tight truncate">
+                        ₦{formatNumberWithCommas(currentAmount)}
+                      </div>
+                    </div>
+
+                    <span className="text-lg font-bold text-[#9CA3AF] shrink-0 select-none pb-1">=</span>
+
+                    {/* Total Invested */}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] text-[#9CA3AF] mb-1 truncate">
+                        TOTAL INVESTED
+                      </div>
+                      <div className="text-[17px] sm:text-[20px] font-bold text-[#111827] tracking-tight truncate">
+                        ₦{formatNumberWithCommas(existingInvestmentAmount + currentAmount)}
+                      </div>
+                      <div className="text-[10px] sm:text-[11px] font-medium text-[#6B7280] mt-0.5 whitespace-nowrap truncate">
+                        +₦{formatNumberWithCommas(expectedProfit)} profit in {currentDuration} months
+                      </div>
+                    </div>
                   </div>
 
                   {/* 2x2 Info Grid */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     {/* Expected Profit */}
-                    <div className="bg-[#182810] border border-[#213A15] rounded-[20px] p-4.5">
-                      <div className="flex items-center gap-2 mb-2 text-[#4ADE80]">
-                        <TrendingUpIcon className="h-4 w-4 shrink-0" />
-                        <span className="text-[9.5px] font-bold uppercase tracking-[0.1em] text-[#8B9A86]">
-                          Expected Profit
+                    <div className="bg-[#EEF9F1] border border-[#BCE4C4] rounded-[20px] p-4 sm:p-5 flex flex-col justify-between min-h-[96px]">
+                      <div className="flex items-center gap-1.5 text-[#008751]">
+                        <TrendingUpIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#008751]">
+                          EXPECTED PROFIT
                         </span>
                       </div>
-                      <div className="text-[15px] sm:text-base font-bold text-white">
+                      <div className="text-[18px] sm:text-[22px] font-bold text-[#111827] mt-2 tracking-tight">
                         ₦{formatNumberWithCommas(expectedProfit)}
                       </div>
                     </div>
 
                     {/* ROI */}
-                    <div className="bg-[#182810] border border-[#213A15] rounded-[20px] p-4.5">
-                      <div className="flex items-center gap-2 mb-2 text-[#4ADE80]">
-                        {/* Custom percent badge icon */}
-                        <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h.01M15 17h.01M9 17h.01M15 7h.01M9 21h6a2 2 0 002-2V5a2 2 0 00-2-2H9a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                        <span className="text-[9.5px] font-bold uppercase tracking-[0.1em] text-[#8B9A86]">
-                          ROI
+                    <div className="bg-[#EDF4F7] rounded-[20px] p-4 sm:p-5 flex flex-col justify-between min-h-[96px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <PercentIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
+                          % ROI
                         </span>
                       </div>
-                      <div className="text-[15px] sm:text-base font-bold text-white">
+                      <div className="text-[18px] sm:text-[22px] font-bold text-[#111827] mt-2 tracking-tight">
                         {currentRoi.toFixed(1)}%
                       </div>
                     </div>
 
                     {/* Principal */}
-                    <div className="bg-[#182810] border border-[#213A15] rounded-[20px] p-4.5">
-                      <div className="flex items-center gap-2 mb-2 text-[#4ADE80]">
-                        <WalletIcon className="h-4 w-4 shrink-0" />
-                        <span className="text-[9.5px] font-bold uppercase tracking-[0.1em] text-[#8B9A86]">
-                          Principal
+                    <div className="bg-[#EDF4F7] rounded-[20px] p-4 sm:p-5 flex flex-col justify-between min-h-[96px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <WalletIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
+                          PRINCIPAL
                         </span>
                       </div>
-                      <div className="text-[15px] sm:text-base font-bold text-white">
+                      <div className="text-[18px] sm:text-[22px] font-bold text-[#111827] mt-2 tracking-tight">
                         ₦{formatNumberWithCommas(currentAmount)}
                       </div>
                     </div>
 
                     {/* Payout Date */}
-                    <div className="bg-[#182810] border border-[#213A15] rounded-[20px] p-4.5">
-                      <div className="flex items-center gap-2 mb-2 text-[#4ADE80]">
-                        {/* Custom calendar icon */}
-                        <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        <span className="text-[9.5px] font-bold uppercase tracking-[0.1em] text-[#8B9A86]">
+                    <div className="bg-[#EDF4F7] rounded-[20px] p-4 sm:p-5 flex flex-col justify-between min-h-[96px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <CalendarIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
+                          PAYOUT DATE
+                        </span>
+                      </div>
+                      <div className="text-[15px] sm:text-[18px] font-bold text-[#111827] mt-2 truncate tracking-tight">
+                        {payoutDateString}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 'calculator' && (
+          // Investment Calculator Step UI
+          <div>
+            <div className="mb-6 text-[12px] text-[#8B988A] flex items-center gap-1.5 font-medium">
+              <Link href="/invest" className="hover:text-[#4B5548] transition-colors">
+                Invest
+              </Link>
+              <span className="text-[#C4CFC3]">/</span>
+              <button
+                type="button"
+                onClick={() => setStep('details')}
+                className="hover:text-[#4B5548] cursor-pointer"
+              >
+                {farm.name}
+              </button>
+              <span className="text-[#C4CFC3]">/</span>
+              <span className="text-[#556358] font-semibold">Set Investment</span>
+            </div>
+
+            <div className="mb-8">
+              <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#008751] mb-2 flex items-center gap-1.5">
+                <span>INVESTMENT</span>
+                <span>·</span>
+                <span>CALCULATOR</span>
+              </div>
+              <h1 className="text-[30px] sm:text-[40px] font-bold leading-[1.15] text-[#111827] tracking-tight">
+                See your money <span className="text-[#008751]">grow</span> before you invest.
+              </h1>
+              <p className="mt-2 text-xs sm:text-[14px] text-[#556358] max-w-2xl">
+                Move the slider or enter an amount, pick a duration, and watch your projected returns update in real time.
+              </p>
+            </div>
+
+            <div className="mx-auto rounded-[28px] border border-[#E2E8E0] bg-white text-[#111827] shadow-[0_4px_25px_rgba(0,0,0,0.03)] overflow-hidden">
+              <div className="grid md:grid-cols-2">
+                {/* Header */}
+                <div className="px-6 py-5 sm:px-8 sm:py-6 md:col-span-2 border-b border-[#EEF2EC] flex items-center justify-between">
+                  <div className="flex items-center gap-3.5">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#008751] text-white shadow-sm shrink-0">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L13.8 8.2L20 10L13.8 11.8L12 18L10.2 11.8L4 10L10.2 8.2L12 2Z" />
+                        <circle cx="19" cy="4" r="1.5" />
+                        <circle cx="5" cy="18" r="1.5" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-[17px] font-bold text-[#111827] leading-tight">Investment Calculator</h3>
+                      <p className="text-[12px] text-[#718073] mt-0.5">Project your returns in real time</p>
+                    </div>
+                  </div>
+
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF7EE] border border-[#C8E6CB] px-3.5 py-1 text-xs font-semibold text-[#008751]">
+                    <span className="h-2 w-2 rounded-full bg-[#008751]"></span>
+                    Live preview
+                  </span>
+                </div>
+
+                {/* Left Column - Inputs */}
+                <div className="p-6 sm:p-8 border-b md:border-b-0 md:border-r border-[#EEF2EC] flex flex-col justify-between">
+                  <div className="space-y-6">
+                    {/* Investment Amount */}
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-[0.14em] text-[#718073] mb-2.5">
+                        INVESTMENT AMOUNT
+                      </label>
+                      <div className="bg-[#F5F7F5] border border-transparent focus-within:border-[#008751] focus-within:bg-white rounded-xl px-4 py-3 flex items-center gap-2 transition-all">
+                        <span className="text-lg sm:text-xl font-medium text-[#718073] select-none">₦</span>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={investAmount === 0 ? "" : investAmount}
+                          placeholder={String(details?.minInvestVal || 0)}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/[^0-9]/g, "");
+                            setInvestAmount(val ? parseInt(val, 10) : 0);
+                          }}
+                          className="w-full bg-transparent text-xl sm:text-2xl font-bold text-[#111827] outline-none placeholder:text-[#9AA59C]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Slider */}
+                    <div className="relative pt-1">
+                      <input
+                        type="range"
+                        min={minSlider}
+                        max={maxSlider}
+                        step={stepSlider}
+                        value={currentAmount}
+                        onChange={(e) => setInvestAmount(Number(e.target.value))}
+                        className="w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-[#DDE7DD] focus:outline-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[2.5px] [&::-webkit-slider-thumb]:border-[#008751] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-[2.5px] [&::-moz-range-thumb]:border-[#008751] [&::-moz-range-thumb]:shadow-md"
+                        style={{
+                          background: `linear-gradient(to right, #008751 0%, #008751 ${sliderPercent}%, #DDE7DD ${sliderPercent}%, #DDE7DD 100%)`
+                        }}
+                      />
+                      <div className="flex justify-between text-[11px] text-[#8B988A] mt-2 font-semibold select-none">
+                        <span>{formatCompactNaira(minSlider)}</span>
+                        <span className="translate-x-[-20%]">{formatCompactNaira(Math.round((minSlider + maxSlider) / 2))}</span>
+                        <span>{formatCompactNaira(maxSlider)}</span>
+                      </div>
+                    </div>
+
+                    {/* Preset buttons */}
+                    <div className="flex flex-wrap gap-2 sm:gap-2.5">
+                      {presets.map((preset) => (
+                        <button
+                          key={preset}
+                          type="button"
+                          onClick={() => setInvestAmount(preset)}
+                          className={clsx(
+                            "flex-1 min-w-[70px] sm:min-w-[80px] rounded-full py-2 px-1.5 sm:px-2 text-xs font-semibold text-center transition-all cursor-pointer border",
+                            currentAmount === preset
+                              ? "bg-[#008751] border-[#008751] text-white shadow-sm"
+                              : "bg-[#EDF2ED] border-transparent text-[#3A483D] hover:bg-[#E2EAE2]"
+                          )}
+                        >
+                          {preset === maxSlider && presets.length > 2
+                            ? `Max (${formatCompactNaira(preset)})`
+                            : formatCompactNaira(preset)}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Duration */}
+                    <div>
+                      <label className="block text-[11px] font-bold uppercase tracking-[0.14em] text-[#718073] mb-2.5">
+                        DURATION
+                      </label>
+                      <div className="bg-[#EDF2ED] rounded-full p-1.5 inline-flex items-center gap-1.5 w-full sm:w-auto">
+                        {durations.map((d) => (
+                          <button
+                            key={d}
+                            type="button"
+                            onClick={() => setSelectedDuration(d)}
+                            className={clsx(
+                              "rounded-full px-6 py-2 text-xs font-bold transition-all cursor-pointer",
+                              currentDuration === d
+                                ? "bg-[#008751] text-white shadow-sm"
+                                : "bg-transparent text-[#556358] hover:text-[#111827]"
+                            )}
+                          >
+                            {d} mo
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 space-y-4">
+                    {/* Terms Checkbox */}
+                    <div
+                      onClick={() => setAgreedToTerms(!agreedToTerms)}
+                      className="bg-[#EEF7EE] border border-[#BCE4C4] rounded-2xl p-4 sm:p-4.5 flex items-start gap-3 cursor-pointer transition-all hover:border-[#96D8A2]"
+                    >
+                      <div
+                        className={clsx(
+                          "mt-0.5 h-4.5 w-4.5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors border",
+                          agreedToTerms
+                            ? "bg-[#008751] border-[#008751] text-white"
+                            : "bg-white border-[#A6CDB0]"
+                        )}
+                      >
+                        {agreedToTerms && (
+                          <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-xs sm:text-[13px] text-[#2C382F] leading-snug select-none">
+                        I have read the{" "}
+                        <Link
+                          href="/legal/terms-and-conditions"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="font-bold text-[#008751] underline hover:text-[#00663d]"
+                        >
+                          terms & conditions
+                        </Link>{" "}
+                        applied to this investment & agree to it
+                      </span>
+                    </div>
+
+                    {/* Proceed Button */}
+                    <button
+                      type="button"
+                      onClick={handleProceedInvest}
+                      className="w-full rounded-2xl bg-[#008751] hover:bg-[#007446] py-3.5 sm:py-4 px-6 text-sm font-bold text-white shadow-[0_8px_24px_rgba(0,135,81,0.25)] transition-all cursor-pointer flex items-center justify-center gap-2 group"
+                    >
+                      Proceed to Invest
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="transform transition-transform group-hover:translate-x-1"
+                      >
+                        <path
+                          d="M8.00008 12.6666L12.6667 7.99998L8.00008 3.33331"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M3.33342 8H12.6667"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right Column - Returns Details */}
+                <div className="p-6 sm:p-8 flex flex-col justify-between gap-6">
+                  {/* Total Return Box */}
+                  <div className="bg-white border border-[#9CE3B0] rounded-[22px] p-5 sm:p-6 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#008751] block mb-1.5">
+                      TOTAL RETURN
+                    </span>
+                    <div className="text-[34px] sm:text-[44px] font-extrabold text-[#008751] tracking-tight leading-none mb-1.5">
+                      ₦{formatNumberWithCommas(totalReturn)}
+                    </div>
+                    <p className="text-xs sm:text-[13px] text-[#556358] font-medium">
+                      +₦{formatNumberWithCommas(expectedProfit)} profit in {currentDuration} months
+                    </p>
+                  </div>
+
+                  {/* 2x2 Info Grid */}
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    {/* Expected Profit */}
+                    <div className="bg-[#EDF4F7] rounded-[18px] p-4 sm:p-5 flex flex-col justify-between min-h-[92px]">
+                      <div className="flex items-center gap-1.5 text-[#008751]">
+                        <TrendingUpIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#008751]">
+                          Expected Profit
+                        </span>
+                      </div>
+                      <div className="text-[16px] sm:text-[19px] font-bold text-[#111827] mt-1.5">
+                        ₦{formatNumberWithCommas(expectedProfit)}
+                      </div>
+                    </div>
+
+                    {/* ROI */}
+                    <div className="bg-[#EDF4F7] rounded-[18px] p-4 sm:p-5 flex flex-col justify-between min-h-[92px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <PercentIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
+                          ROI
+                        </span>
+                      </div>
+                      <div className="text-[16px] sm:text-[19px] font-bold text-[#111827] mt-1.5">
+                        {currentRoi.toFixed(1)}%
+                      </div>
+                    </div>
+
+                    {/* Principal */}
+                    <div className="bg-[#EDF4F7] rounded-[18px] p-4 sm:p-5 flex flex-col justify-between min-h-[92px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <WalletIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
+                          Principal
+                        </span>
+                      </div>
+                      <div className="text-[16px] sm:text-[19px] font-bold text-[#111827] mt-1.5">
+                        ₦{formatNumberWithCommas(currentAmount)}
+                      </div>
+                    </div>
+
+                    {/* Payout Date */}
+                    <div className="bg-[#EDF4F7] rounded-[18px] p-4 sm:p-5 flex flex-col justify-between min-h-[92px]">
+                      <div className="flex items-center gap-1.5 text-[#556358]">
+                        <CalendarIcon className="h-4 w-4 shrink-0" color="currentColor" />
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.08em] text-[#556358]">
                           Payout Date
                         </span>
                       </div>
-                      <div className="text-[14px] sm:text-[15px] font-bold text-white">
+                      <div className="text-[15px] sm:text-[18px] font-bold text-[#111827] mt-1.5 truncate">
                         {payoutDateString}
                       </div>
                     </div>
@@ -694,8 +1216,8 @@ const FarmDetailPage = () => {
           // Review Agreement Step UI
           <div>
             <div className="mb-6 text-[12px] text-[#9DA59A] flex items-center gap-1.5 font-medium">
-              <Link href="/invest" className="hover:text-[#697468] transition-colors">
-                Invest
+              <Link href={isTopupMode ? "/my-portfolio" : "/invest"} className="hover:text-[#697468] transition-colors">
+                {isTopupMode ? "My Portfolio" : "Invest"}
               </Link>
               <span className="text-[#B9C0B5] font-light">/</span>
               <button
@@ -708,10 +1230,10 @@ const FarmDetailPage = () => {
               <span className="text-[#B9C0B5] font-light">/</span>
               <button
                 type="button"
-                onClick={() => setStep('calculator')}
+                onClick={() => setStep(isTopupMode ? 'topup' : 'calculator')}
                 className="hover:text-[#697468] cursor-pointer font-medium transition-colors"
               >
-                Set Investment
+                {isTopupMode ? "Topup Investment" : "Set Investment"}
               </button>
               <span className="text-[#B9C0B5] font-light">/</span>
               <span className="font-semibold text-[#1C241D]">Review Investment</span>
@@ -739,7 +1261,7 @@ const FarmDetailPage = () => {
                     </div>
                     <div>
                       <h2 className="text-sm sm:text-base font-semibold text-[#1C241D] leading-snug">Investment Agreement</h2>
-                      <p className="text-[11px] text-[#8B9586] font-medium">Ref • AGR-876-0043</p>
+                      <p className="text-[11px] text-[#8B9586] font-medium">Ref • {farm?.id ? `AGR-${farm.id.slice(-6).toUpperCase()}` : 'AGR-ESCROW'}</p>
                     </div>
                   </div>
                   <div>
@@ -1081,7 +1603,7 @@ const FarmDetailPage = () => {
                   </div>
 
                   <div className="mt-4 rounded-[12px] bg-[#D9F8DC] py-3 px-4 text-xs font-medium leading-relaxed text-[#013611]">
-                    Note: <strong className="font-bold">Funding goal</strong> for this farm must be reached on or before the <strong className="font-bold">Investment End Date.</strong> If the funding goal is not reached by this date, <strong className="font-bold">your payment will be reimbursed back to your account and the farm funding will be closed.</strong>
+                    Note: <strong className="font-bold">Funding goal</strong> for this farm must be reached on or before the <strong className="font-bold">Funding End Date.</strong> If the funding goal is not reached by this date, <strong className="font-bold">your payment will be reimbursed back to your account and the farm funding will be closed.</strong>
                   </div>
                 </div>
 
@@ -1136,7 +1658,16 @@ const FarmDetailPage = () => {
                         I agree to the investment terms
                       </span>
                       <span className="text-[10px] text-[#7A846F] leading-snug">
-                        I have read and accept all sections of the agreement above.
+                        I have read and accept all sections of the agreement above and the{" "}
+                        <Link
+                          href="/legal/terms-and-conditions"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="font-medium text-[#098926] underline hover:text-[#076d1e]"
+                        >
+                          Terms & Conditions
+                        </Link>.
                       </span>
                     </div>
                   </div>
@@ -1278,7 +1809,7 @@ const FarmDetailPage = () => {
                       <span>ROI</span>
                     </div>
                     <span className="text-xs sm:text-sm font-bold text-[#192218]">
-                      {details?.roi ? `${Number(details.roi).toFixed(1)}%` : '42.0%'}
+                      {Number(details?.roi || 0).toFixed(1)}%
                     </span>
                   </div>
 
@@ -1291,7 +1822,7 @@ const FarmDetailPage = () => {
                       <span>DURATION</span>
                     </div>
                     <span className="text-xs sm:text-sm font-bold text-[#192218]">
-                      {currentDuration || details?.duration || 14} Months
+                      {currentDuration || details?.duration || 0} Months
                     </span>
                   </div>
 
@@ -1304,7 +1835,7 @@ const FarmDetailPage = () => {
                       <span>TRANSACTION ID</span>
                     </div>
                     <span className="text-xs sm:text-sm font-bold text-[#192218]">
-                      {transactionId || 'TXN-8F29X1A2'}
+                      {transactionId || farm?.Investment?.id || '—'}
                     </span>
                   </div>
                 </div>
@@ -1355,8 +1886,8 @@ const FarmDetailPage = () => {
           // Main Detail Page UI
           <div>
             <div className="mb-6 text-[12px] text-[#9DA59A]">
-              <Link href="/invest" className="hover:text-[#697468]">
-                Invest
+              <Link href={isFromPortfolio ? "/my-portfolio" : "/invest"} className="hover:text-[#697468]">
+                {isFromPortfolio ? "My Portfolio" : "Invest"}
               </Link>
               <span className="px-1.5">/</span>
               <span className="font-medium text-[#7A846F]">{farm.name}</span>
@@ -1470,7 +2001,7 @@ const FarmDetailPage = () => {
                         <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Amount Invested</div>
                       </div>
                       <div className="mt-1 text-[18px] font-semibold text-[#172017]">
-                        ₦{formatNumberWithCommas(farm?.Investment?.amount || investAmount || 1640000)}
+                        ₦{formatNumberWithCommas(farm?.Investment?.amount || investAmount || currentAmount)}
                       </div>
                     </div>
 
@@ -1503,7 +2034,7 @@ const FarmDetailPage = () => {
                         <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Transaction ID</div>
                       </div>
                       <div className="mt-1 text-[18px] font-semibold text-[#172017] truncate">
-                        {farm?.Investment?.id || transactionId || "TXN-8F29X1A2"}
+                        {farm?.Investment?.id || transactionId || "—"}
                       </div>
                     </div>
                   </div>
@@ -1513,7 +2044,7 @@ const FarmDetailPage = () => {
                       <div className="flex flex-col gap-1.5 rounded-[18px] border border-[#E8ECE1] bg-white p-4">
                         <div className="flex items-center gap-1.5">
                           <CalendarIcon className="h-5 w-5" color="#80916E" strokeWidth={2} />
-                          <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Investment Start Date</div>
+                          <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Funding Start Date</div>
                         </div>
                         <div className="mt-1 text-[16px] font-bold text-[#172017]">{details.startDate}</div>
                       </div>
@@ -1521,14 +2052,14 @@ const FarmDetailPage = () => {
                       <div className="flex flex-col gap-1.5 rounded-[18px] border border-[#E8ECE1] bg-white p-4">
                         <div className="flex items-center gap-1.5">
                           <CalendarIcon className="h-5 w-5" color="#80916E" strokeWidth={2} />
-                          <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Investment End Date</div>
+                          <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Funding End Date</div>
                         </div>
                         <div className="mt-1 text-[16px] font-bold text-[#172017]">{details.endDate}</div>
                       </div>
                     </div>
 
                     <div className="mt-4 rounded-[12px] bg-[#D9F8DC] p-4 text-xs md:text-sm font-medium leading-relaxed text-[#013611]">
-                      Note: <strong className="font-bold">Funding goal</strong> for this farm must be reached on or before the <strong className="font-bold">Investment End Date.</strong> If the funding goal is not reached by this date, <strong className="font-bold">your payment will be reimbursed back to your account and the farm funding will be closed.</strong>
+                      Note: <strong className="font-bold">Funding goal</strong> for this farm must be reached on or before the <strong className="font-bold">Funding End Date.</strong> If the funding goal is not reached by this date, <strong className="font-bold">your payment will be reimbursed back to your account and the farm funding will be closed.</strong>
                     </div>
                   </div>
                 )}
@@ -1589,6 +2120,71 @@ const FarmDetailPage = () => {
                     </div>
                   </div>
                 </section>
+
+                {/* Investment History Section */}
+                {hasInvested && investmentHistory.length > 0 && (
+                  <section className="my-5 overflow-hidden rounded-[18px] border border-[#DDE8D0] bg-white p-5 sm:p-6 shadow-[0_10px_24px_rgba(17,24,39,0.03)]">
+                    <div className="flex items-start justify-between gap-3 mb-4">
+                      <div>
+                        <div className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-[#93A08D] mb-1">
+                          PAYMENTS
+                        </div>
+                        <h3 className="text-[18px] sm:text-[20px] font-bold text-[#172017] leading-tight">
+                          Investment History
+                        </h3>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+                        className="text-[#64748B] hover:text-[#111827] transition-colors p-1 cursor-pointer"
+                        aria-label="Toggle investment history"
+                      >
+                        <svg
+                          className={clsx("h-5 w-5 transform transition-transform duration-200", isHistoryOpen ? "rotate-180" : "")}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {isHistoryOpen && (
+                      <div className="space-y-4">
+                        <div className="divide-y divide-[#F1F5F0]">
+                          {investmentHistory.map((item) => (
+                            <div key={item.id} className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                              <div>
+                                <div className="text-[14px] sm:text-[15px] font-bold text-[#172017]">
+                                  {item.title}
+                                </div>
+                                <div className="text-[11.5px] text-[#8B9586] mt-0.5">
+                                  {formatHistoryDate(item.date)}
+                                  {item.roi > 0 && ` • ${item.roi.toFixed(1)}% ROI estimated`}
+                                  {item.maturesDate && ` • Matures ${formatHistoryDate(item.maturesDate)}`}
+                                </div>
+                              </div>
+                              <div className="text-[15px] sm:text-[16px] font-bold text-[#172017] shrink-0">
+                                ₦{formatNumberWithCommas(item.amount)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="mt-4 rounded-[14px] bg-[#EEF5FB] px-5 py-3.5 flex items-center justify-between">
+                          <span className="text-[13px] sm:text-[14px] font-semibold text-[#334155]">
+                            Total invested
+                          </span>
+                          <span className="text-[15px] sm:text-[16px] font-bold text-[#111827]">
+                            ₦{formatNumberWithCommas(totalInvestedInHistory)}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </section>
+                )}
 
                 {/* Farm Updates Section */}
                 {hasInvested && farmUpdates.length > 0 && (
@@ -1705,7 +2301,7 @@ const FarmDetailPage = () => {
                           </span>
 
                           <div>
-                            <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Investment Start Date</div>
+                            <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Funding Start Date</div>
                             <div className="text-[14px] font-semibold text-[#172017]">{details.startDate}</div>
                           </div>
                         </div>
@@ -1745,7 +2341,9 @@ const FarmDetailPage = () => {
 
                           <div>
                             <div className="text-[11px] uppercase tracking-[0.08em] text-[#93A08D]">Remaining Units</div>
-                            <div className="text-[14px] font-semibold text-[#172017]">{remainingUnits} / 250</div>
+                            <div className="text-[14px] font-semibold text-[#172017]">
+                              {remainingUnits} {totalUnits > 0 ? `/ ${totalUnits}` : 'units'}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1757,7 +2355,7 @@ const FarmDetailPage = () => {
                         onClick={handleInvest}
                         className="mt-5 w-full rounded-[6px] bg-[#67A73B] py-3 text-[14px] font-semibold text-white shadow-[0_10px_18px_rgba(103,167,59,0.22)] cursor-pointer hover:bg-[#589230] transition-colors uppercase"
                       >
-                        {hasInvested ? "ADD ANOTHER INVESTMENT" : "INVEST NOW"}
+                        {hasInvested ? "TOPUP YOUR INVESTMENT" : "INVEST NOW"}
                       </button>
                     )}
 
@@ -1791,7 +2389,7 @@ const FarmDetailPage = () => {
         )}
       </main>
 
-      {step === 'details' && !hasInvested && details.progress < 100 && (
+      {step === 'details' && details.progress < 100 && (
         <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[#E2EAD8] bg-white shadow-[0_-10px_30px_rgba(0,0,0,0.04)]">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-8 px-6 py-5 sm:px-8 lg:px-12">
             {/* Funding Goal */}
@@ -1822,7 +2420,7 @@ const FarmDetailPage = () => {
               onClick={handleInvest}
               className="rounded-[6px] bg-[#67A73B] px-5 py-3 text-[14px] font-semibold text-white shadow-[0_10px_18px_rgba(103,167,59,0.22)] cursor-pointer hover:bg-[#589230] transition-colors uppercase"
             >
-              {hasInvested ? "ADD ANOTHER INVESTMENT" : "INVEST NOW"}
+              {hasInvested ? "TOPUP YOUR INVESTMENT" : "INVEST NOW"}
             </button>
           </div>
         </div>
