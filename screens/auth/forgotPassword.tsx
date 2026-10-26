@@ -4,20 +4,21 @@ import Link from "next/link"
 import { useState } from "react"
 import { LogoIcon } from "@/components/icons"
 import { Button, Typography, Input } from "@/components/ui"
-import { useRequestOtp } from "@/mutation"
+import { useForgotPassword } from "@/mutation"
 import { toast } from "sonner"
 
 const ForgotPassword = () => {
-  const { mutate, isPending } = useRequestOtp()
+  const { mutate, isPending } = useForgotPassword()
   const [phone, setPhone] = useState("")
 
   const handleLogin = () => {
-    const phoneRegex = /^\d{10,15}$/;
-    const isPhoneNumber = phoneRegex.test(phone);
+    const identifier = phone.trim();
+    const phoneRegex = /^\+?\d{10,15}$/;
+    const isPhoneNumber = phoneRegex.test(identifier);
 
     const payload = isPhoneNumber
-      ? { phoneNumber: phone }
-      : { email: phone };
+      ? { phoneNumber: identifier }
+      : { email: identifier.toLowerCase() };
 
     mutate(payload, {
       onSuccess: () => {
@@ -49,7 +50,7 @@ const ForgotPassword = () => {
         size="large"
         onClick={handleLogin}
         isLoading={isPending}
-        disabled={!phone}
+        disabled={!phone.trim()}
       >
         Submit
       </Button>
