@@ -17,7 +17,12 @@ export interface BetaSignup {
     id: string;
     email: string;
     firstName: string;
+    name?: string;
+    location?: string;
+    phone?: string;
     type?: BetaSignupType | string;
+    produce?: string;
+    investmentTimeline?: string;
     source: string;
     confirmationEmailSentAt: string | null;
     createdAt: string;
@@ -26,7 +31,12 @@ export interface BetaSignup {
 export interface BetaSignupPayload {
     email: string;
     firstName: string;
+    name?: string;
+    location?: string;
+    phone?: string;
     type?: BetaSignupType | string;
+    produce?: string;
+    investmentTimeline?: string;
 }
 
 export interface BetaSignupsPagination {

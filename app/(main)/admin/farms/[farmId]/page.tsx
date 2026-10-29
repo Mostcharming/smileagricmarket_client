@@ -369,10 +369,11 @@ const FarmDetailPage = () => {
       {
         onSuccess: () => {
           toast.success('Farm approved successfully');
-          queryClient.invalidateQueries({ queryKey: ['adminFarms'] }).catch(() => {});
-          queryClient.invalidateQueries({ queryKey: ['adminFarm', farmId] }).catch(() => {});
-          queryClient.invalidateQueries({ queryKey: ['farms'] }).catch(() => {});
+          queryClient.invalidateQueries({ queryKey: ['adminFarms'], refetchType: 'all' }).catch(() => {});
+          queryClient.invalidateQueries({ queryKey: ['adminFarm', farmId], refetchType: 'all' }).catch(() => {});
+          queryClient.invalidateQueries({ queryKey: ['farms'], refetchType: 'all' }).catch(() => {});
           setIsModalOpen(false);
+          router.push('/admin/farms');
         },
         onError: (err) => {
           const msg = err instanceof Error ? err.message : 'Failed to approve farm';
