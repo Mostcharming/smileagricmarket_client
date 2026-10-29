@@ -208,6 +208,13 @@ const MarketingDashboard = () => {
       ),
     },
     {
+      header: 'Name',
+      key: 'name',
+      render: (item) => (
+        <span className="font-medium text-gray-900">{item.name || item.firstName || '—'}</span>
+      ),
+    },
+    {
       header: (
         <div className="flex items-center gap-1.5 cursor-pointer select-none">
           <span>Email address</span>
@@ -216,7 +223,21 @@ const MarketingDashboard = () => {
       ),
       key: 'email',
       render: (item) => (
-        <span className="font-medium text-gray-900">{item.email}</span>
+        <span className="text-gray-700">{item.email}</span>
+      ),
+    },
+    {
+      header: 'Phone',
+      key: 'phone',
+      render: (item) => (
+        <span className="text-gray-700">{item.phone || '—'}</span>
+      ),
+    },
+    {
+      header: 'Location',
+      key: 'location',
+      render: (item) => (
+        <span className="text-gray-700">{item.location || '—'}</span>
       ),
     },
     {
@@ -225,6 +246,17 @@ const MarketingDashboard = () => {
       render: (item) => (
         <span className="capitalize text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-700">
           {item.type ? (item.type === 'farm_owner' ? 'Farm Owner' : item.type === 'investor' ? 'Investor' : item.type) : '—'}
+        </span>
+      ),
+    },
+    {
+      header: 'Extra Info',
+      key: 'extraInfo',
+      render: (item) => (
+        <span className="text-gray-600 text-xs max-w-[180px] truncate block">
+          {item.type === 'farm_owner'
+            ? (item.produce ? `Produces: ${item.produce}` : '—')
+            : (item.investmentTimeline ? item.investmentTimeline : '—')}
         </span>
       ),
     },

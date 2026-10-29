@@ -886,10 +886,11 @@ const FarmDetailsView = ({
   }, [farm.verificationStatus, farm.status]);
 
   const hasActiveProject = useMemo(() => {
+    if (!isFarmVerified) return false;
     return farmProjects.some(
       (project) => project.status && String(project.status).toLowerCase().trim() !== "completed"
     );
-  }, [farmProjects]);
+  }, [isFarmVerified, farmProjects]);
 
   const isDisabled = !isFarmVerified || hasActiveProject;
 
@@ -1057,9 +1058,14 @@ const FarmDetailsView = ({
             <AddIcon color={isDisabled ? "#76BD5F" : "#FFFFFF"} size={16} />
             <span>Create Farm Project</span>
           </button>
-          {isDisabled && (
+          {hasActiveProject && (
             <span className="text-[10px] font-bold text-[#5E6771] tracking-[0.06em] uppercase mt-2 text-center w-full md:w-auto">
               ACTIVE PROJECT IN PROGRESS
+            </span>
+          )}
+          {!isFarmVerified && (
+            <span className="text-[10px] font-bold text-[#5E6771] tracking-[0.06em] uppercase mt-2 text-center w-full md:w-auto">
+              PENDING VERIFICATION
             </span>
           )}
         </div>
@@ -2459,7 +2465,7 @@ const MyFarms = () => {
 
       setProjectStep('success');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to create farm project.");
+      toast.error(err?.message || err?.response?.data?.message || "Failed to create farm project.");
     }
   };
 
